@@ -1,15 +1,21 @@
 import React, { useState, useEffect, useMemo } from "react";
+import TimeAgo from "react-timeago";
 
 import s from "./App.module.scss";
 import Leaderboard from "./components/Leaderboard";
 
 const App: React.FC = () => {
   const [leaderboardData, setLeaderboardData] = useState();
+  const [apiStatus, setAPIStatus] = useState();
 
   useEffect(() => {
     fetch("https://api.clan.report/leaderboards-all.json")
       .then(r => r.json())
       .then(d => setLeaderboardData(d));
+
+    fetch("https://api.clan.report/status.json")
+      .then(r => r.json())
+      .then(d => setAPIStatus(d));
   }, []);
 
   const triumphLeaderboard = useMemo(() => {
@@ -48,6 +54,13 @@ const App: React.FC = () => {
           renderSub={player => `${player.triumphScore.toLocaleString()} points`}
         />
       </div>
+
+      {apiStatus && (
+        <p className={s.explainer}>
+          Currently tracking {apiStatus.profileCount.toLocaleString()} profiles,
+          last updated <TimeAgo date={apiStatus.latestProfileLastCrawled} />.
+        </p>
+      )}
     </div>
   );
 };
