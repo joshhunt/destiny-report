@@ -15,7 +15,8 @@ const Icon: React.FC<IconProps> = ({
   regular,
   light,
   duotone,
-  brand
+  brand,
+  ...rest
 }) => {
   const prefix =
     {
@@ -29,12 +30,15 @@ const Icon: React.FC<IconProps> = ({
   if (solid) {
   }
 
-  return <span className={`${prefix} fa-${name}`}></span>;
+  return <span className={`${prefix} fa-${name}`} {...rest}></span>;
 };
 
 export default Icon;
 
-export const MembershipTypeIcon: React.FC<{ type: number }> = ({ type }) => {
+export const MembershipTypeIcon: React.FC<{ type: number }> = ({
+  type,
+  ...rest
+}) => {
   const iconMap: Record<string, string> = {
     1: "xbox",
     2: "playstation",
@@ -43,5 +47,5 @@ export const MembershipTypeIcon: React.FC<{ type: number }> = ({ type }) => {
     5: "google"
   };
 
-  return <Icon brand name={iconMap[type.toString()]} />;
+  return <Icon brand name={iconMap[type.toString()]} {...rest} />;
 };
