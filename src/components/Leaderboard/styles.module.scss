@@ -1,0 +1,97 @@
+@import "../../variables.scss";
+
+.table {
+  background: rgba(white, 0.05);
+  box-shadow: $shadow-5;
+  padding: 16px;
+  padding-left: 0;
+  border-radius: 5px;
+  margin-top: 16px;
+  display: flex;
+  width: 100%;
+
+  tbody {
+    width: 100%;
+  }
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.cell {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.rankCell {
+  composes: cell;
+}
+
+.rank {
+  font-size: 30px;
+  padding: 16px;
+  min-width: 60px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+}
+
+.main {
+  flex: 1;
+  composes: cell;
+}
+
+.other {
+  composes: cell;
+}
+
+.name {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.sub {
+  font-size: 0.9em;
+  opacity: 0.9;
+}
+
+.platforms {
+  font-size: 0.9em;
+}
+
+.platformIcon {
+  padding-right: 0.5em;
+}
+
+.primaryPlatformIcon {
+  composes: platformIcon;
+}
+
+.secondaryPlatformIcon {
+  composes: platformIcon;
+  opacity: 0.6;
+}
+
+// .xboxIcon {
+//   color: #107c10;
+//   composes: platformIcon;
+// }
+
+// .playstationIcon {
+//   color: #003087;
+//   composes: platformIcon;
+// }
+
+// .steamIcon {
+//   color: #fafafa;
+//   composes: platformIcon;
+// }
+
+// .stadiaIcon {
+//   color: #fc502e;
+//   composes: platformIcon;
+// }
