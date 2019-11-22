@@ -4,9 +4,17 @@ import TimeAgo from "react-timeago";
 import s from "./App.module.scss";
 import Leaderboard from "./components/Leaderboard";
 
+const LEADERBOARD_SIZES = [20, 100, 999];
+const VIEW_MORE_LABELS: Record<string, string> = {
+  20: "View more",
+  100: "View a lot more",
+  999: "Less!!!"
+};
+
 const App: React.FC = () => {
   const [leaderboardData, setLeaderboardData] = useState();
   const [apiStatus, setAPIStatus] = useState();
+  const [maxLeaderboardSize, setMaxLeaderboardSize] = useState(20);
 
   useEffect(() => {
     fetch("https://api.clan.report/leaderboards-all.json")
@@ -24,8 +32,8 @@ const App: React.FC = () => {
       .sort((a, b) => a.collectionRank - b.collectionRank)
       .sort((a, b) => a.triumphRank - b.triumphRank)
       .map(player => ({ ...player, rank: player.triumphRank }))
-      .slice(0, 20);
-  }, [leaderboardData]);
+      .slice(0, maxLeaderboardSize);
+  }, [leaderboardData, maxLeaderboardSize]);
 
   const collectionLeaderboard = useMemo(() => {
     const data = [...(leaderboardData || [])];
@@ -33,8 +41,15 @@ const App: React.FC = () => {
       .sort((a, b) => a.triumphRank - b.triumphRank)
       .sort((a, b) => a.collectionRank - b.collectionRank)
       .map(player => ({ ...player, rank: player.collectionRank }))
-      .slice(0, 20);
-  }, [leaderboardData]);
+      .slice(0, maxLeaderboardSize);
+  }, [leaderboardData, maxLeaderboardSize]);
+
+  function viewMore() {
+    const currentIndex = LEADERBOARD_SIZES.indexOf(maxLeaderboardSize);
+    setMaxLeaderboardSize(
+      LEADERBOARD_SIZES[currentIndex + 1] || LEADERBOARD_SIZES[0]
+    );
+  }
 
   return (
     <div className={s.root}>
@@ -54,6 +69,12 @@ const App: React.FC = () => {
           renderSub={player => `${player.triumphScore.toLocaleString()} points`}
         />
       </div>
+
+      <section className={s.section}>
+        <button className={s.moreButton} onClick={viewMore}>
+          {VIEW_MORE_LABELS[maxLeaderboardSize.toString()]}
+        </button>
+      </section>
 
       {apiStatus && (
         <p className={s.explainer}>

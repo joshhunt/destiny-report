@@ -1,5 +1,4 @@
 .root {
-  content: "hello";
   padding: 20px;
 }
 
@@ -11,6 +10,7 @@
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
+  margin-bottom: 32px;
 
   & > div {
     margin: 0 16px;
@@ -19,9 +19,35 @@
   }
 }
 
+.section {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.moreButton {
+  background: none;
+  padding: 0;
+  border: none;
+  font-family: inherit;
+  color: inherit;
+  font-size: inherit;
+  appearance: none;
+  outline: none !important;
+  cursor: pointer;
+  transition: 50ms ease-in opacity;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:active {
+    opacity: 0.75;
+  }
+}
+
 .explainer {
   font-size: 0.9em;
   opacity: 0.9;
   text-align: center;
-  margin: 64px 0;
+  margin-bottom: 32px;
 }

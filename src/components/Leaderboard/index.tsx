@@ -27,6 +27,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
   return (
     <div>
       <h2 className={s.title}>{title}</h2>
+
       <div className={s.table}>
         {players.map(player => (
           <a
