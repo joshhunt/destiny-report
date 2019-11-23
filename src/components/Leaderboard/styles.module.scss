@@ -1,11 +1,31 @@
 @import "../../variables.scss";
 
+.header {
+  display: flex;
+  font-size: 0.9em;
+  opacity: 0.9;
+}
+
+.rankHeader {
+  padding: 0 16px;
+  min-width: 60px;
+}
+
+.mainHeader {
+  min-width: 60px;
+  flex: 1;
+}
+
+.otherHeader {
+  padding: 0 16px;
+}
+
 .table {
   background: rgba(white, 0.05);
   box-shadow: $shadow-4;
   padding: 0;
   border-radius: 5px;
-  margin-top: 16px;
+  margin-top: 8px;
   display: flex;
   width: 100%;
   flex-direction: column;

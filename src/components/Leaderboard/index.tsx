@@ -28,6 +28,12 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
     <div>
       <h2 className={s.title}>{title}</h2>
 
+      <div className={s.header}>
+        <div className={s.rankHeader}>Rank</div>
+        <div className={s.mainHeader}>Player</div>
+        <div className={s.otherHeader}>Score</div>
+      </div>
+
       <div className={s.table}>
         {players.map(player => (
           <a
