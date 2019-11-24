@@ -1,4 +1,5 @@
 import React from "react";
+import { MembershipType } from "../types";
 
 interface IconProps {
   name: string;
@@ -35,16 +36,16 @@ const Icon: React.FC<IconProps> = ({
 
 export default Icon;
 
-export const MembershipTypeIcon: React.FC<{ type: number }> = ({
+export const MembershipTypeIcon: React.FC<{ type: MembershipType }> = ({
   type,
   ...rest
 }) => {
   const iconMap: Record<string, string> = {
-    1: "xbox",
-    2: "playstation",
-    3: "steam",
-    4: "battle-net",
-    5: "google"
+    [MembershipType.Xbox]: "xbox",
+    [MembershipType.Playstation]: "playstation",
+    [MembershipType.Steam]: "steam",
+    [MembershipType.BattleNet]: "battle-net",
+    [MembershipType.Stadia]: "google"
   };
 
   return <Icon brand name={iconMap[type.toString()]} {...rest} />;

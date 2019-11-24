@@ -1,3 +1,5 @@
+@import "./variables.scss";
+
 .root {
   padding: 20px;
 }
@@ -17,6 +19,10 @@
     width: 100%;
     max-width: 500px;
   }
+}
+
+.staleData {
+  opacity: 0.5;
 }
 
 .section {
@@ -50,4 +56,10 @@
   opacity: 0.9;
   text-align: center;
   margin-bottom: 32px;
+}
+
+.search {
+  width: 100%;
+  max-width: 400px;
+  margin: 32px auto;
 }

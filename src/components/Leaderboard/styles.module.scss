@@ -68,8 +68,9 @@
 .rank {
   font-size: 30px;
   padding: 16px;
-  min-width: 60px;
+  min-width: 92px;
   font-weight: 600;
+  line-height: 36px;
   display: flex;
   justify-content: center;
 }
@@ -111,22 +112,20 @@
   opacity: 0.6;
 }
 
-// .xboxIcon {
-//   color: #107c10;
-//   composes: platformIcon;
-// }
+.rankFourDigit {
+  font-size: 22px;
+}
+.rankFiveDigit {
+  font-size: 17px;
+}
+.rankSixDigit {
+  font-size: 14px;
+}
 
-// .playstationIcon {
-//   color: #003087;
-//   composes: platformIcon;
-// }
-
-// .steamIcon {
-//   color: #fafafa;
-//   composes: platformIcon;
-// }
-
-// .stadiaIcon {
-//   color: #fc502e;
-//   composes: platformIcon;
-// }
+.divider {
+  height: 1px;
+  background: rgba(white, 0.15);
+  margin: 0 16px;
+  margin-top: -1px;
+  margin-bottom: -1px;
+}
