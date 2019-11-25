@@ -10,6 +10,7 @@ interface LeaderboardProps {
   title: React.ReactNode;
   players: LeaderboardEntry[];
   extraPlayers?: LeaderboardEntry[];
+  extraPlayersLoading?: Boolean;
   renderScore: (player: LeaderboardEntry) => React.ReactNode;
 }
 
@@ -18,6 +19,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
   title,
   players,
   extraPlayers,
+  extraPlayersLoading,
   renderScore
 }) => {
   return (
@@ -31,13 +33,15 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
       </div>
 
       <div className={s.table}>
-        {extraPlayers && (
-          <>
-            {extraPlayers.map(player => (
-              <Player player={player} renderScore={renderScore} />
-            ))}
-            <div className={s.divider} />
-          </>
+        {extraPlayersLoading && <div className={s.loading}>Loading</div>}
+
+        {extraPlayers &&
+          extraPlayers.map(player => (
+            <Player player={player} renderScore={renderScore} />
+          ))}
+
+        {((extraPlayers && extraPlayers.length) || extraPlayersLoading) && (
+          <div className={s.divider} />
         )}
 
         {players.map(player => (

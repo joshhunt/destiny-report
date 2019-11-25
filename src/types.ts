@@ -18,3 +18,24 @@ export type LeaderboardEntry = {
 
   rank?: number;
 };
+
+export interface DestinyCrawlProfileResponse {
+  profile: DestinyCrawlProfile;
+  collectionRank: number;
+  triumphRank: number;
+}
+
+export interface DestinyCrawlProfile {
+  membershipId: string;
+  membershipType: number;
+  displayName: string;
+  lastCrawled: string;
+  lastSeen: string;
+  lastPlayed: string;
+  triumphScore: number;
+  collectionScore: number;
+  crossSaveOverride: number;
+  applicableMembershipTypes: number[];
+  createdAt: string;
+  updatedAt: string;
+}

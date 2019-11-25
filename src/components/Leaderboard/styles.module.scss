@@ -29,6 +29,15 @@
   display: flex;
   width: 100%;
   flex-direction: column;
+  overflow: hidden;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  min-height: 80px;
 }
 
 .row {
@@ -45,12 +54,10 @@
 
   &:first-of-type {
     padding-top: 8px;
-    border-radius: 5px 5px 0 0;
   }
 
   &:last-of-type {
     padding-bottom: 8px;
-    border-radius: 0 0 5px 5px;
   }
 }
 

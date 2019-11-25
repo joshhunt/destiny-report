@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useReducer } from "react";
 import TimeAgo from "react-timeago";
 
 import s from "./App.module.scss";
 import Leaderboard from "./components/Leaderboard";
 import Search from "./components/Search";
-import { LeaderboardEntry } from "./types";
+import { LeaderboardEntry, DestinyCrawlProfileResponse } from "./types";
 import { useLocation } from "./history";
+import { useLeaderboards, useApiStatus } from "./appHooks";
 
 const LEADERBOARD_SIZES = [20, 100, 999];
 const VIEW_MORE_LABELS: Record<string, string> = {
@@ -31,87 +32,81 @@ const sortLeaderboard = (
     .slice(0, size);
 };
 
-export interface DestinyCrawlProfileResponse {
-  profile: DestinyCrawlProfile;
-  collectionRank: number;
-  triumphRank: number;
-}
-
-export interface DestinyCrawlProfile {
-  membershipId: string;
-  membershipType: number;
-  displayName: string;
-  lastCrawled: string;
-  lastSeen: string;
-  lastPlayed: string;
-  triumphScore: number;
-  collectionScore: number;
-  crossSaveOverride: number;
-  applicableMembershipTypes: number[];
-  createdAt: string;
-  updatedAt: string;
-}
-
-const prevLeaderboardsJason = window.localStorage.getItem("leaderboards");
-const prevLeaderboards =
-  prevLeaderboardsJason && JSON.parse(prevLeaderboardsJason);
-
-const prevApiStatusJason = window.localStorage.getItem("apiStatus");
-const prevApiStatus = prevApiStatusJason && JSON.parse(prevApiStatusJason);
-
-function leaderboardFromProfile(
-  destinyCrawl: DestinyCrawlProfileResponse,
+function leaderboardFromProfiles(
+  responses: DestinyCrawlProfileResponse[],
   rankField: RankField
 ) {
-  const { triumphRank, collectionRank, profile } = destinyCrawl;
+  return responses
+    .map(player => {
+      const { triumphRank, collectionRank, profile } = player;
 
-  return {
-    ...profile,
-    triumphRank,
-    collectionRank,
-    rank: destinyCrawl[rankField]
-  };
+      const payload = {
+        ...profile,
+        triumphRank,
+        collectionRank,
+        rank: player[rankField]
+      };
+
+      return payload;
+    })
+    .sort((a, b) => a.rank - b.rank);
 }
 
+type DestinyRecordStateItem = {
+  key: string;
+  loading: boolean;
+  response: DestinyCrawlProfileResponse;
+};
+
+type DestinyCrawlState = Record<string, DestinyRecordStateItem>;
+
+const destinyCrawlReducer = (
+  state: DestinyCrawlState,
+  data: DestinyRecordStateItem
+) => ({
+  ...state,
+  [data.key]: data
+});
+
 const App: React.FC = () => {
-  const [destinyCrawl, setDestinyCrawl] = useState<
-    DestinyCrawlProfileResponse
-  >();
-  const [staleData, setStaleData] = useState<Boolean>(true);
-  const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>(
-    prevLeaderboards
+  const [destinyCrawl, dispatchDestinyCrawl] = useReducer(
+    destinyCrawlReducer,
+    {}
   );
-  const [apiStatus, setAPIStatus] = useState(prevApiStatus);
+
+  const [destinyCrawlLoading, setDestinyCrawlLoading] = useState<Boolean>(
+    false
+  );
+  const [leaderboardData, staleData] = useLeaderboards();
+  const [apiStatus] = useApiStatus();
   const [maxLeaderboardSize, setMaxLeaderboardSize] = useState(20);
   const _location = useLocation();
 
-  useEffect(() => {
-    fetch("https://api.clan.report/leaderboards-all.json")
-      .then(r => r.json())
-      .then(data => {
-        setLeaderboardData(data);
-        setStaleData(false);
-        window.localStorage.setItem("leaderboards", JSON.stringify(data));
-      });
-
-    fetch("https://api.clan.report/status.json")
-      .then(r => r.json())
-      .then(data => {
-        setAPIStatus(data);
-        window.localStorage.setItem("apiStatus", JSON.stringify(data));
-      });
-  }, []);
+  const extraPlayers = Object.values(destinyCrawl).map(v => {
+    return v.response;
+  });
 
   useEffect(() => {
-    const matches = _location.pathname.match(/\/(\d)\/(\d+)/);
+    const matches = _location.pathname.match(/\/(\d\/\d+)/);
+
     if (!matches) {
       return;
     }
 
-    const [, membershipType, membershipId] = matches;
-    fetch(`https://api.clan.report/i/user/${membershipType}/${membershipId}`)
+    const [, key] = matches;
+
+    setDestinyCrawlLoading(true);
+
+    fetch(`https://api.clan.report/i/user/${key}`)
       .then(r => r.json())
-      .then(d => setDestinyCrawl(d));
+      .then(d =>
+        dispatchDestinyCrawl({
+          key,
+          loading: false,
+          response: d
+        })
+      )
+      .finally(() => setDestinyCrawlLoading(false));
   }, [_location]);
 
   const triumphLeaderboard = useMemo(() => {
@@ -157,10 +152,11 @@ const App: React.FC = () => {
           className={staleData ? s.staleData : undefined}
           title="Collection"
           players={collectionLeaderboard}
+          extraPlayersLoading={destinyCrawlLoading}
           extraPlayers={
-            destinyCrawl && [
-              leaderboardFromProfile(destinyCrawl, "collectionRank")
-            ]
+            extraPlayers.length > 0
+              ? leaderboardFromProfiles(extraPlayers, "collectionRank")
+              : undefined
           }
           renderScore={player =>
             `${player.collectionScore.toLocaleString()} items`
@@ -170,10 +166,11 @@ const App: React.FC = () => {
           className={staleData ? s.staleData : undefined}
           title="Triumphs"
           players={triumphLeaderboard}
+          extraPlayersLoading={destinyCrawlLoading}
           extraPlayers={
-            destinyCrawl && [
-              leaderboardFromProfile(destinyCrawl, "triumphRank")
-            ]
+            extraPlayers.length > 0
+              ? leaderboardFromProfiles(extraPlayers, "triumphRank")
+              : undefined
           }
           renderScore={player =>
             `${player.triumphScore.toLocaleString()} points`
@@ -186,6 +183,8 @@ const App: React.FC = () => {
           {VIEW_MORE_LABELS[maxLeaderboardSize.toString()]}
         </button>
       </section>
+
+      <p className={s.explainer}>Made by joshhunt</p>
     </div>
   );
 };
