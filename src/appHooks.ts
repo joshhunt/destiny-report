@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 
 import { LeaderboardEntry } from "./types";
 
+window.localStorage.removeItem("leaderboards");
+window.localStorage.removeItem("apiStatus");
+
 function useCachedApi<Data>(url: string) {
   const [data, setData] = useState<Data>();
   const [isStale, setIsStale] = useState();
