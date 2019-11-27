@@ -155,7 +155,7 @@ const App: React.FC = () => {
         </p>
       )}
 
-      {playersWithErrors && (
+      {playersWithErrors.length > 0 && (
         <p className={s.explainer}>
           Unable to retrieve ranks for a player. Is the profile set to private?
         </p>
