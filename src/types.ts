@@ -22,6 +22,7 @@ export interface DestinyCrawlProfileResponse {
   profile: DestinyCrawlProfile;
   collectionRank: number;
   triumphRank: number;
+  error?: any;
 }
 
 export interface DestinyCrawlProfile {
