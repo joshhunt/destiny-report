@@ -20,6 +20,9 @@
     "react-timeago": "^4.4.0",
     "typescript": "3.7.2"
   },
+  "reactSnap": {
+    "inlineCss": true
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
