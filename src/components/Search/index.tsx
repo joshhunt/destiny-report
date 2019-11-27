@@ -52,7 +52,7 @@ const Search: React.FC<{ className?: string }> = ({ className }) => {
           type="text"
           placeholder="Search for player"
           onFocus={() => setIsFocused(true)}
-          onBlur={() => setTimeout(() => setIsFocused(false), 100)}
+          onBlur={() => setTimeout(() => setIsFocused(false), 250)}
         />
 
         <div className={s.results}>

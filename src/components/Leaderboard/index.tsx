@@ -37,7 +37,11 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
 
         {extraPlayers &&
           extraPlayers.map(player => (
-            <Player player={player} renderScore={renderScore} />
+            <Player
+              key={player.membershipId}
+              player={player}
+              renderScore={renderScore}
+            />
           ))}
 
         {((extraPlayers && extraPlayers.length) || extraPlayersLoading) && (
@@ -45,7 +49,11 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
         )}
 
         {players.map(player => (
-          <Player player={player} renderScore={renderScore} />
+          <Player
+            key={player.membershipId}
+            player={player}
+            renderScore={renderScore}
+          />
         ))}
       </div>
     </div>
