@@ -8,18 +8,19 @@
   font-family: inherit;
   font-size: inherit;
   color: white;
-  transition: background 50ms ease-in-out;
+  transition: background 100ms ease-in-out;
   transition-property: background shadow;
   border-radius: 4px;
-  box-shadow: $shadow-1;
-  // background-color: rgb(51, 51, 51);
+  box-shadow: none;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.18);
   }
 
   &:focus {
     box-shadow: $shadow-5;
+    outline: none;
+    background: rgba(255, 255, 255, 0.22);
   }
 
   &.hasResults {

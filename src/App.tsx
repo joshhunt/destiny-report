@@ -82,9 +82,17 @@ const App: React.FC = () => {
   const [maxLeaderboardSize, setMaxLeaderboardSize] = useState(20);
   const _location = useLocation();
 
-  const extraPlayers = Object.values(destinyCrawl).map(v => {
-    return v.response;
-  });
+  const extraPlayers = Object.values(destinyCrawl)
+    .map(v => {
+      return v.response;
+    })
+    .filter(v => !v.error);
+
+  const playersWithErrors = Object.values(destinyCrawl)
+    .map(v => {
+      return v.response;
+    })
+    .filter(v => v.error);
 
   useEffect(() => {
     const matches = _location.pathname.match(/\/(\d\/\d+)/);
@@ -144,6 +152,12 @@ const App: React.FC = () => {
         <p className={s.explainer}>
           Currently tracking {apiStatus.profileCount.toLocaleString()} profiles,
           last updated <TimeAgo date={apiStatus.latestProfileLastCrawled} />.
+        </p>
+      )}
+
+      {playersWithErrors && (
+        <p className={s.explainer}>
+          Unable to retrieve ranks for a player. Is the profile set to private?
         </p>
       )}
 

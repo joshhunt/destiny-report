@@ -15,7 +15,6 @@ export type LeaderboardEntry = {
   triumphRank: number;
   collectionRank: number;
   applicableMembershipTypes: MembershipType[];
-
   rank?: number;
 };
 
