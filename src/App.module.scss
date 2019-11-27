@@ -1,7 +1,9 @@
 @import "./variables.scss";
 
-.root {
+.container {
   padding: 20px;
+  max-width: 1200px;
+  margin: auto;
 }
 
 .title {
@@ -9,15 +11,14 @@
 }
 
 .leaderboards {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 48px;
   margin-bottom: 32px;
+  overflow-x: auto;
 
-  & > div {
-    margin: 0 16px;
-    width: 100%;
-    max-width: 500px;
+  @media screen and (min-width: 870px) {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
@@ -32,18 +33,24 @@
 
 .moreButton {
   background: none;
-  padding: 0;
-  border: none;
+  padding: 8px 16px;
+  border: 1px solid currentColor;
+  border-radius: 5px;
   font-family: inherit;
   color: inherit;
-  font-size: inherit;
+  font-size: 0.9em;
+  font-weight: 700;
   appearance: none;
-  outline: none !important;
   cursor: pointer;
   transition: 50ms ease-in opacity;
+  box-shadow: 0 0 0 1px rgba(white, 0);
+  transition: background 100ms ease-in-out;
+  transition-property: background, box-shadow;
+  outline: none !important;
 
   &:hover {
-    text-decoration: underline;
+    box-shadow: 0 0 0 1px rgba(white, 1);
+    background: rgba(white, 0.05);
   }
 
   &:active {
@@ -62,4 +69,24 @@
   width: 100%;
   max-width: 400px;
   margin: 32px auto;
+}
+
+// Seals
+.seals {
+  margin: -16px;
+}
+
+.seal {
+  background: rgba(white, 0.05);
+  border-radius: 5px;
+  padding: 16px;
+  display: inline-block;
+  min-width: 200px;
+  margin: 16px;
+}
+
+.sealTitle {
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 8px;
 }

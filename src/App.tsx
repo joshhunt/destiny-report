@@ -8,6 +8,8 @@ import { LeaderboardEntry, DestinyCrawlProfileResponse } from "./types";
 import { useLocation } from "./history";
 import { useLeaderboards, useApiStatus } from "./appHooks";
 
+const SEALS = false;
+
 const LEADERBOARD_SIZES = [20, 100, 999];
 const VIEW_MORE_LABELS: Record<string, string> = {
   20: "View more",
@@ -79,7 +81,9 @@ const App: React.FC = () => {
   );
   const [leaderboardData, staleData] = useLeaderboards();
   const [apiStatus] = useApiStatus();
-  const [maxLeaderboardSize, setMaxLeaderboardSize] = useState(20);
+  const [maxLeaderboardSize, setMaxLeaderboardSize] = useState(
+    LEADERBOARD_SIZES[0]
+  );
   const _location = useLocation();
 
   const extraPlayers = Object.values(destinyCrawl)
@@ -143,7 +147,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className={s.root}>
+    <div className={s.container}>
       <h1 className={s.title}>destiny.report</h1>
 
       <Search className={s.search} />
@@ -159,6 +163,26 @@ const App: React.FC = () => {
         <p className={s.explainer}>
           Unable to retrieve ranks for a player. Is the profile set to private?
         </p>
+      )}
+
+      {SEALS && (
+        <section className={s.section} style={{ textAlign: "left" }}>
+          <h2>Seals</h2>
+
+          <div className={s.seals}>
+            {[
+              { title: "Wayfarer", stat: 12 },
+              { title: "Blacksmith", stat: 2 },
+              { title: "Dredgen", stat: 31 },
+              { title: "Cursebreaker", stat: 4 }
+            ].map(seal => (
+              <div className={s.seal} key={seal.title}>
+                <div className={s.sealTitle}>{seal.title}</div>
+                <div className={s.sealStat}>{seal.stat}%</div>
+              </div>
+            ))}
+          </div>
+        </section>
       )}
 
       <div className={s.leaderboards}>
@@ -191,7 +215,6 @@ const App: React.FC = () => {
           }
         />
       </div>
-
       <section className={s.section}>
         <button className={s.moreButton} onClick={viewMore}>
           {VIEW_MORE_LABELS[maxLeaderboardSize.toString()]}
