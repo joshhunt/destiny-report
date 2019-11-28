@@ -16,7 +16,10 @@ const rehydrate = (url: string) => {
   return preloadStore[url];
 };
 
-function useCachedApi<Data>(url: string) {
+function useCachedApi<Data>(
+  url: string,
+  helpSerialize: (data: Data) => any = v => v
+) {
   const scriptRef = useRef<HTMLScriptElement>();
   const [data, setData] = useState<Data>(rehydrate(url));
   const [isStale, setIsStale] = useState();
@@ -48,7 +51,7 @@ function useCachedApi<Data>(url: string) {
       .then(data => {
         setData(data);
         setIsStale(false);
-        const serialized = JSON.stringify(data);
+        const serialized = JSON.stringify(helpSerialize(data));
         window.localStorage.setItem(url, serialized);
 
         const scriptSrc = `
@@ -67,7 +70,8 @@ function useCachedApi<Data>(url: string) {
 
 export function useLeaderboards() {
   return useCachedApi<LeaderboardEntry[]>(
-    "https://api.clan.report/leaderboards-all.json"
+    "https://api.clan.report/leaderboards-all.json",
+    v => v.slice(0, 20)
   );
 }
 
