@@ -70,8 +70,7 @@ function useCachedApi<Data>(
 
 export function useLeaderboards() {
   return useCachedApi<LeaderboardEntry[]>(
-    "https://api.clan.report/leaderboards-all.json",
-    v => v.slice(0, 20)
+    "https://api.clan.report/leaderboards-all.json"
   );
 }
 
