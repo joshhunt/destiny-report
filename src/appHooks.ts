@@ -20,9 +20,10 @@ function useCachedApi<Data>(
   url: string,
   helpSerialize: (data: Data) => any = v => v
 ) {
+  const rehydratedData = rehydrate(url);
   const scriptRef = useRef<HTMLScriptElement>();
-  const [data, setData] = useState<Data>(rehydrate(url));
-  const [isStale, setIsStale] = useState();
+  const [data, setData] = useState<Data>(rehydratedData);
+  const [isStale, setIsStale] = useState(!!rehydratedData);
 
   useEffect(() => {
     const rootElement = document.getElementById("root");
