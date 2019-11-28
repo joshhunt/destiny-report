@@ -15,9 +15,9 @@ const Site = () => {
 
 const rootElement = document.getElementById("root");
 if (rootElement && rootElement.hasChildNodes()) {
-  hydrate(<App />, rootElement);
+  hydrate(<Site />, rootElement);
 } else {
-  render(<App />, rootElement);
+  render(<Site />, rootElement);
 }
 
 // If you want your app to work offline and load faster, you can change

@@ -1,13 +1,41 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { LeaderboardEntry } from "./types";
 
 window.localStorage.removeItem("leaderboards");
 window.localStorage.removeItem("apiStatus");
 
+declare global {
+  interface Window {
+    __preloadData: Record<string, any>;
+  }
+}
+
+const rehydrate = (url: string) => {
+  const preloadStore = window.__preloadData || {};
+  return preloadStore[url];
+};
+
 function useCachedApi<Data>(url: string) {
-  const [data, setData] = useState<Data>();
+  const scriptRef = useRef<HTMLScriptElement>();
+  const [data, setData] = useState<Data>(rehydrate(url));
   const [isStale, setIsStale] = useState();
+
+  useEffect(() => {
+    const rootElement = document.getElementById("root");
+    scriptRef.current = document.createElement("script");
+    document.body.appendChild(scriptRef.current);
+
+    if (rootElement) {
+      rootElement.parentNode &&
+        rootElement.parentNode.insertBefore(
+          scriptRef.current,
+          rootElement.nextSibling
+        );
+    } else {
+      document.body.appendChild(scriptRef.current);
+    }
+  }, []);
 
   useEffect(() => {
     const prevJson = window.localStorage.getItem(url);
@@ -20,7 +48,17 @@ function useCachedApi<Data>(url: string) {
       .then(data => {
         setData(data);
         setIsStale(false);
-        window.localStorage.setItem(url, JSON.stringify(data));
+        const serialized = JSON.stringify(data);
+        window.localStorage.setItem(url, serialized);
+
+        const scriptSrc = `
+          window.__preloadData = window.__preloadData || {};
+          window.__preloadData["${url}"] = ${serialized}
+        `;
+
+        if (scriptRef.current) {
+          scriptRef.current.innerHTML = scriptSrc;
+        }
       });
   }, [url]);
 
