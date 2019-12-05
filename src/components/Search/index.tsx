@@ -10,6 +10,11 @@ type SearchResult = {
   displayName: string;
   membershipId: string;
   membershipType: MembershipType;
+  originalMembershipType: MembershipType;
+  crossSaveOverride?: {
+    membershipId: string;
+    membershipType: MembershipType;
+  };
 };
 
 const Search: React.FC<{ className?: string }> = ({ className }) => {
@@ -30,9 +35,25 @@ const Search: React.FC<{ className?: string }> = ({ className }) => {
 
     fetch(url)
       .then(r => r.json())
-      .then(results => {
+      .then(_results => {
+        const results: SearchResult[] = _results;
+
         if (searchValue === valueSearchedFor) {
-          setResults(results);
+          const cleanedResults = results.map(result => {
+            const hasCrossSaveOverride =
+              result.crossSaveOverride &&
+              result.crossSaveOverride.membershipId !== "" &&
+              result.crossSaveOverride.membershipType !== 0;
+
+            return {
+              ...result,
+              crossSaveOverride: hasCrossSaveOverride
+                ? result.crossSaveOverride
+                : undefined
+            };
+          });
+
+          setResults(cleanedResults);
         }
       });
   }, [searchValue]);
@@ -55,28 +76,29 @@ const Search: React.FC<{ className?: string }> = ({ className }) => {
           onBlur={() => setTimeout(() => setIsFocused(false), 250)}
         />
 
-        <div className={s.results}>
-          {displayResults &&
-            results &&
-            results.map(result => {
-              return (
-                <Link
-                  className={s.player}
-                  key={result.membershipId}
-                  to={`/${result.membershipType}/${result.membershipId}`}
-                  onClick={clearSearch}
-                >
-                  <MembershipTypeIcon type={result.membershipType} />{" "}
-                  {result.displayName}
-                </Link>
-              );
-            })}
-        </div>
+        {displayResults && (
+          <div className={s.results}>
+            {results &&
+              results.map(result => {
+                const { membershipId, membershipType } =
+                  result.crossSaveOverride || result;
+                return (
+                  <Link
+                    className={s.player}
+                    key={result.membershipId}
+                    to={`/${membershipType}/${membershipId}`}
+                    onClick={clearSearch}
+                  >
+                    <MembershipTypeIcon type={result.membershipType} />{" "}
+                    {result.displayName}
+                  </Link>
+                );
+              })}
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
 export default Search;
-
-// 5212225342

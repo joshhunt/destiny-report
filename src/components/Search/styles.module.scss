@@ -38,8 +38,16 @@
   top: 100%;
   left: 0;
   right: 0;
-  background-color: #424242;
+  background: #464646;
   border-radius: 0 0 4px 4px;
+
+  &:before {
+    background: rgba(white, 0.2);
+    height: 1px;
+    margin: 0px 16px;
+    display: block;
+    content: "";
+  }
 }
 
 .player {
@@ -47,4 +55,9 @@
   padding: 8px;
   color: inherit;
   text-decoration: none;
+  transition: background 100ms ease-in-out;
+
+  &:hover {
+    background: rgba(white, 0.1);
+  }
 }

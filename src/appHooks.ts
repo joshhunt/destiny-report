@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-import { LeaderboardEntry } from "./types";
+import { LeaderboardEntry, DestinyCrawlApiStatus } from "./types";
 
 window.localStorage.removeItem("leaderboards");
 window.localStorage.removeItem("apiStatus");
@@ -16,10 +16,7 @@ const rehydrate = (url: string) => {
   return preloadStore[url];
 };
 
-function useCachedApi<Data>(
-  url: string,
-  helpSerialize: (data: Data) => any = v => v
-) {
+function useCachedApi<Data>(url: string): [Data, boolean] {
   const rehydratedData = rehydrate(url);
   const scriptRef = useRef<HTMLScriptElement>();
   const [data, setData] = useState<Data>(rehydratedData);
@@ -52,7 +49,7 @@ function useCachedApi<Data>(
       .then(data => {
         setData(data);
         setIsStale(false);
-        const serialized = JSON.stringify(helpSerialize(data));
+        const serialized = JSON.stringify(data);
         window.localStorage.setItem(url, serialized);
 
         const scriptSrc = `
@@ -76,7 +73,7 @@ export function useLeaderboards() {
 }
 
 export function useApiStatus() {
-  return useCachedApi<LeaderboardEntry[]>(
+  return useCachedApi<DestinyCrawlApiStatus>(
     "https://api.clan.report/status.json"
   );
 }

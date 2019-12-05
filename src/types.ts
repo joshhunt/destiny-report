@@ -39,3 +39,8 @@ export interface DestinyCrawlProfile {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface DestinyCrawlApiStatus {
+  profileCount: number;
+  latestProfileLastCrawled: string;
+}
