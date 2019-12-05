@@ -155,7 +155,8 @@ const App: React.FC = () => {
       {apiStatus && (
         <p className={s.explainer}>
           Currently tracking {apiStatus.profileCount.toLocaleString()} profiles,
-          last updated <TimeAgo date={apiStatus.latestProfileLastCrawled} />.
+          leaderboards last updated{" "}
+          <TimeAgo date={apiStatus.latestProfileLastCrawled} />.
         </p>
       )}
 

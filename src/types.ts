@@ -13,6 +13,7 @@ export type LeaderboardEntry = {
   triumphScore: number;
   collectionScore: number;
   triumphRank: number;
+  lastCrawled: string;
   collectionRank: number;
   applicableMembershipTypes: MembershipType[];
   rank?: number;

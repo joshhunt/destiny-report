@@ -1,5 +1,6 @@
 import React from "react";
 import cx from "classnames";
+import TimeAgo from "react-timeago";
 
 import s from "./styles.module.scss";
 import { MembershipTypeIcon } from "../Icon";
@@ -104,8 +105,13 @@ const Player: React.FC<{
             ))}
         </div>
       </div>
+
       <div className={s.other}>
         <div className={s.sub}>{renderScore(player)}</div>
+
+        <div className={s.timeUpdated}>
+          Profile updated <TimeAgo date={player.lastCrawled} />
+        </div>
       </div>
     </a>
   );

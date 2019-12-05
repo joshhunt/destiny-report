@@ -90,6 +90,7 @@
 .other {
   composes: cell;
   padding-right: 16px;
+  align-items: flex-end;
 }
 
 .name {
@@ -100,6 +101,21 @@
 .sub {
   font-size: 0.9em;
   opacity: 0.9;
+}
+
+.timeUpdated {
+  font-size: 0.75em;
+  opacity: 0.75;
+  height: 0;
+  overflow: hidden;
+  transition: all 150ms ease-in-out;
+  line-height: 2;
+  margin-bottom: 0;
+
+  .row:hover & {
+    height: 24px;
+    margin-bottom: -4.5px;
+  }
 }
 
 .platforms {
