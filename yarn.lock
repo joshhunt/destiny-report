@@ -2323,6 +2323,11 @@ builtin-status-codes@^3.0.0:
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
   integrity sha1-hZgoeOIbmOHGZCXgPQF0eI9Wnug=
 
+bungie-api-ts@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/bungie-api-ts/-/bungie-api-ts-2.3.0.tgz#2c95bf197a71ea876bc6829335c385acbec909af"
+  integrity sha512-tHN6p+QazQ4AKf0gnqxAeJZ1ZRgY1+/LeqGiJ1VkhxrkA7FNKLeZEzabEQTDxZSVkJEYA02+gZpWEP+7G6LxHg==
+
 bytes@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/bytes/-/bytes-3.0.0.tgz#d32815404d689699f85a4ea4fa8755dd13a96048"
@@ -3398,6 +3403,11 @@ detect-port-alt@1.1.6:
   dependencies:
     address "^1.0.1"
     debug "^2.6.0"
+
+dexie@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/dexie/-/dexie-2.0.4.tgz#6027a5e05879424e8f9979d8c14e7420f27e3a11"
+  integrity sha512-aQ/s1U2wHxwBKRrt2Z/mwFNHMQWhESerFsMYzE+5P5OsIe5o1kgpFMWkzKTtkvkyyEni6mWr/T4HUJuY9xIHLA==
 
 diff-sequences@^24.9.0:
   version "24.9.0"
