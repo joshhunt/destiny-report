@@ -5,3 +5,18 @@
   max-width: 1200px;
   margin: auto;
 }
+
+.node {
+  padding-left: 5px;
+  border-left: 3px solid grey;
+  margin-left: 5px;
+
+  .node & {
+    font-size: 0.9em;
+  }
+}
+
+.nodeHeading {
+  font-size: 1.2em;
+  font-weight: 600;
+}
