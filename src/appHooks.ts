@@ -16,7 +16,7 @@ const rehydrate = (url: string) => {
   return preloadStore[url];
 };
 
-function useCachedApi<Data>(url: string): [Data, boolean] {
+export function useCachedApi<Data>(url: string): [Data, boolean] {
   const rehydratedData = rehydrate(url);
   const scriptRef = useRef<HTMLScriptElement>();
   const [data, setData] = useState<Data>(rehydratedData);

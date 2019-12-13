@@ -3,6 +3,7 @@ import TimeAgo from "react-timeago";
 
 import s from "./App.module.scss";
 import Leaderboard from "./components/Leaderboard";
+import NightfallLeaderboards from "./components/NightfallLeaderboards";
 import Search from "./components/Search";
 import { LeaderboardEntry, DestinyCrawlProfileResponse } from "./types";
 import { useLocation } from "./history";
@@ -185,6 +186,8 @@ const App: React.FC = () => {
           </div>
         </section>
       )}
+
+      <NightfallLeaderboards />
 
       <div className={s.leaderboards}>
         <Leaderboard
