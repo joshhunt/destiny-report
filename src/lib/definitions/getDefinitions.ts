@@ -1,7 +1,7 @@
-import { useReducer, useEffect } from "react";
 import { DestinyManifest } from "bungie-api-ts/destiny2/interfaces";
 import { ServerResponse } from "bungie-api-ts/common";
 import Dexie from "dexie";
+import { DefintionsDispatchData } from "./types";
 
 const REQUESTS: Record<string, Promise<any>> = {};
 
@@ -26,40 +26,12 @@ class DestinyReportDatabase extends Dexie {
 
 const db = new DestinyReportDatabase();
 
-type DefinitionsState = Record<string, any>;
-
-interface DefintionsDispatchData {
-  tableName: string;
-  definitions: any;
-}
-
 interface UpdatedDestinyManifest extends DestinyManifest {
   readonly jsonWorldComponentContentPaths: {
     [language: string]: {
       [key: string]: string;
     };
   };
-}
-
-const definitionsReducer = (
-  state: DefinitionsState,
-  data: DefintionsDispatchData
-) => ({
-  ...state,
-  [data.tableName]: data.definitions
-});
-
-export function useDefinitions(...tables: string[]) {
-  const [store, dispatchDefinition] = useReducer(definitionsReducer, {});
-
-  useEffect(() => {
-    console.log("effect is running");
-    getDefinitions(tables, (data: DefintionsDispatchData) => {
-      dispatchDefinition(data);
-    });
-  }, tables);
-
-  return store;
 }
 
 function bungieFetch<Data>(
@@ -83,7 +55,6 @@ function bungieFetch<Data>(
   const url = _url.startsWith("https://")
     ? _url
     : `https://www.bungie.net${_url}`;
-  console.log({ url, _url });
 
   return fetch(url, combinedOptions).then(r => r.json());
 }
@@ -119,7 +90,7 @@ function fetchDefinition(url: string) {
   return promise;
 }
 
-async function getDefinitions(
+export async function getDefinitions(
   tables: string[],
   callback: (data: DefintionsDispatchData) => void
 ) {
