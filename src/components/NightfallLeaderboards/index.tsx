@@ -1,13 +1,17 @@
 import React from "react";
-import { WithDefinitions, useDefinitions } from "../../lib/definitions";
+import { WithDefinitions } from "../../lib/definitions";
 import { useCachedApi } from "../../appHooks";
 import {
   NightfallLeaderboardResponse,
   NightfallLeaderboardEntry
 } from "../../types";
 
+import s from "./styles.module.scss";
+import Activity from "../../components/Activity";
+
+const NIGHTFALL_BLACKLIST = ["1207505828"];
+
 const NightfallLeaderboards: React.FC = () => {
-  const { DestinyActivityDefinition } = useDefinitions();
   const [nightfallLeaderboardData] = useCachedApi<NightfallLeaderboardResponse>(
     "https://api.clan.report/nightfall-score-dawn.json"
   );
@@ -25,39 +29,19 @@ const NightfallLeaderboards: React.FC = () => {
     }, {});
 
   return (
-    <div>
-      <h2>Nightfalls</h2>
-
-      {DestinyActivityDefinition &&
-        leaderboardsByNightfall &&
-        Object.entries(leaderboardsByNightfall).map(
-          ([referenceId, entries]) => {
-            const activity = DestinyActivityDefinition[referenceId];
-
-            return (
-              <div key={referenceId}>
-                {activity ? (
-                  <>
-                    <h2>{activity.displayProperties.name}</h2>
-                    <p>{activity.displayProperties.description}</p>
-                  </>
-                ) : (
-                  <h2>
-                    <em>Unknown activity</em>
-                  </h2>
-                )}
-
-                <ol>
-                  {entries.map(entry => (
-                    <li key={entry.pgcrId}>
-                      {entry.pgcrId}: {entry.teamScore}
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            );
-          }
+    <div className={s.nightfalls}>
+      {leaderboardsByNightfall &&
+        Object.keys(leaderboardsByNightfall).map(
+          referenceId =>
+            !NIGHTFALL_BLACKLIST.includes(referenceId) && (
+              <Activity
+                className={s.nightfallCard}
+                activityHash={referenceId}
+              />
+            )
         )}
+
+      <div className={s.spacerwtf} />
     </div>
   );
 };

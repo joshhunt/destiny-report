@@ -9,8 +9,6 @@ import { LeaderboardEntry, DestinyCrawlProfileResponse } from "./types";
 import { useLocation } from "./history";
 import { useLeaderboards, useApiStatus } from "./appHooks";
 
-const SEALS = false;
-
 const LEADERBOARD_SIZES = [20, 100, 999];
 const VIEW_MORE_LABELS: Record<string, string> = {
   20: "View more",
@@ -148,85 +146,76 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className={s.container}>
-      <h1 className={s.title}>destiny.report</h1>
+    <>
+      <section className={s.container}>
+        <h1 className={s.title}>destiny.report</h1>
 
-      <Search className={s.search} />
+        <Search className={s.search} />
 
-      {apiStatus && (
-        <p className={s.explainer}>
-          Currently tracking {apiStatus.profileCount.toLocaleString()} profiles,
-          leaderboards last updated{" "}
-          <TimeAgo date={apiStatus.latestProfileLastCrawled} />.
-        </p>
-      )}
+        {apiStatus && (
+          <p className={s.explainer}>
+            Currently tracking {apiStatus.profileCount.toLocaleString()}{" "}
+            profiles, leaderboards last updated{" "}
+            <TimeAgo date={apiStatus.latestProfileLastCrawled} />.
+          </p>
+        )}
 
-      {playersWithErrors.length > 0 && (
-        <p className={s.explainer}>
-          Unable to retrieve ranks for a player. Is the profile set to private?
-        </p>
-      )}
-
-      {SEALS && (
-        <section className={s.section} style={{ textAlign: "left" }}>
-          <h2>Seals</h2>
-
-          <div className={s.seals}>
-            {[
-              { title: "Wayfarer", stat: 12 },
-              { title: "Blacksmith", stat: 2 },
-              { title: "Dredgen", stat: 31 },
-              { title: "Cursebreaker", stat: 4 }
-            ].map(seal => (
-              <div className={s.seal} key={seal.title}>
-                <div className={s.sealTitle}>{seal.title}</div>
-                <div className={s.sealStat}>{seal.stat}%</div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      <NightfallLeaderboards />
-
-      <div className={s.leaderboards}>
-        <Leaderboard
-          className={staleData ? s.staleData : undefined}
-          title="Collection"
-          players={collectionLeaderboard}
-          extraPlayersLoading={destinyCrawlLoading}
-          extraPlayers={
-            extraPlayers.length > 0
-              ? leaderboardFromProfiles(extraPlayers, "collectionRank")
-              : undefined
-          }
-          renderScore={player =>
-            `${player.collectionScore.toLocaleString()} items`
-          }
-        />
-        <Leaderboard
-          className={staleData ? s.staleData : undefined}
-          title="Triumphs"
-          players={triumphLeaderboard}
-          extraPlayersLoading={destinyCrawlLoading}
-          extraPlayers={
-            extraPlayers.length > 0
-              ? leaderboardFromProfiles(extraPlayers, "triumphRank")
-              : undefined
-          }
-          renderScore={player =>
-            `${player.triumphScore.toLocaleString()} points`
-          }
-        />
-      </div>
-      <section className={s.section}>
-        <button className={s.moreButton} onClick={viewMore}>
-          {VIEW_MORE_LABELS[maxLeaderboardSize.toString()]}
-        </button>
+        {playersWithErrors.length > 0 && (
+          <p className={s.explainer}>
+            Unable to retrieve ranks for a player. Is the profile set to
+            private?
+          </p>
+        )}
       </section>
 
-      <p className={s.explainer}>Made by joshhunt</p>
-    </div>
+      <section>
+        <div className={s.container}>
+          <h2>Nightfalls</h2>
+        </div>
+
+        <NightfallLeaderboards />
+      </section>
+
+      <section className={s.container}>
+        <div className={s.leaderboards}>
+          <Leaderboard
+            className={staleData ? s.staleData : undefined}
+            title="Collection"
+            players={collectionLeaderboard}
+            extraPlayersLoading={destinyCrawlLoading}
+            extraPlayers={
+              extraPlayers.length > 0
+                ? leaderboardFromProfiles(extraPlayers, "collectionRank")
+                : undefined
+            }
+            renderScore={player =>
+              `${player.collectionScore.toLocaleString()} items`
+            }
+          />
+          <Leaderboard
+            className={staleData ? s.staleData : undefined}
+            title="Triumphs"
+            players={triumphLeaderboard}
+            extraPlayersLoading={destinyCrawlLoading}
+            extraPlayers={
+              extraPlayers.length > 0
+                ? leaderboardFromProfiles(extraPlayers, "triumphRank")
+                : undefined
+            }
+            renderScore={player =>
+              `${player.triumphScore.toLocaleString()} points`
+            }
+          />
+        </div>
+        <section className={s.section}>
+          <button className={s.moreButton} onClick={viewMore}>
+            {VIEW_MORE_LABELS[maxLeaderboardSize.toString()]}
+          </button>
+        </section>
+
+        <p className={s.explainer}>Made by joshhunt</p>
+      </section>
+    </>
   );
 };
 

@@ -1,0 +1,37 @@
+@import "../../variables.scss";
+
+.root {
+}
+
+.nightfalls {
+  display: flex;
+  overflow: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: calc(
+    ((100vw - #{$containerWidth}) / 2) + #{$containerPadding}
+  );
+  padding-left: calc(((100vw - #{$containerWidth}) / 2) + #{$containerPadding});
+
+  @supports (scroll-snap-type: x mandatory) {
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  > div {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+}
+
+.nightfallCard {
+  max-width: 350px;
+  margin-right: 32px;
+}
+
+.spacerwtf {
+  width: 1px;
+  margin-left: -1px;
+}
