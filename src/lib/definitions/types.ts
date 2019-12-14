@@ -1,7 +1,8 @@
 import {
   DestinyActivityDefinition,
   DestinyInventoryItemDefinition,
-  DestinyPresentationNodeDefinition
+  DestinyPresentationNodeDefinition,
+  DestinyRecordDefinition
 } from "bungie-api-ts/destiny2/interfaces";
 
 type DefinitionsObject<Definition> = {
@@ -9,6 +10,7 @@ type DefinitionsObject<Definition> = {
 };
 
 export interface DestinyWorldDefinitions {
+  DestinyRecordDefinition?: DefinitionsObject<DestinyRecordDefinition>;
   DestinyActivityDefinition?: DefinitionsObject<DestinyActivityDefinition>;
   DestinyInventoryItemDefinition?: DefinitionsObject<
     DestinyInventoryItemDefinition

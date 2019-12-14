@@ -90,13 +90,25 @@ function fetchDefinition(url: string) {
   return promise;
 }
 
+function getManifest() {
+  if (REQUESTS.manifest) {
+    return REQUESTS.manifest;
+  }
+
+  const promise = bungieFetch<UpdatedDestinyManifest>(
+    "https://www.bungie.net/Platform/Destiny2/Manifest/"
+  );
+
+  REQUESTS.manifest = promise;
+
+  return promise;
+}
+
 export async function getDefinitions(
   tables: string[],
   callback: (data: DefintionsDispatchData) => void
 ) {
-  const manifest = await bungieFetch<UpdatedDestinyManifest>(
-    "https://www.bungie.net/Platform/Destiny2/Manifest/"
-  );
+  const manifest = await getManifest();
 
   const promises = tables
     .map(async tableName => {
