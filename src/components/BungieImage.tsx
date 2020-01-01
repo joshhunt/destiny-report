@@ -18,7 +18,7 @@ const BungieImage: React.FC<BungieImageProps> = ({ def, src, ...rest }) => {
     return null;
   }
 
-  return <img {...rest} src={`https://www.bungie.net${bungieSrc}`} />;
+  return <img {...rest} alt="" src={`https://www.bungie.net${bungieSrc}`} />;
 };
 
 export default BungieImage;

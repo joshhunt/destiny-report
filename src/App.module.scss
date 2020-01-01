@@ -2,7 +2,7 @@
 
 .container {
   max-width: $containerWidth;
-  padding: $containerPadding;
+  padding: 0 $containerPadding;
   margin: auto;
 }
 
@@ -26,9 +26,9 @@
   opacity: 0.5;
 }
 
-.section {
+.buttonSection {
   text-align: center;
-  margin-bottom: 48px;
+  margin-bottom: 0;
 }
 
 .moreButton {

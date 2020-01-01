@@ -26,7 +26,7 @@ class DestinyReportDatabase extends Dexie {
 
 const db = new DestinyReportDatabase();
 
-interface UpdatedDestinyManifest extends DestinyManifest {
+export interface DestinyManifestUpdated extends DestinyManifest {
   readonly jsonWorldComponentContentPaths: {
     [language: string]: {
       [key: string]: string;
@@ -95,7 +95,7 @@ function getManifest() {
     return REQUESTS.manifest;
   }
 
-  const promise = bungieFetch<UpdatedDestinyManifest>(
+  const promise = bungieFetch<DestinyManifestUpdated>(
     "https://www.bungie.net/Platform/Destiny2/Manifest/"
   );
 

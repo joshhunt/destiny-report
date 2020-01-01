@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useMemo } from "react";
 import cx from "classnames";
 import { DestinyActivityDefinition } from "bungie-api-ts/destiny2/interfaces";
 
 import BungieImage from "../BungieImage";
 import { useDefinitions } from "../../lib/definitions";
+import { DestinyWorldDefinitions } from "../../lib/definitions/types";
+import { NightfallLeaderboardEntry } from "../../types";
 
 import s from "./styles.module.scss";
-import { string } from "prop-types";
+import Icon from "../Icon";
+import FireteamMembers from "../FireteamMembers";
 
 const usesNightfallCard = (activity: DestinyActivityDefinition): boolean => {
   return !!activity.modifiers.find(
@@ -14,38 +17,90 @@ const usesNightfallCard = (activity: DestinyActivityDefinition): boolean => {
   );
 };
 
-const ALTERNATE_DISPLAY: Record<string, number> = {
-  1358381368: 442671778, // arms dealer ordeal
-  1358381370: 442671778, // arms dealer ordeal
-  1358381371: 442671778, // arms dealer ordeal
-  1358381373: 442671778, // arms dealer ordeal
-  3108813009: 1134446996, // warden of nothing
-  3280234344: 649648599, // savathuns song
-  3718330161: 561345573 // tree of probabilities
-};
-
 interface ActivityProps {
   activityHash: number | string;
   className?: string;
+  leaderboardEntries: NightfallLeaderboardEntry[];
 }
 
-const Activity: React.FC<ActivityProps> = ({ activityHash, className }) => {
+const isActivity = (
+  obj: DestinyActivityDefinition | undefined
+): obj is DestinyActivityDefinition => !!obj;
+
+function getSupplimentaryData(
+  activity: DestinyActivityDefinition | undefined,
+  activityDefs: DestinyWorldDefinitions["DestinyActivityDefinition"]
+) {
+  if (!activityDefs || !activity) {
+    return {
+      displayActivity: activity
+    };
+  }
+
+  const isOrdeal = activity.displayProperties.name.includes("The Ordeal:");
+  const activities = Object.values(activityDefs).filter(isActivity);
+
+  const displayActivity = isOrdeal
+    ? activities.find(
+        candidate =>
+          candidate.displayProperties.name ===
+          activity.displayProperties.description
+      )
+    : activities
+        .filter(
+          candidate =>
+            activity.displayProperties.name &&
+            candidate.displayProperties.name &&
+            candidate.displayProperties.name.length > 3 &&
+            activity.displayProperties.name !==
+              candidate.displayProperties.name &&
+            activity.displayProperties.name.includes(
+              candidate.displayProperties.name
+            )
+        )
+        .sort(
+          (a, b) =>
+            a.displayProperties.name.length - b.displayProperties.name.length
+        )[0];
+
+  return {
+    displayActivity: displayActivity || activity
+  };
+}
+
+function formatSeconds(seconds: number) {
+  const minutes = Math.floor(seconds / 60);
+  const secondsRemaining = seconds - minutes * 60;
+
+  return [
+    minutes > 0 && `${minutes}m`,
+    secondsRemaining > 0 && `${secondsRemaining}s`
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
+const Activity: React.FC<ActivityProps> = ({
+  activityHash,
+  className,
+  leaderboardEntries
+}) => {
   const { DestinyActivityDefinition } = useDefinitions();
 
   const activity =
     DestinyActivityDefinition && DestinyActivityDefinition[activityHash];
 
-  if (!activity) {
+  const { displayActivity } = useMemo(
+    () => getSupplimentaryData(activity, DestinyActivityDefinition),
+    [activity, DestinyActivityDefinition]
+  );
+
+  if (!activity || !displayActivity) {
     return null;
   }
 
-  const displayActivityHash = ALTERNATE_DISPLAY[activityHash] || activityHash;
-  const displayActivity =
-    (DestinyActivityDefinition &&
-      DestinyActivityDefinition[displayActivityHash]) ||
-    activity;
-
   const isClassic = usesNightfallCard(activity);
+  const topEntry = leaderboardEntries[0];
 
   return (
     <div className={cx(s.root, className)}>
@@ -55,68 +110,48 @@ const Activity: React.FC<ActivityProps> = ({ activityHash, className }) => {
         <div className={s.nameSplit}>
           <div className={s.name}>{displayActivity.displayProperties.name}</div>
 
-          <div className={s.tag}>{isClassic ? "Classic" : "Ordeal"}</div>
+          {isClassic ? (
+            <div className={s.tagClassic}>Classic</div>
+          ) : (
+            <div className={s.tagOrdeal}>
+              Ordeal: {activity.activityLightLevel}
+            </div>
+          )}
         </div>
 
-        {isClassic && (
-          <>
+        <br />
+        <div className={s.statSplit}>
+          <div>
+            <strong>Top score</strong>
             <br />
-            <div className={s.statSplit}>
-              <div>
-                <strong>Top score</strong>
-                <br />
-                52,985
-              </div>
+            {topEntry.teamScore.toLocaleString()}
 
-              <div>
-                <strong>Fastest time</strong>
-                <br />
-                13m 24s
-              </div>
-            </div>
-          </>
-        )}
-
-        {!isClassic && (
-          <div className={s.statSplit}>
-            <div className={s.statGroup}>
-              <div className={s.smallHeading}>950 Legend</div>
-
-              <div className={s.statSplit}>
-                <div>
-                  <div className={s.statHeading}>Top score</div>
-                  52,985
-                </div>
-
-                {/* <div>
-                  <div className={s.statHeading}>Fastest time</div>
-                  13m 24s
-                </div> */}
-              </div>
-            </div>
-
-            <div className={s.statGroup}>
-              <div className={s.smallHeading}>980 Master</div>
-
-              <div className={s.statSplit}>
-                <div>
-                  <div className={s.statHeading}>Top score</div>
-                  52,985
-                </div>
-
-                {/* <div>
-                  <div className={s.statHeading}>Fastest time</div>
-                  13m 24s
-                </div> */}
-              </div>
-            </div>
-
-            {/* <td>750 Adept</td>
-                <td>920 Hero</td>
-                <td>950 Legend</td>
-                <td>980 Master</td> */}
+            <br />
+            <br />
+            <strong>Duration</strong>
+            <br />
+            {formatSeconds(topEntry.activityDurationSeconds)}
           </div>
-        )}
+
+          <div>
+            <strong>Fireteam</strong>
+            <br />
+            <FireteamMembers pgcrId={topEntry.pgcrId} />
+          </div>
+        </div>
+
+        <br />
+        <a
+          className={isClassic ? s.classicLink : s.link}
+          href={`https://www.bungie.net/en/PGCR/${topEntry.pgcrId}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View on Bungie.net{" "}
+          <span className={s.linkIcon}>
+            <Icon name="arrow-right" />
+          </span>
+        </a>
       </div>
     </div>
   );

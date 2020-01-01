@@ -36,6 +36,16 @@
   display: inline-block;
 }
 
+.tagClassic {
+  composes: tag;
+  background: #e74c3c;
+}
+
+.tagOrdeal {
+  composes: tag;
+  background: $accentColor;
+}
+
 .statSplit {
   display: flex;
 
@@ -57,4 +67,25 @@
 
 .statGroup {
   margin-top: 16px;
+}
+
+.link {
+  color: inherit;
+
+  &:hover {
+    color: $accentColor;
+  }
+}
+
+.classicLink {
+  composes: link;
+
+  &:hover {
+    color: #e74c3c;
+  }
+}
+
+.linkIcon {
+  font-size: 0.9em;
+  text-decoration: underline;
 }

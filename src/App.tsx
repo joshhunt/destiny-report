@@ -168,14 +168,6 @@ const App: React.FC = () => {
         )}
       </section>
 
-      <section>
-        <div className={s.container}>
-          <h2>Nightfalls</h2>
-        </div>
-
-        <NightfallLeaderboards />
-      </section>
-
       <section className={s.container}>
         <div className={s.leaderboards}>
           <Leaderboard
@@ -207,14 +199,33 @@ const App: React.FC = () => {
             }
           />
         </div>
-        <section className={s.section}>
+
+        <section className={s.buttonSection}>
           <button className={s.moreButton} onClick={viewMore}>
             {VIEW_MORE_LABELS[maxLeaderboardSize.toString()]}
           </button>
         </section>
-
-        <p className={s.explainer}>Made by joshhunt</p>
       </section>
+
+      <br />
+      <br />
+
+      <section>
+        <div className={s.container}>
+          <h2>Nightfalls</h2>
+        </div>
+
+        <NightfallLeaderboards />
+      </section>
+
+      <p className={s.explainer}>
+        <br />
+        <br />
+        <br />
+        <br />
+        Made by joshhunt
+        <br />
+      </p>
     </>
   );
 };

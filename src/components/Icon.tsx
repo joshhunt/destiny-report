@@ -1,7 +1,7 @@
 import React from "react";
 import { MembershipType } from "../types";
 
-interface IconProps {
+interface IconProps extends React.HTMLAttributes<HTMLSpanElement> {
   name: string;
   solid?: boolean;
   regular?: boolean;

@@ -44,7 +44,18 @@ export function useCachedApi<Data>(url: string): [Data, boolean] {
     prevData && setData(prevData);
     prevData && setIsStale(true);
 
-    fetch(url)
+    const isBungieApi =
+      url.includes("://stats.bungie.net/") || url.includes("://bungie.net/");
+
+    const options = isBungieApi
+      ? {
+          headers: {
+            "x-api-key": process.env.REACT_APP_API_KEY || ""
+          }
+        }
+      : {};
+
+    fetch(url, options)
       .then(r => r.json())
       .then(data => {
         setData(data);
