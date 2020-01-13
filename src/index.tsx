@@ -4,14 +4,9 @@ import "./index.scss";
 import App from "./App";
 // import App from "./views/Triumphs";
 import * as serviceWorker from "./serviceWorker";
-import history, { HistoryContext } from "./history";
 
 const Site = () => {
-  return (
-    <HistoryContext.Provider value={history}>
-      <App />
-    </HistoryContext.Provider>
-  );
+  return <App />;
 };
 
 const rootElement = document.getElementById("root");

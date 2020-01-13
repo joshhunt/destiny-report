@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 
 import s from "./styles.module.scss";
-import { useDefinitions } from "../../lib/definitions";
+import { useDefinitions, WithDefinitions } from "../../lib/definitions";
 
 const ROOT_TRIUMPH_NODE = 1024788583;
 
@@ -114,4 +114,12 @@ const Triumphs = function() {
   );
 };
 
-export default Triumphs;
+export default function TriumphsWithDefinitions() {
+  return (
+    <WithDefinitions
+      tables={["DestinyRecordDefinition", "DestinyPresentationNodeDefinition"]}
+    >
+      <Triumphs />
+    </WithDefinitions>
+  );
+}
