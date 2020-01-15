@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import { useDefinitions } from "../../../lib/definitions";
 
 import Record from "../Record";
@@ -51,15 +51,26 @@ const Node: React.FC<{
   presentationNodeHash: number;
 }> = ({ isRoot, presentationNodeHash }) => {
   const { showZeroPointTriumphs } = useSettings();
+
   const {
     DestinyPresentationNodeDefinition: nodeDefs,
     DestinyRecordDefinition: recordDefs
   } = useDefinitions();
+
   const [isCollapsed, setIsCollapsed] = useLocalStorage(
     `collapsed_${presentationNodeHash}`,
     false
   );
+
   const node = nodeDefs && nodeDefs[presentationNodeHash];
+
+  // useEffect(() => {
+  //   console.log({ isRoot, refCurrent: rootRef.current });
+
+  //   if (isRoot && rootRef.current) {
+
+  //   }
+  // }, [isRoot]);
 
   const totalChildrenPointScore =
     (node &&

@@ -36,7 +36,6 @@ export async function getProfile(
   components: DestinyComponentType[]
 ) {
   const componentsStr = components.join(",");
-  console.log({ componentsStr });
 
   return await bungieFetch<DestinyProfileResponse>(
     `https://www.bungie.net/Platform/Destiny2/${membershipType}/Profile/${membershipId}/?components=${componentsStr}`

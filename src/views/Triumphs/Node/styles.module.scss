@@ -75,6 +75,7 @@
   top: 0;
   background-color: $bg;
   z-index: 1;
+  padding: 16px 0;
 }
 
 .players {
@@ -83,7 +84,7 @@
 }
 
 .player {
-  width: 300px;
+  width: 200px;
 
   & + & {
     margin-left: 10px;

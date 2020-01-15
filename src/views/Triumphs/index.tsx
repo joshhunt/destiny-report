@@ -62,8 +62,6 @@ const Triumphs = function() {
       //   return null;
       // }
 
-      console.log("request player", membershipId);
-
       getProfile(membershipType, membershipId, [
         DestinyComponentType.Profiles,
         DestinyComponentType.PresentationNodes,
