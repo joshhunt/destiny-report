@@ -85,14 +85,16 @@ const Node: React.FC<{
 
   return node ? (
     <div className={cx(s.node, isCollapsed && s.isCollapsed)}>
-      <div className={s.side}>
-        <button
-          className={s.collapseButton}
-          onClick={() => setIsCollapsed(!isCollapsed)}
-        >
-          {isCollapsed ? "expand" : "collapse"}
-        </button>
-      </div>
+      {!isRoot && (
+        <div className={s.side}>
+          <button
+            className={s.collapseButton}
+            onClick={() => setIsCollapsed(!isCollapsed)}
+          >
+            {isCollapsed ? "expand" : "collapse"}
+          </button>
+        </div>
+      )}
 
       <div className={s.main}>
         <div className={cx(s.splitHeading, isRoot && s.sticky)}>
