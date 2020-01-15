@@ -72,9 +72,13 @@
 .sticky {
   position: sticky;
   top: 0;
-  background-color: $bg;
   z-index: 1;
   padding: 16px 0;
+
+  &,
+  &:hover {
+    background-color: $bg;
+  }
 }
 
 .players {
