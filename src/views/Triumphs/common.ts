@@ -54,12 +54,20 @@ export const recordIsCompleted = (state: number) => {
   return enumerated.recordRedeemed || !enumerated.objectiveNotCompleted;
 };
 
+const profileScoreCache: Record<string, Record<string, number>> = {};
 export function calculateCompletedScoreFromNode(
   node: DestinyPresentationNodeDefinition,
   profile: DestinyProfileResponse,
   nodeDefs: DestinyPresentationNodeDefinitionCollection,
   recordDefs: DestinyRecordDefinitionCollection
 ) {
+  const membershipId = profile.profile.data?.userInfo.membershipId || "0";
+  profileScoreCache[membershipId] = profileScoreCache[membershipId] || {};
+
+  if (profileScoreCache[membershipId].hasOwnProperty(node.hash)) {
+    return profileScoreCache[membershipId][node.hash];
+  }
+
   const triumphs = triumphsFromProfile(profile);
 
   let score = 0;
@@ -102,12 +110,10 @@ export function calculateCompletedScoreFromNode(
     score += basicScore + (intervalScore || 0);
   });
 
+  profileScoreCache[membershipId][node.hash] = score;
+
   return score;
 }
-
-// export const calculateCompletedScoreFromNode = memoize(
-//   _calculateCompletedScoreFromNode
-// );
 
 function _triumphsFromProfile(profile: DestinyProfileResponse) {
   const records: Record<string, DestinyRecordComponent | undefined> = {};

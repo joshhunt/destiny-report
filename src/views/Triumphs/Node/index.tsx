@@ -50,7 +50,8 @@ const Node: React.FC<{
   isRoot?: boolean;
   presentationNodeHash: number;
 }> = ({ isRoot, presentationNodeHash }) => {
-  const { showZeroPointTriumphs } = useSettings();
+  const { showZeroPointTriumphs, showCompletedTriumphs } = useSettings();
+  const playerData = usePlayerData();
 
   const {
     DestinyPresentationNodeDefinition: nodeDefs,
@@ -64,14 +65,30 @@ const Node: React.FC<{
 
   const node = nodeDefs && nodeDefs[presentationNodeHash];
 
+  if (!(node && nodeDefs && recordDefs)) {
+    return null;
+  }
+
   const totalChildrenPointScore =
-    (node &&
-      nodeDefs &&
-      recordDefs &&
-      scoreFromPresentationNode(node, nodeDefs, recordDefs)) ||
-    0;
+    scoreFromPresentationNode(node, nodeDefs, recordDefs) || 0;
 
   if (!showZeroPointTriumphs && totalChildrenPointScore === 0) {
+    return null;
+  }
+
+  const allZeroPointsRemaining = playerData.every(player => {
+    const completedScore = calculateCompletedScoreFromNode(
+      node,
+      player,
+      nodeDefs,
+      recordDefs
+    );
+    const remaining = totalChildrenPointScore - completedScore;
+
+    return remaining <= 0;
+  });
+
+  if (!showCompletedTriumphs && allZeroPointsRemaining) {
     return null;
   }
 
