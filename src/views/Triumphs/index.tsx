@@ -7,8 +7,7 @@ import {
   useLocalStorage,
   PlayerDataState,
   PlayerDataAction,
-  playerDataContext,
-  usePlayerData
+  playerDataContext
 } from "./common";
 import s from "./styles.module.scss";
 import { useLocation } from "react-router-dom";
@@ -26,14 +25,11 @@ function playerDataReducer(
   state: PlayerDataState,
   action: PlayerDataAction
 ): PlayerDataState {
-  return {
-    ...state,
-    [action.key]: action.data
-  };
+  return [...state, action.data];
 }
 
 const Triumphs = function() {
-  const [playerData, setPlayerData] = useReducer(playerDataReducer, {});
+  const [playerData, setPlayerData] = useReducer(playerDataReducer, []);
 
   const [showZeroPointTriumphs, setShowZeroPointTriumphs] = useLocalStorage(
     "showZeroPointTriumphs",
@@ -41,7 +37,12 @@ const Triumphs = function() {
   );
 
   const [showCompletedPoints, setShowCompletedPoints] = useLocalStorage(
-    "showZeroPointTriumphs",
+    "showCompletedPoints",
+    false
+  );
+
+  const [showCompletedTriumphs, setShowCompletedTriumphs] = useLocalStorage(
+    "showCompletedTriumphs",
     false
   );
 
@@ -58,10 +59,6 @@ const Triumphs = function() {
 
   useEffect(() => {
     players.forEach(({ membershipId, membershipType }) => {
-      // if (playerData[membershipType]) {
-      //   return null;
-      // }
-
       getProfile(membershipType, membershipId, [
         DestinyComponentType.Profiles,
         DestinyComponentType.PresentationNodes,
@@ -76,9 +73,15 @@ const Triumphs = function() {
     return {
       showZeroPointTriumphs,
       showCompletedPoints,
+      showCompletedTriumphs,
       setShowCompletedPoints
     };
-  }, [setShowCompletedPoints, showCompletedPoints, showZeroPointTriumphs]);
+  }, [
+    setShowCompletedPoints,
+    showCompletedPoints,
+    showCompletedTriumphs,
+    showZeroPointTriumphs
+  ]);
 
   return (
     <settingsContext.Provider value={settings}>
@@ -93,6 +96,17 @@ const Triumphs = function() {
               onChange={ev => setShowZeroPointTriumphs(ev.target.checked)}
             />{" "}
             Show zero point triumphs
+          </label>
+
+          <br />
+
+          <label>
+            <input
+              type="checkbox"
+              checked={showCompletedTriumphs}
+              onChange={ev => setShowCompletedTriumphs(ev.target.checked)}
+            />{" "}
+            Show triumphs completed by all
           </label>
 
           <br />

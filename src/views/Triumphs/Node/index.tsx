@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from "react";
+import React from "react";
 import { useDefinitions } from "../../../lib/definitions";
 
 import Record from "../Record";
@@ -63,14 +63,6 @@ const Node: React.FC<{
   );
 
   const node = nodeDefs && nodeDefs[presentationNodeHash];
-
-  // useEffect(() => {
-  //   console.log({ isRoot, refCurrent: rootRef.current });
-
-  //   if (isRoot && rootRef.current) {
-
-  //   }
-  // }, [isRoot]);
 
   const totalChildrenPointScore =
     (node &&
@@ -158,7 +150,7 @@ const NodePlayerData: React.FC<{
 
   return (
     <div className={s.players}>
-      {Object.values(playerData).map(player => {
+      {playerData.map(player => {
         if (!player) {
           return undefined;
         }

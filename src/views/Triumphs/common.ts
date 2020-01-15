@@ -14,14 +14,12 @@ import {
 
 export interface TriumphsSettings {
   showZeroPointTriumphs?: boolean;
+  showCompletedTriumphs?: boolean;
   showCompletedPoints?: boolean;
   setShowCompletedPoints: (value: boolean) => void;
 }
 
-export type PlayerDataState = Record<
-  string,
-  DestinyProfileResponse | undefined
->;
+export type PlayerDataState = DestinyProfileResponse[];
 export interface PlayerDataAction {
   key: string;
   data: DestinyProfileResponse;
@@ -32,7 +30,7 @@ export const settingsContext = createContext<TriumphsSettings>({
 });
 export const useSettings = () => useContext(settingsContext);
 
-export const playerDataContext = createContext<PlayerDataState>({});
+export const playerDataContext = createContext<PlayerDataState>([]);
 export const usePlayerData = () => useContext(playerDataContext);
 
 export const flagEnum = (state: number, value: number) => !!(state & value);

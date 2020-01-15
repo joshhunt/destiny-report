@@ -10,7 +10,8 @@ import {
   scoreFromRecord,
   usePlayerData,
   triumphsFromProfile,
-  recordIsCompleted
+  recordIsCompleted,
+  PlayerDataState
 } from "../common";
 
 const RecordBody: React.FC<{
@@ -32,14 +33,13 @@ const RecordBody: React.FC<{
   );
 };
 
-const RecordPlayerData: React.FC<{ record: DestinyRecordDefinition }> = ({
-  record
-}) => {
-  const playerData = usePlayerData();
-
+const RecordPlayerData: React.FC<{
+  record: DestinyRecordDefinition;
+  playerData: PlayerDataState;
+}> = ({ record, playerData }) => {
   return (
     <div className={s.players}>
-      {Object.values(playerData).map(player => {
+      {playerData.map(player => {
         if (!player) {
           return undefined;
         }
@@ -60,7 +60,8 @@ const RecordPlayerData: React.FC<{ record: DestinyRecordDefinition }> = ({
 };
 
 const Record: React.FC<{ recordHash: number }> = ({ recordHash }) => {
-  const { showZeroPointTriumphs } = useSettings();
+  const playerData = usePlayerData();
+  const { showZeroPointTriumphs, showCompletedTriumphs } = useSettings();
   const { DestinyRecordDefinition: recordDefs } = useDefinitions();
   const record = recordDefs && recordDefs[recordHash];
   const totalPointScore = (record && scoreFromRecord(record)) || 0;
@@ -69,11 +70,21 @@ const Record: React.FC<{ recordHash: number }> = ({ recordHash }) => {
     return null;
   }
 
+  const allCompleted = playerData.every(profile => {
+    const playerTriumphs = triumphsFromProfile(profile);
+    const recordInstance = playerTriumphs[record.hash];
+    return recordInstance && recordIsCompleted(recordInstance.state);
+  });
+
+  if (!showCompletedTriumphs && allCompleted) {
+    return null;
+  }
+
   return (
     <div className={s.root}>
       <RecordBody record={record} totalPointScore={totalPointScore} />
 
-      <RecordPlayerData record={record} />
+      <RecordPlayerData playerData={playerData} record={record} />
     </div>
   );
 };
