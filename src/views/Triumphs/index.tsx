@@ -28,8 +28,26 @@ function playerDataReducer(
   return [...state, action.data];
 }
 
+const useSortedPlayers = (
+  unsortedPlayerData: PlayerDataState,
+  players: { membershipId: string }[]
+) => {
+  return useMemo(() => {
+    return unsortedPlayerData.sort(function(a, b) {
+      return (
+        players.findIndex(
+          p => p.membershipId === a.profile.data?.userInfo.membershipId
+        ) -
+        players.findIndex(
+          p => p.membershipId === b.profile.data?.userInfo.membershipId
+        )
+      );
+    });
+  }, [players, unsortedPlayerData]);
+};
+
 const Triumphs = function() {
-  const [playerData, setPlayerData] = useReducer(playerDataReducer, []);
+  const [unsortedPlayerData, setPlayerData] = useReducer(playerDataReducer, []);
 
   const [showZeroPointTriumphs, setShowZeroPointTriumphs] = useLocalStorage(
     "showZeroPointTriumphs",
@@ -56,6 +74,8 @@ const Triumphs = function() {
       }),
     [playersParam]
   );
+
+  const playerData = useSortedPlayers(unsortedPlayerData, players);
 
   useEffect(() => {
     players.forEach(({ membershipId, membershipType }) => {
