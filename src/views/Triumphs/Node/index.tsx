@@ -47,8 +47,9 @@ function scoreFromPresentationNode(
 }
 
 const Node: React.FC<{
+  isRoot?: boolean;
   presentationNodeHash: number;
-}> = ({ presentationNodeHash }) => {
+}> = ({ isRoot, presentationNodeHash }) => {
   const { showZeroPointTriumphs } = useSettings();
   const {
     DestinyPresentationNodeDefinition: nodeDefs,
@@ -83,7 +84,7 @@ const Node: React.FC<{
       </div>
 
       <div className={s.main}>
-        <div className={s.splitHeading}>
+        <div className={cx(s.splitHeading, isRoot && s.sticky)}>
           <p
             className={s.nodeHeading}
             onClick={() => setIsCollapsed(!isCollapsed)}
@@ -96,6 +97,7 @@ const Node: React.FC<{
           </p>
 
           <NodePlayerData
+            isRoot={isRoot}
             node={node}
             totalChildrenPointScore={totalChildrenPointScore}
           />
@@ -125,9 +127,10 @@ const Node: React.FC<{
 };
 
 const NodePlayerData: React.FC<{
+  isRoot?: boolean;
   node: DestinyPresentationNodeDefinition;
   totalChildrenPointScore: number;
-}> = ({ node, totalChildrenPointScore }) => {
+}> = ({ isRoot, node, totalChildrenPointScore }) => {
   const playerData = usePlayerData();
 
   const {
@@ -157,15 +160,42 @@ const NodePlayerData: React.FC<{
 
         return (
           <div className={s.player}>
-            <strong>{player.profile.data?.userInfo.displayName}</strong>
-            <br />
-            {completedScore.toLocaleString()} pts
-            <br />
-            {remainingScore.toLocaleString()} pts remaining.
+            {isRoot && (
+              <>
+                <strong>{player.profile.data?.userInfo.displayName}</strong>
+                <br />
+              </>
+            )}
+
+            <PointsToggle
+              completed={completedScore}
+              remaining={remainingScore}
+            />
           </div>
         );
       })}
     </div>
+  );
+};
+
+const PointsToggle: React.FC<{
+  completed: number;
+  remaining: number;
+}> = ({ completed, remaining }) => {
+  const settings = useSettings();
+
+  return (
+    <span
+      onClick={ev =>
+        settings.setShowCompletedPoints(!settings.showCompletedPoints)
+      }
+    >
+      {settings.showCompletedPoints ? (
+        <span>{completed.toLocaleString()} pts completed</span>
+      ) : (
+        <span>{remaining.toLocaleString()} pts remaining</span>
+      )}
+    </span>
   );
 };
 

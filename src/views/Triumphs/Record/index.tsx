@@ -1,4 +1,5 @@
 import React from "react";
+import cx from "classnames";
 import { DestinyRecordDefinition } from "bungie-api-ts/destiny2/interfaces";
 
 import { useDefinitions } from "../../../lib/definitions";
@@ -49,9 +50,7 @@ const RecordPlayerData: React.FC<{ record: DestinyRecordDefinition }> = ({
           recordInstance && recordIsCompleted(recordInstance.state);
 
         return (
-          <div className={isComplete ? s.complete : s.incomplete}>
-            <strong>{player.profile.data?.userInfo.displayName}</strong>
-            <br />
+          <div className={cx(s.player, isComplete ? s.complete : s.incomplete)}>
             {isComplete ? "completed" : "incomplete"}
           </div>
         );

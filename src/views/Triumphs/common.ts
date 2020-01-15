@@ -14,6 +14,8 @@ import {
 
 export interface TriumphsSettings {
   showZeroPointTriumphs?: boolean;
+  showCompletedPoints?: boolean;
+  setShowCompletedPoints: (value: boolean) => void;
 }
 
 export type PlayerDataState = Record<
@@ -25,7 +27,9 @@ export interface PlayerDataAction {
   data: DestinyProfileResponse;
 }
 
-export const settingsContext = createContext<TriumphsSettings>({});
+export const settingsContext = createContext<TriumphsSettings>({
+  setShowCompletedPoints: () => {}
+});
 export const useSettings = () => useContext(settingsContext);
 
 export const playerDataContext = createContext<PlayerDataState>({});

@@ -62,6 +62,19 @@
 .splitHeading {
   display: flex;
   justify-content: space-between;
+
+  transition: background-color 50ms ease-in-out;
+
+  &:hover {
+    background-color: $cardColor;
+  }
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  background-color: $bg;
+  z-index: 1;
 }
 
 .players {
@@ -69,12 +82,10 @@
   font-size: 14px;
 }
 
-// .players > div {
-//   flex: 1 1 0px;
-// }
-
 .player {
-  background: $cardColor;
-  padding: 5px;
-  margin: 5px;
+  width: 300px;
+
+  & + & {
+    margin-left: 10px;
+  }
 }

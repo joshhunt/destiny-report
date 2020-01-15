@@ -7,7 +7,8 @@ import {
   useLocalStorage,
   PlayerDataState,
   PlayerDataAction,
-  playerDataContext
+  playerDataContext,
+  usePlayerData
 } from "./common";
 import s from "./styles.module.scss";
 import { useLocation } from "react-router-dom";
@@ -35,6 +36,11 @@ const Triumphs = function() {
   const [playerData, setPlayerData] = useReducer(playerDataReducer, {});
 
   const [showZeroPointTriumphs, setShowZeroPointTriumphs] = useLocalStorage(
+    "showZeroPointTriumphs",
+    false
+  );
+
+  const [showCompletedPoints, setShowCompletedPoints] = useLocalStorage(
     "showZeroPointTriumphs",
     false
   );
@@ -69,8 +75,12 @@ const Triumphs = function() {
   }, [players]);
 
   const settings = useMemo(() => {
-    return { showZeroPointTriumphs };
-  }, [showZeroPointTriumphs]);
+    return {
+      showZeroPointTriumphs,
+      showCompletedPoints,
+      setShowCompletedPoints
+    };
+  }, [setShowCompletedPoints, showCompletedPoints, showZeroPointTriumphs]);
 
   return (
     <settingsContext.Provider value={settings}>
@@ -91,7 +101,7 @@ const Triumphs = function() {
           <br />
 
           <div className={s.triumphs}>
-            <Node presentationNodeHash={ROOT_TRIUMPH_NODE} />
+            <Node presentationNodeHash={ROOT_TRIUMPH_NODE} isRoot />
           </div>
         </div>
       </playerDataContext.Provider>

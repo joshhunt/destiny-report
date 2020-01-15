@@ -40,12 +40,17 @@
 
 .complete {
   background: green;
-  margin: 5px;
-  padding: 5px;
 }
 
 .incomplete {
   background: red;
-  margin: 5px;
+}
+
+.player {
   padding: 5px;
+  width: 300px;
+
+  & + & {
+    margin-left: 10px;
+  }
 }
