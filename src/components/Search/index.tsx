@@ -59,11 +59,6 @@ const Search: React.FC<{ className?: string }> = ({ className }) => {
       });
   }, [searchValue]);
 
-  function clearSearch() {
-    setSearchValue(undefined);
-    setResults(undefined);
-  }
-
   return (
     <div className={className}>
       <div className={s.searchBox}>
@@ -88,7 +83,6 @@ const Search: React.FC<{ className?: string }> = ({ className }) => {
                     className={s.player}
                     key={result.membershipId}
                     to={`/${membershipType}/${membershipId}`}
-                    // onClick={clearSearch}
                   >
                     <MembershipTypeIcon type={result.membershipType} />{" "}
                     {result.displayName}

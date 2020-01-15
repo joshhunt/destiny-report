@@ -1,0 +1,51 @@
+@import "../../../variables.scss";
+
+.root {
+  display: flex;
+  justify-content: space-between;
+  transition: background-color 50ms ease-in-out;
+
+  &:hover {
+    background-color: $cardColor;
+  }
+}
+
+.root + .root {
+  margin-top: 16px;
+}
+
+.recordBody {
+  max-width: 400px;
+}
+
+.recordTitle {
+  font-weight: 600;
+}
+
+.recordTotalPointScore {
+  font-weight: normal;
+}
+
+.recordDescription {
+  color: #c5c5c5;
+}
+
+.players {
+  display: flex;
+}
+
+.players > div {
+  flex: 1 1 0px;
+}
+
+.complete {
+  background: green;
+  margin: 5px;
+  padding: 5px;
+}
+
+.incomplete {
+  background: red;
+  margin: 5px;
+  padding: 5px;
+}

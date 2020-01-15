@@ -9,15 +9,24 @@ type DefinitionsObject<Definition> = {
   [key: string]: Definition | undefined;
 };
 
+export type DestinyRecordDefinitionCollection = DefinitionsObject<
+  DestinyRecordDefinition
+>;
+export type DestinyActivityDefinitionCollection = DefinitionsObject<
+  DestinyActivityDefinition
+>;
+export type DestinyInventoryItemDefinitionCollection = DefinitionsObject<
+  DestinyInventoryItemDefinition
+>;
+export type DestinyPresentationNodeDefinitionCollection = DefinitionsObject<
+  DestinyPresentationNodeDefinition
+>;
+
 export interface DestinyWorldDefinitions {
-  DestinyRecordDefinition?: DefinitionsObject<DestinyRecordDefinition>;
-  DestinyActivityDefinition?: DefinitionsObject<DestinyActivityDefinition>;
-  DestinyInventoryItemDefinition?: DefinitionsObject<
-    DestinyInventoryItemDefinition
-  >;
-  DestinyPresentationNodeDefinition?: DefinitionsObject<
-    DestinyPresentationNodeDefinition
-  >;
+  DestinyRecordDefinition?: DestinyRecordDefinitionCollection;
+  DestinyActivityDefinition?: DestinyActivityDefinitionCollection;
+  DestinyInventoryItemDefinition?: DestinyInventoryItemDefinitionCollection;
+  DestinyPresentationNodeDefinition?: DestinyPresentationNodeDefinitionCollection;
 }
 
 export type DefinitionsState = Record<string, any>;

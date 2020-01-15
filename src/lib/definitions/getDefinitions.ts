@@ -1,6 +1,7 @@
 import { DestinyManifest } from "bungie-api-ts/destiny2/interfaces";
-import { ServerResponse } from "bungie-api-ts/common";
 import Dexie from "dexie";
+
+import { bungieFetch } from "../destinyApi";
 import { DefintionsDispatchData } from "./types";
 
 const REQUESTS: Record<string, Promise<any>> = {};
@@ -32,31 +33,6 @@ export interface DestinyManifestUpdated extends DestinyManifest {
       [key: string]: string;
     };
   };
-}
-
-function bungieFetch<Data>(
-  _url: string,
-  options: RequestInit = { headers: {} }
-): Promise<ServerResponse<Data>> {
-  const apiKey = process.env.REACT_APP_API_KEY;
-
-  if (!apiKey) {
-    throw new Error("REACT_APP_API_KEY not defined");
-  }
-
-  const combinedOptions = {
-    ...options,
-    headers: {
-      ...(options.headers || {}),
-      "x-api-key": apiKey
-    }
-  };
-
-  const url = _url.startsWith("https://")
-    ? _url
-    : `https://www.bungie.net${_url}`;
-
-  return fetch(url, combinedOptions).then(r => r.json());
 }
 
 const LANGUAGE = "en";
@@ -113,7 +89,7 @@ export async function getDefinitions(
   const promises = tables
     .map(async tableName => {
       const bungiePath =
-        manifest.Response.jsonWorldComponentContentPaths[LANGUAGE][tableName];
+        manifest.jsonWorldComponentContentPaths[LANGUAGE][tableName];
 
       if (!bungiePath) {
         return null;

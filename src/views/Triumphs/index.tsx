@@ -1,116 +1,101 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useMemo, useReducer, useEffect } from "react";
+import { WithDefinitions } from "../../lib/definitions";
 
+import Node from "./Node";
+import {
+  settingsContext,
+  useLocalStorage,
+  PlayerDataState,
+  PlayerDataAction,
+  playerDataContext
+} from "./common";
 import s from "./styles.module.scss";
-import { useDefinitions, WithDefinitions } from "../../lib/definitions";
+import { useLocation } from "react-router-dom";
+import { getProfile } from "../../lib/destinyApi";
+import { DestinyComponentType } from "../../additionalDestinyTypes";
 
+// This can be gotten from the API, settings endpoint
 const ROOT_TRIUMPH_NODE = 1024788583;
 
-function useLocalStorage<Value>(
-  key: string,
-  initialValue: Value
-): [Value, (v: Value) => void] {
-  const previousInitialValue = useMemo(() => {
-    const previous = window.localStorage.getItem(key);
-    return previous && JSON.parse(previous);
-  }, [key]);
-
-  const [value, setValue] = useState<Value>(
-    previousInitialValue || initialValue
-  );
-
-  const setter = (newValue: Value) => {
-    setValue(newValue);
-    window.localStorage.setItem(key, JSON.stringify(newValue));
-  };
-
-  return [value, setter];
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
 }
 
-const Record: React.FC<{ recordHash: number }> = ({ recordHash }) => {
-  const { DestinyRecordDefinition: recordDefs } = useDefinitions();
-
-  const record = recordDefs && recordDefs[recordHash];
-
-  if (!record) {
-    return null;
-  }
-
-  return (
-    <div className={s.record}>
-      <div className={s.recordTitle}>{record.displayProperties.name}</div>
-      <div className={s.recordDescription}>
-        {record.displayProperties.description}
-      </div>
-    </div>
-  );
-};
-
-const Node: React.FC<{
-  noUi?: boolean;
-  presentationNodeHash: number;
-}> = ({ noUi, presentationNodeHash }) => {
-  const { DestinyPresentationNodeDefinition: nodeDefs } = useDefinitions();
-  const [isCollapsed, setIsCollapsed] = useLocalStorage(
-    `collapsed_${presentationNodeHash}`,
-    false
-  );
-  const node = nodeDefs && nodeDefs[presentationNodeHash];
-
-  return node ? (
-    <div className={s.node}>
-      {!noUi && (
-        <div className={s.side}>
-          <button
-            className={isCollapsed ? s.expandButton : s.collapseButton}
-            onClick={() => setIsCollapsed(!isCollapsed)}
-          >
-            {isCollapsed ? "expand" : "collapse"}
-          </button>
-        </div>
-      )}
-
-      <div className={s.main}>
-        {!noUi && (
-          <p
-            className={s.nodeHeading}
-            onClick={() => setIsCollapsed(!isCollapsed)}
-          >
-            {node.displayProperties.name}{" "}
-          </p>
-        )}
-
-        {!isCollapsed && (
-          <div>
-            {node.children.presentationNodes.map(child => {
-              return (
-                <Node
-                  key={child.presentationNodeHash}
-                  presentationNodeHash={child.presentationNodeHash}
-                />
-              );
-            })}
-
-            {node.children.records.map(child => {
-              return (
-                <Record key={child.recordHash} recordHash={child.recordHash} />
-              );
-            })}
-          </div>
-        )}
-      </div>
-    </div>
-  ) : null;
-};
+function playerDataReducer(
+  state: PlayerDataState,
+  action: PlayerDataAction
+): PlayerDataState {
+  return {
+    ...state,
+    [action.key]: action.data
+  };
+}
 
 const Triumphs = function() {
-  return (
-    <div className={s.root}>
-      <h2>Triumphs</h2>
+  const [playerData, setPlayerData] = useReducer(playerDataReducer, {});
 
-      <div className={s.triumphs}>
-        <Node noUi presentationNodeHash={ROOT_TRIUMPH_NODE} />
-      </div>
-    </div>
+  const [showZeroPointTriumphs, setShowZeroPointTriumphs] = useLocalStorage(
+    "showZeroPointTriumphs",
+    false
+  );
+
+  const queryParams = useQuery();
+  const playersParam = queryParams.get("players") || "";
+  const players = useMemo(
+    () =>
+      playersParam.split(",").map(str => {
+        const [type, id] = str.split("/");
+        return { membershipType: type, membershipId: id };
+      }),
+    [playersParam]
+  );
+
+  useEffect(() => {
+    players.forEach(({ membershipId, membershipType }) => {
+      // if (playerData[membershipType]) {
+      //   return null;
+      // }
+
+      console.log("request player", membershipId);
+
+      getProfile(membershipType, membershipId, [
+        DestinyComponentType.Profiles,
+        DestinyComponentType.PresentationNodes,
+        DestinyComponentType.Records
+      ]).then(data => {
+        setPlayerData({ key: membershipId, data });
+      });
+    });
+  }, [players]);
+
+  const settings = useMemo(() => {
+    return { showZeroPointTriumphs };
+  }, [showZeroPointTriumphs]);
+
+  return (
+    <settingsContext.Provider value={settings}>
+      <playerDataContext.Provider value={playerData}>
+        <div className={s.root}>
+          <h2>Triumphs</h2>
+
+          <label>
+            <input
+              type="checkbox"
+              checked={showZeroPointTriumphs}
+              onChange={ev => setShowZeroPointTriumphs(ev.target.checked)}
+            />{" "}
+            Show zero point triumphs
+          </label>
+
+          <br />
+          <br />
+
+          <div className={s.triumphs}>
+            <Node presentationNodeHash={ROOT_TRIUMPH_NODE} />
+          </div>
+        </div>
+      </playerDataContext.Provider>
+    </settingsContext.Provider>
   );
 };
 
