@@ -100,11 +100,12 @@ const Node: React.FC<{
         <div className={cx(s.splitHeading, isRoot && s.sticky)}>
           <p
             className={s.nodeHeading}
-            onClick={() => setIsCollapsed(!isCollapsed)}
+            onClick={() => !isRoot && setIsCollapsed(!isCollapsed)}
           >
             {node.displayProperties.name}
-            {" - "}
+
             <span className={s.nodePointScore}>
+              {" - "}
               {totalChildrenPointScore.toLocaleString()} pts
             </span>
           </p>
