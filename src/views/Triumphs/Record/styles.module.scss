@@ -1,17 +1,19 @@
 @import "../../../variables.scss";
+@import "../common.scss";
 
 .root {
   display: flex;
   justify-content: space-between;
   transition: background-color 50ms ease-in-out;
+  padding-left: 8px;
+  font-size: 13px;
+  border-bottom: 1px solid #2a2a2a;
+  padding-bottom: 10px;
+  padding-top: 10px;
 
   &:hover {
     background-color: $cardColor;
   }
-}
-
-.root + .root {
-  margin-top: 16px;
 }
 
 .recordBody {
@@ -32,6 +34,7 @@
 
 .players {
   display: flex;
+  margin: -10px 0;
 }
 
 .players > div {
@@ -39,18 +42,81 @@
 }
 
 .complete {
-  background: green;
+  background: #43a047;
 }
 
 .incomplete {
-  background: red;
+  background: #e53935;
 }
 
 .player {
   padding: 5px;
-  width: 250px;
+  width: $player-width;
 
   & + & {
     margin-left: 10px;
   }
+}
+
+// Objective
+$objective-height: 16px;
+.objective {
+  margin-bottom: 4px;
+  display: flex;
+  height: $objective-height;
+  overflow: hidden;
+}
+
+.objectiveIndicatorIncomplete {
+  flex: 0 0 $objective-height;
+  width: $objective-height;
+  height: $objective-height;
+  border: 1px solid white;
+}
+
+.objectiveIndicatorComplete {
+  composes: objectiveIndicatorIncomplete;
+  background: white;
+}
+
+.objectiveBar {
+  display: flex;
+  position: relative;
+  width: 100%;
+  justify-content: space-between;
+  white-space: nowrap;
+  line-height: 1;
+  overflow: hidden;
+  font-size: 12px;
+  align-items: center;
+  border: 1px solid rgba(white, 0.2);
+  border-left: none;
+}
+
+.objectiveScore {
+  padding: 0 3px;
+}
+
+.objectiveName,
+.objectiveScore {
+  position: relative;
+  z-index: 2;
+}
+
+.objectiveName {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  flex: 1 1 100%;
+  padding-left: 3px;
+}
+
+.objectiveTrack {
+  position: absolute;
+  z-index: 1;
+  height: 100%;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(white, 0.2);
+  width: 55%;
 }

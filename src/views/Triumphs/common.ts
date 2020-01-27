@@ -97,7 +97,7 @@ export function calculateCompletedScoreFromNode(
     const intervalScore =
       instance.intervalObjectives &&
       instance.intervalObjectives.reduce((acc, interval, index) => {
-        if (interval.complete) {
+        if (isCompleted || interval.complete) {
           return (
             acc +
             record.intervalInfo.intervalObjectives[index].intervalScoreValue

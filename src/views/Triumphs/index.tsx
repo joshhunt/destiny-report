@@ -16,6 +16,9 @@ import { DestinyComponentType } from "../../additionalDestinyTypes";
 
 // This can be gotten from the API, settings endpoint
 const ROOT_TRIUMPH_NODE = 1024788583;
+const ROOT_SEALS_NODE = 1652422747;
+
+type ExcludesFalse = <T>(x: T | null) => x is T;
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -68,14 +71,16 @@ const Triumphs = function() {
   const playersParam = queryParams.get("players") || "";
   const players = useMemo(
     () =>
-      playersParam.split(",").map(str => {
-        const [type, id] = str.split("/");
-        return { membershipType: type, membershipId: id };
-      }),
+      playersParam
+        .split(",")
+        .map(str => {
+          const [type, id] = str.split("/");
+          const hasData = type && id;
+          return hasData ? { membershipType: type, membershipId: id } : null;
+        })
+        .filter((Boolean as any) as ExcludesFalse),
     [playersParam]
   );
-
-  const playerData = useSortedPlayers(unsortedPlayerData, players);
 
   useEffect(() => {
     players.forEach(({ membershipId, membershipType }) => {
@@ -88,6 +93,8 @@ const Triumphs = function() {
       });
     });
   }, [players]);
+
+  const playerData = useSortedPlayers(unsortedPlayerData, players);
 
   const settings = useMemo(() => {
     return {
@@ -134,6 +141,7 @@ const Triumphs = function() {
 
           <div className={s.triumphs}>
             <Node presentationNodeHash={ROOT_TRIUMPH_NODE} isRoot />
+            <Node presentationNodeHash={ROOT_SEALS_NODE} isRoot />
           </div>
         </div>
       </playerDataContext.Provider>
@@ -144,7 +152,11 @@ const Triumphs = function() {
 export default function TriumphsWithDefinitions() {
   return (
     <WithDefinitions
-      tables={["DestinyRecordDefinition", "DestinyPresentationNodeDefinition"]}
+      tables={[
+        "DestinyRecordDefinition",
+        "DestinyObjectiveDefinition",
+        "DestinyPresentationNodeDefinition"
+      ]}
     >
       <Triumphs />
     </WithDefinitions>

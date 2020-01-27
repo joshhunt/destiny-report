@@ -1,4 +1,5 @@
 @import "../../../variables.scss";
+@import "../common.scss";
 
 .node {
   display: flex;
@@ -28,7 +29,7 @@
 }
 
 .nodeHeading {
-  font-size: 1.2em;
+  font-size: 1.3em;
   font-weight: 600;
   margin: 0;
 }
@@ -72,7 +73,7 @@
 .sticky {
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 10;
   padding: 16px 0;
 
   &,
@@ -87,7 +88,7 @@
 }
 
 .player {
-  width: 250px;
+  width: $player-width;
 
   & + & {
     margin-left: 10px;

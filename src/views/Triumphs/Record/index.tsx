@@ -1,8 +1,8 @@
 import React from "react";
-import cx from "classnames";
 import { DestinyRecordDefinition } from "bungie-api-ts/destiny2/interfaces";
 
 import { useDefinitions } from "../../../lib/definitions";
+import RecordPlayerData from "./RecordPlayerData";
 
 import s from "./styles.module.scss";
 import {
@@ -10,8 +10,7 @@ import {
   scoreFromRecord,
   usePlayerData,
   triumphsFromProfile,
-  recordIsCompleted,
-  PlayerDataState
+  recordIsCompleted
 } from "../common";
 
 const RecordBody: React.FC<{
@@ -29,32 +28,6 @@ const RecordBody: React.FC<{
       <div className={s.recordDescription}>
         {record.displayProperties.description}
       </div>
-    </div>
-  );
-};
-
-const RecordPlayerData: React.FC<{
-  record: DestinyRecordDefinition;
-  playerData: PlayerDataState;
-}> = ({ record, playerData }) => {
-  return (
-    <div className={s.players}>
-      {playerData.map(player => {
-        if (!player) {
-          return undefined;
-        }
-
-        const playerTriumphs = triumphsFromProfile(player);
-        const recordInstance = playerTriumphs[record.hash];
-        const isComplete =
-          recordInstance && recordIsCompleted(recordInstance.state);
-
-        return (
-          <div className={cx(s.player, isComplete ? s.complete : s.incomplete)}>
-            {isComplete ? "completed" : "incomplete"}
-          </div>
-        );
-      })}
     </div>
   );
 };
