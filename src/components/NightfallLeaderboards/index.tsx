@@ -1,7 +1,7 @@
 import React from "react";
 import TimeAgo from "react-timeago";
 
-import { WithDefinitions, useDefinitions } from "../../lib/definitions";
+import { useDefinitions, withDefinitions } from "../../lib/definitions";
 import { useCachedApi } from "../../appHooks";
 import {
   NightfallLeaderboardResponse,
@@ -88,10 +88,6 @@ const NightfallLeaderboards: React.FC = () => {
   );
 };
 
-export default function NightfallLeaderboardsWithDefinitions() {
-  return (
-    <WithDefinitions tables={["DestinyActivityDefinition"]}>
-      <NightfallLeaderboards />
-    </WithDefinitions>
-  );
-}
+export default withDefinitions(NightfallLeaderboards, [
+  "DestinyActivityDefinition"
+]);

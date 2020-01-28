@@ -51,7 +51,18 @@ const definitionsReducer = (
   [data.tableName]: data.definitions
 });
 
-const WithDefinitions: React.FC<{
+export function withDefinitions<T>(
+  Component: React.ComponentType<T>,
+  tables: (keyof DestinyWorldDefinitions)[]
+) {
+  return (props: T) => (
+    <DefinitionsProvider tables={tables}>
+      <Component {...props} />
+    </DefinitionsProvider>
+  );
+}
+
+export const DefinitionsProvider: React.FC<{
   tables: (keyof DestinyWorldDefinitions)[];
 }> = ({ tables, children }) => {
   const [store, dispatchDefinition] = useReducer(definitionsReducer, {});
@@ -71,4 +82,4 @@ const WithDefinitions: React.FC<{
   return <Provider value={store}>{children}</Provider>;
 };
 
-export default WithDefinitions;
+export default DefinitionsProvider;

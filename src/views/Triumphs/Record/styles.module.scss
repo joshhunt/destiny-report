@@ -7,12 +7,16 @@
   transition: background-color 50ms ease-in-out;
   padding-left: 8px;
   font-size: 13px;
-  border-bottom: 1px solid #2a2a2a;
+  border-top: 1px solid #2a2a2a;
   padding-bottom: 10px;
   padding-top: 10px;
 
   &:hover {
     background-color: $cardColor;
+  }
+
+  &:last-of-type {
+    border-bottom: 1px solid #2a2a2a;
   }
 }
 

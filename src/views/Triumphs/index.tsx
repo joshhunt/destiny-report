@@ -1,5 +1,5 @@
 import React, { useMemo, useReducer, useEffect } from "react";
-import { WithDefinitions } from "../../lib/definitions";
+import { withDefinitions } from "../../lib/definitions";
 
 import Node from "./Node";
 import {
@@ -149,16 +149,8 @@ const Triumphs = function() {
   );
 };
 
-export default function TriumphsWithDefinitions() {
-  return (
-    <WithDefinitions
-      tables={[
-        "DestinyRecordDefinition",
-        "DestinyObjectiveDefinition",
-        "DestinyPresentationNodeDefinition"
-      ]}
-    >
-      <Triumphs />
-    </WithDefinitions>
-  );
-}
+export default withDefinitions(Triumphs, [
+  "DestinyRecordDefinition",
+  "DestinyObjectiveDefinition",
+  "DestinyPresentationNodeDefinition"
+]);
