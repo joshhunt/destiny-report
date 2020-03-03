@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useReducer } from "react";
+import React, { useState, useMemo } from "react";
 import TimeAgo from "react-timeago";
 
 import Leaderboard from "../../components/Leaderboard";
@@ -9,6 +9,7 @@ import { useLeaderboards, useApiStatus } from "../../appHooks";
 
 import s from "./styles.module.scss";
 import { useParams } from "react-router-dom";
+import { useProfileAPIData } from "./hooks";
 
 const LEADERBOARD_SIZES = [20, 100, 999];
 const VIEW_MORE_LABELS: Record<string, string> = {
@@ -54,74 +55,43 @@ function leaderboardFromProfiles(
     .sort((a, b) => a.rank - b.rank);
 }
 
-type DestinyRecordStateItem = {
-  key: string;
-  loading: boolean;
-  response: DestinyCrawlProfileResponse;
-};
+function filterValues<Value, MappedValue>(
+  obj: Record<any, Value>,
+  predicate: (value: Value) => MappedValue
+) {
+  const results = [];
 
-type DestinyCrawlState = Record<string, DestinyRecordStateItem>;
+  for (const key in obj) {
+    const value = obj[key];
+    const result = predicate(value);
 
-const destinyCrawlReducer = (
-  state: DestinyCrawlState,
-  data: DestinyRecordStateItem
-) => ({
-  ...state,
-  [data.key]: data
-});
+    if (result) {
+      results.push(result);
+    }
+  }
+
+  return results;
+}
 
 const App: React.FC = () => {
-  const [destinyCrawl, dispatchDestinyCrawl] = useReducer(
-    destinyCrawlReducer,
-    {}
-  );
-
-  const [destinyCrawlLoading, setDestinyCrawlLoading] = useState<Boolean>(
-    false
-  );
   const [leaderboardData, staleData] = useLeaderboards();
   const [apiStatus] = useApiStatus();
   const [maxLeaderboardSize, setMaxLeaderboardSize] = useState(
     LEADERBOARD_SIZES[0]
   );
 
-  let { membershipType, membershipId } = useParams<{
+  const { membershipType, membershipId } = useParams<{
     membershipId?: string;
     membershipType?: string;
   }>();
 
-  const extraPlayers = Object.values(destinyCrawl)
-    .map(v => {
-      return v.response;
-    })
-    .filter(v => !v.error);
+  const profileData = useProfileAPIData({ membershipId, membershipType });
 
-  const playersWithErrors = Object.values(destinyCrawl)
-    .map(v => {
-      return v.response;
-    })
-    .filter(v => v.error);
-
-  useEffect(() => {
-    if (!(membershipType && membershipId)) {
-      return;
-    }
-
-    const key = membershipId;
-
-    setDestinyCrawlLoading(true);
-
-    fetch(`https://api.clan.report/i/user/${membershipType}/${membershipId}`)
-      .then(r => r.json())
-      .then(d =>
-        dispatchDestinyCrawl({
-          key,
-          loading: false,
-          response: d
-        })
-      )
-      .finally(() => setDestinyCrawlLoading(false));
-  }, [membershipType, membershipId]);
+  const extraPlayers = filterValues(profileData, v =>
+    !v.response?.error ? v.response : null
+  );
+  const playersWithErrors = filterValues(profileData, v => v.response?.error);
+  const isLoading = filterValues(profileData, v => v.loading).length > 0;
 
   const triumphLeaderboard = useMemo(() => {
     return sortLeaderboard(
@@ -177,7 +147,7 @@ const App: React.FC = () => {
             className={staleData ? s.staleData : undefined}
             title="Collection"
             players={collectionLeaderboard}
-            extraPlayersLoading={destinyCrawlLoading}
+            extraPlayersLoading={isLoading}
             extraPlayers={
               extraPlayers.length > 0
                 ? leaderboardFromProfiles(extraPlayers, "collectionRank")
@@ -191,7 +161,7 @@ const App: React.FC = () => {
             className={staleData ? s.staleData : undefined}
             title="Triumphs"
             players={triumphLeaderboard}
-            extraPlayersLoading={destinyCrawlLoading}
+            extraPlayersLoading={isLoading}
             extraPlayers={
               extraPlayers.length > 0
                 ? leaderboardFromProfiles(extraPlayers, "triumphRank")

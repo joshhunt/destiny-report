@@ -6,7 +6,7 @@ export enum MembershipType {
   Stadia = 5
 }
 
-export type LeaderboardEntry = {
+export interface LeaderboardEntry {
   membershipId: string;
   membershipType: MembershipType;
   displayName: string;
@@ -17,7 +17,7 @@ export type LeaderboardEntry = {
   collectionRank: number;
   applicableMembershipTypes: MembershipType[];
   rank?: number;
-};
+}
 
 export interface DestinyCrawlProfileResponse {
   profile: DestinyCrawlProfile;
