@@ -39,14 +39,10 @@ export interface DestinyCrawlProfile {
   membershipType: number;
   displayName: string;
   lastCrawled: string;
-  lastSeen: string;
-  lastPlayed: string;
   triumphScore: number;
   collectionScore: number;
   crossSaveOverride: number;
   applicableMembershipTypes: number[];
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface DestinyCrawlApiStatus {

@@ -36,3 +36,12 @@
 .button {
   composes: moreButton from "../../components/GlobalLeaderboards/styles.module.scss";
 }
+
+.notStale {
+  transition: 250ms ease-in-out opacity;
+}
+
+.stale {
+  composes: notStale;
+  opacity: 0.5;
+}
