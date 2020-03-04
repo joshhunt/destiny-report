@@ -4,16 +4,7 @@ import { DestinyComponentType } from "../additionalDestinyTypes";
 import { getEnsuredAccessToken } from "./bungieAuth/auth";
 import { UserMembershipData } from "bungie-api-ts/user/interfaces";
 
-const CLIENT_ID = process.env.REACT_APP_BUNGIE_CLIENT_ID;
 const API_KEY = process.env.REACT_APP_BUNGIE_API_KEY;
-
-if (!CLIENT_ID) {
-  throw new Error("Missing environment variable REACT_APP_BUNGIE_CLIENT_ID");
-}
-
-if (!API_KEY) {
-  throw new Error("Missing environment variable REACT_APP_BUNGIE_API_KEY");
-}
 
 export async function bungieFetch<Data>(
   url: string,

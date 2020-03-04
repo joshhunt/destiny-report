@@ -1,4 +1,5 @@
 import React from "react";
+import cx from "classnames";
 import TimeAgo from "react-timeago";
 import { useParams } from "react-router-dom";
 
@@ -8,7 +9,10 @@ import Search from "../../components/Search";
 import SiteHeader from "../../components/SiteHeader";
 
 import { useLeaderboards, useApiStatus } from "../../appHooks";
-import { useProfileAPIData } from "./hooks";
+import {
+  useAdditionalProfiles,
+  useAuthenticatedBungieMembership
+} from "./hooks";
 import { useBungieAuth } from "../../lib/bungieAuth";
 
 import s from "./styles.module.scss";
@@ -22,11 +26,15 @@ interface RouteParams {
 
 const App: React.FC = () => {
   const { isAuthenticated } = useBungieAuth();
-  const [leaderboardData] = useLeaderboards();
+  const [leaderboardData, isStale] = useLeaderboards();
   const [apiStatus] = useApiStatus();
 
+  const authedMembership = useAuthenticatedBungieMembership();
   const { membershipType, membershipId } = useParams<RouteParams>();
-  const profiles = useProfileAPIData({ membershipId, membershipType });
+  const profiles = useAdditionalProfiles(
+    { membershipId, membershipType },
+    authedMembership
+  );
 
   const loadedProfiles = profiles
     .map(v => v.response)
@@ -64,7 +72,7 @@ const App: React.FC = () => {
         )}
       </section>
 
-      <section className={s.leaderboards}>
+      <section className={cx(s.leaderboards, isStale ? s.stale : s.notStale)}>
         <GlobalLeaderboards
           isLoading={isLoading}
           leaderboards={leaderboardData}

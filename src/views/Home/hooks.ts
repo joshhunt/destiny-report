@@ -55,22 +55,20 @@ const getLeaderboardProfile = (
     });
 };
 
-export const useProfileAPIData = ({
-  membershipType,
-  membershipId
-}: {
+interface MembershipSummary {
   membershipId?: string;
   membershipType?: string;
-}) => {
+}
+
+export const useAdditionalProfiles = (
+  routeParams: MembershipSummary,
+  authedMembership: MembershipSummary
+) => {
   const [profileData, dispatchProfileData] = useReducer(profileDataReducer, {});
-  const authedMembership = useAuthenticatedBungieProfile();
 
   useEffect(() => {
-    getLeaderboardProfile(
-      { membershipType, membershipId },
-      dispatchProfileData
-    );
-  }, [membershipType, membershipId]);
+    getLeaderboardProfile(routeParams, dispatchProfileData);
+  }, [routeParams]);
 
   useEffect(() => {
     authedMembership &&
@@ -80,7 +78,7 @@ export const useProfileAPIData = ({
   return Object.values(profileData);
 };
 
-export const useAuthenticatedBungieProfile = () => {
+export const useAuthenticatedBungieMembership = () => {
   const { isAuthenticated, authLoaded } = useBungieAuth();
   const [data, setData] = useState();
 
@@ -89,7 +87,7 @@ export const useAuthenticatedBungieProfile = () => {
       return;
     }
 
-    getAuthenticatedDestinyMembership().then(setData);
+    getAuthenticatedDestinyMembership().then(r => setData(r));
   }, [isAuthenticated, authLoaded]);
 
   return data;
