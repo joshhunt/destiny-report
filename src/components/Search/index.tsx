@@ -6,6 +6,7 @@ import { MembershipTypeIcon } from "../Icon";
 // import Link from "../Link";
 import { Link } from "react-router-dom";
 import { MembershipType } from "../../types";
+import { getTokenRequestUrl } from "../../lib/bungieAuth/auth";
 
 type SearchResult = {
   displayName: string;
@@ -18,7 +19,12 @@ type SearchResult = {
   };
 };
 
-const Search: React.FC<{ className?: string }> = ({ className }) => {
+interface SearchProps {
+  className?: string;
+  isAuthenticated: boolean;
+}
+
+const Search: React.FC<SearchProps> = ({ className, isAuthenticated }) => {
   const [searchValue, setSearchValue] = useState<string>();
   const [results, setResults] = useState<SearchResult[]>();
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -42,9 +48,8 @@ const Search: React.FC<{ className?: string }> = ({ className }) => {
         if (searchValue === valueSearchedFor) {
           const cleanedResults = results.map(result => {
             const hasCrossSaveOverride =
-              result.crossSaveOverride &&
-              result.crossSaveOverride.membershipId !== "" &&
-              result.crossSaveOverride.membershipType !== 0;
+              result.crossSaveOverride?.membershipId !== "" &&
+              result.crossSaveOverride?.membershipType !== 0;
 
             return {
               ...result,
@@ -62,15 +67,23 @@ const Search: React.FC<{ className?: string }> = ({ className }) => {
   return (
     <div className={className}>
       <div className={s.searchBox}>
-        <input
-          onChange={ev => setSearchValue(ev.target.value)}
-          value={searchValue || ""}
-          className={cx(s.searchField, displayResults && s.hasResults)}
-          type="text"
-          placeholder="Search for player"
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setTimeout(() => setIsFocused(false), 250)}
-        />
+        <div className={s.inputWrapper}>
+          <input
+            onChange={ev => setSearchValue(ev.target.value)}
+            value={searchValue || ""}
+            className={cx(s.searchField, displayResults && s.hasResults)}
+            type="text"
+            placeholder="Search for player"
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setTimeout(() => setIsFocused(false), 250)}
+          />
+
+          {!isAuthenticated ? (
+            <a className={s.connectBtn} href={getTokenRequestUrl()}>
+              Login with Bungie.net
+            </a>
+          ) : null}
+        </div>
 
         {displayResults && (
           <div className={s.results}>
