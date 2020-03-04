@@ -207,8 +207,4 @@ const destinyAuth = (cb: (err: Error | null, result: AuthResult) => void) => {
   }
 };
 
-// window.__getTokenRequestUrl = getTokenRequestUrl;
-// window.__requestNewAccessToken = requestNewAccessToken;
-// window.__destinyAuth = destinyAuth;
-
 export default destinyAuth;
