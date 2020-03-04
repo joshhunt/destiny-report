@@ -1,122 +1,36 @@
-import React, { useState, useMemo } from "react";
+import React from "react";
 import TimeAgo from "react-timeago";
+import { useParams } from "react-router-dom";
 
-import Leaderboard from "../../components/Leaderboard";
+import GlobalLeaderboards from "../../components/GlobalLeaderboards";
 import NightfallLeaderboards from "../../components/NightfallLeaderboards";
 import Search from "../../components/Search";
-import { LeaderboardEntry, DestinyCrawlProfileResponse } from "../../types";
 import { useLeaderboards, useApiStatus } from "../../appHooks";
 
 import s from "./styles.module.scss";
-import { useParams } from "react-router-dom";
 import { useProfileAPIData } from "./hooks";
 
-const LEADERBOARD_SIZES = [20, 100, 999];
-const VIEW_MORE_LABELS: Record<string, string> = {
-  20: "View more",
-  100: "View a lot more",
-  999: "Less!!!"
-};
+const isTruthy = <T,>(v: T | undefined): v is T => !!v;
 
-type RankField = "triumphRank" | "collectionRank";
-
-const sortLeaderboard = (
-  leaderboard: LeaderboardEntry[],
-  primaryRank: RankField,
-  secondaryRank: RankField,
-  size: number
-): LeaderboardEntry[] => {
-  const data = [...(leaderboard || [])];
-
-  return data
-    .sort((a, b) => a[secondaryRank] - b[secondaryRank])
-    .sort((a, b) => a[primaryRank] - b[primaryRank])
-    .map(player => ({ ...player, rank: player[primaryRank] }))
-    .slice(0, size);
-};
-
-function leaderboardFromProfiles(
-  responses: DestinyCrawlProfileResponse[],
-  rankField: RankField
-) {
-  return responses
-    .map(player => {
-      const { triumphRank, collectionRank, profile } = player;
-
-      const payload = {
-        ...profile,
-        triumphRank,
-        collectionRank,
-        rank: player[rankField]
-      };
-
-      return payload;
-    })
-    .sort((a, b) => a.rank - b.rank);
-}
-
-function filterValues<Value, MappedValue>(
-  obj: Record<any, Value>,
-  predicate: (value: Value) => MappedValue
-) {
-  const results = [];
-
-  for (const key in obj) {
-    const value = obj[key];
-    const result = predicate(value);
-
-    if (result) {
-      results.push(result);
-    }
-  }
-
-  return results;
+interface RouteParams {
+  membershipId?: string;
+  membershipType?: string;
 }
 
 const App: React.FC = () => {
-  const [leaderboardData, staleData] = useLeaderboards();
+  const [leaderboardData] = useLeaderboards();
   const [apiStatus] = useApiStatus();
-  const [maxLeaderboardSize, setMaxLeaderboardSize] = useState(
-    LEADERBOARD_SIZES[0]
-  );
 
-  const { membershipType, membershipId } = useParams<{
-    membershipId?: string;
-    membershipType?: string;
-  }>();
+  const { membershipType, membershipId } = useParams<RouteParams>();
+  const profiles = useProfileAPIData({ membershipId, membershipType });
 
-  const profileData = useProfileAPIData({ membershipId, membershipType });
+  const loadedProfiles = profiles
+    .map(v => v.response)
+    .filter(v => v?.error)
+    .filter(isTruthy);
 
-  const extraPlayers = filterValues(profileData, v =>
-    !v.response?.error ? v.response : null
-  );
-  const playersWithErrors = filterValues(profileData, v => v.response?.error);
-  const isLoading = filterValues(profileData, v => v.loading).length > 0;
-
-  const triumphLeaderboard = useMemo(() => {
-    return sortLeaderboard(
-      leaderboardData || [],
-      "triumphRank",
-      "collectionRank",
-      maxLeaderboardSize
-    );
-  }, [leaderboardData, maxLeaderboardSize]);
-
-  const collectionLeaderboard = useMemo(() => {
-    return sortLeaderboard(
-      leaderboardData || [],
-      "collectionRank",
-      "triumphRank",
-      maxLeaderboardSize
-    );
-  }, [leaderboardData, maxLeaderboardSize]);
-
-  function viewMore() {
-    const currentIndex = LEADERBOARD_SIZES.indexOf(maxLeaderboardSize);
-    setMaxLeaderboardSize(
-      LEADERBOARD_SIZES[currentIndex + 1] || LEADERBOARD_SIZES[0]
-    );
-  }
+  const hasErrors = profiles.some(v => v.response?.error);
+  const isLoading = profiles.some(v => v.loading);
 
   return (
     <>
@@ -133,7 +47,7 @@ const App: React.FC = () => {
           </p>
         )}
 
-        {playersWithErrors.length > 0 && (
+        {hasErrors && (
           <p className={s.explainer}>
             Unable to retrieve ranks for a player. Is the profile set to
             private?
@@ -141,47 +55,13 @@ const App: React.FC = () => {
         )}
       </section>
 
-      <section className={s.container}>
-        <div className={s.leaderboards}>
-          <Leaderboard
-            className={staleData ? s.staleData : undefined}
-            title="Collection"
-            players={collectionLeaderboard}
-            extraPlayersLoading={isLoading}
-            extraPlayers={
-              extraPlayers.length > 0
-                ? leaderboardFromProfiles(extraPlayers, "collectionRank")
-                : undefined
-            }
-            renderScore={player =>
-              `${player.collectionScore.toLocaleString()} items`
-            }
-          />
-          <Leaderboard
-            className={staleData ? s.staleData : undefined}
-            title="Triumphs"
-            players={triumphLeaderboard}
-            extraPlayersLoading={isLoading}
-            extraPlayers={
-              extraPlayers.length > 0
-                ? leaderboardFromProfiles(extraPlayers, "triumphRank")
-                : undefined
-            }
-            renderScore={player =>
-              `${player.triumphScore.toLocaleString()} points`
-            }
-          />
-        </div>
-
-        <section className={s.buttonSection}>
-          <button className={s.moreButton} onClick={viewMore}>
-            {VIEW_MORE_LABELS[maxLeaderboardSize.toString()]}
-          </button>
-        </section>
+      <section className={s.leaderboards}>
+        <GlobalLeaderboards
+          isLoading={isLoading}
+          leaderboards={leaderboardData}
+          extraProfiles={loadedProfiles}
+        />
       </section>
-
-      <br />
-      <br />
 
       <section>
         <div className={s.container}>
@@ -191,14 +71,7 @@ const App: React.FC = () => {
         <NightfallLeaderboards />
       </section>
 
-      <p className={s.explainer}>
-        <br />
-        <br />
-        <br />
-        <br />
-        Made by joshhunt
-        <br />
-      </p>
+      <p className={s.footer}>Made by joshhunt</p>
     </>
   );
 };

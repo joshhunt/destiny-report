@@ -1,0 +1,38 @@
+.leaderboards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-gap: 48px;
+  overflow-x: auto;
+}
+
+.buttonSection {
+  text-align: center;
+  margin-top: 32px;
+}
+
+.moreButton {
+  background: none;
+  padding: 8px 16px;
+  border: 1px solid currentColor;
+  border-radius: 5px;
+  font-family: inherit;
+  color: inherit;
+  font-size: 0.9em;
+  font-weight: 700;
+  appearance: none;
+  cursor: pointer;
+  transition: 50ms ease-in opacity;
+  box-shadow: 0 0 0 1px rgba(white, 0);
+  transition: background 100ms ease-in-out;
+  transition-property: background, box-shadow;
+  outline: none !important;
+
+  &:hover {
+    box-shadow: 0 0 0 1px rgba(white, 1);
+    background: rgba(white, 0.05);
+  }
+
+  &:active {
+    opacity: 0.75;
+  }
+}
