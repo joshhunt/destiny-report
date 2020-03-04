@@ -21,13 +21,8 @@ const profileDataReducer = (
 });
 
 const getLeaderboardProfile = (
-  {
-    membershipId,
-    membershipType
-  }: {
-    membershipId?: string;
-    membershipType?: string;
-  },
+  membershipId: string | undefined,
+  membershipType: string | undefined,
   dispatchResult: (item: DestinyRecordStateItem) => void
 ) => {
   if (!membershipType || !membershipId) {
@@ -67,12 +62,20 @@ export const useAdditionalProfiles = (
   const [profileData, dispatchProfileData] = useReducer(profileDataReducer, {});
 
   useEffect(() => {
-    getLeaderboardProfile(routeParams, dispatchProfileData);
-  }, [routeParams]);
+    getLeaderboardProfile(
+      routeParams.membershipId,
+      routeParams.membershipType,
+      dispatchProfileData
+    );
+  }, [routeParams.membershipId, routeParams.membershipType]);
 
   useEffect(() => {
     authedMembership &&
-      getLeaderboardProfile(authedMembership, dispatchProfileData);
+      getLeaderboardProfile(
+        authedMembership.membershipId,
+        authedMembership.membershipType,
+        dispatchProfileData
+      );
   }, [authedMembership]);
 
   return Object.values(profileData);

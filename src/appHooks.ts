@@ -2,8 +2,10 @@ import { useState, useEffect, useRef } from "react";
 
 import { LeaderboardEntry, DestinyCrawlApiStatus } from "./types";
 
-window.localStorage.removeItem("leaderboards");
-window.localStorage.removeItem("apiStatus");
+export enum CacheStrategy {
+  Refresh,
+  UseStale
+}
 
 const API_KEY = process.env.REACT_APP_BUNGIE_API_KEY;
 
@@ -12,7 +14,10 @@ const rehydrate = (url: string) => {
   return preloadStore[url];
 };
 
-export function useCachedApi<Data>(url: string): [Data, boolean] {
+export function useCachedApi<Data>(
+  url: string,
+  cacheStrategy = CacheStrategy.Refresh
+): [Data, boolean] {
   const rehydratedData = rehydrate(url);
   const scriptRef = useRef<HTMLScriptElement>();
   const [data, setData] = useState<Data>(rehydratedData);
@@ -48,6 +53,10 @@ export function useCachedApi<Data>(url: string): [Data, boolean] {
       ? { headers: { "x-api-key": API_KEY || "" } }
       : {};
 
+    if (cacheStrategy === CacheStrategy.UseStale) {
+      return;
+    }
+
     fetch(url, options)
       .then(r => r.json())
       .then(data => {
@@ -65,7 +74,7 @@ export function useCachedApi<Data>(url: string): [Data, boolean] {
           scriptRef.current.innerHTML = scriptSrc;
         }
       });
-  }, [url]);
+  }, [cacheStrategy, url]);
 
   return [data, isStale];
 }
