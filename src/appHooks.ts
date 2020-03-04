@@ -5,11 +5,7 @@ import { LeaderboardEntry, DestinyCrawlApiStatus } from "./types";
 window.localStorage.removeItem("leaderboards");
 window.localStorage.removeItem("apiStatus");
 
-declare global {
-  interface Window {
-    __preloadData: Record<string, any>;
-  }
-}
+const API_KEY = process.env.REACT_APP_BUNGIE_API_KEY;
 
 const rehydrate = (url: string) => {
   const preloadStore = window.__preloadData || {};
@@ -45,14 +41,11 @@ export function useCachedApi<Data>(url: string): [Data, boolean] {
     prevData && setIsStale(true);
 
     const isBungieApi =
-      url.includes("://stats.bungie.net/") || url.includes("://bungie.net/");
+      url.includes("://stats.bungie.net/") ||
+      url.includes("://www.bungie.net/");
 
     const options = isBungieApi
-      ? {
-          headers: {
-            "x-api-key": process.env.REACT_APP_API_KEY || ""
-          }
-        }
+      ? { headers: { "x-api-key": API_KEY || "" } }
       : {};
 
     fetch(url, options)

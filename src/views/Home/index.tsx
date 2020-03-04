@@ -5,10 +5,13 @@ import { useParams } from "react-router-dom";
 import GlobalLeaderboards from "../../components/GlobalLeaderboards";
 import NightfallLeaderboards from "../../components/NightfallLeaderboards";
 import Search from "../../components/Search";
+import SiteHeader from "../../components/SiteHeader";
+
 import { useLeaderboards, useApiStatus } from "../../appHooks";
+import { useProfileAPIData } from "./hooks";
+import { useBungieAuth } from "../../lib/bungieAuth";
 
 import s from "./styles.module.scss";
-import { useProfileAPIData } from "./hooks";
 
 const isTruthy = <T,>(v: T | undefined): v is T => !!v;
 
@@ -18,6 +21,7 @@ interface RouteParams {
 }
 
 const App: React.FC = () => {
+  const { isAuthenticated } = useBungieAuth();
   const [leaderboardData] = useLeaderboards();
   const [apiStatus] = useApiStatus();
 
@@ -26,18 +30,23 @@ const App: React.FC = () => {
 
   const loadedProfiles = profiles
     .map(v => v.response)
-    .filter(v => v?.error)
+    .filter(v => !v?.error)
     .filter(isTruthy);
 
-  const hasErrors = profiles.some(v => v.response?.error);
+  const hasErrors = profiles.some(v => v.error);
   const isLoading = profiles.some(v => v.loading);
+
+  const clearLogout = () => {
+    window.localStorage.removeItem("auth");
+    window.location.reload();
+  };
 
   return (
     <>
-      <section className={s.container}>
-        <h1 className={s.title}>destiny.report</h1>
+      <SiteHeader />
 
-        <Search className={s.search} />
+      <section className={s.container}>
+        <Search className={s.search} isAuthenticated={isAuthenticated} />
 
         {apiStatus && (
           <p className={s.explainer}>
@@ -70,6 +79,14 @@ const App: React.FC = () => {
 
         <NightfallLeaderboards />
       </section>
+
+      {isAuthenticated && (
+        <p className={s.footer}>
+          <button onClick={clearLogout} className={s.button}>
+            Log out from Bungie.net
+          </button>
+        </p>
+      )}
 
       <p className={s.footer}>Made by joshhunt</p>
     </>

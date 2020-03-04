@@ -68,6 +68,7 @@ const NightfallLeaderboards: React.FC = () => {
         {activityLeaderboards &&
           activityLeaderboards.map(obj => (
             <Activity
+              key={obj.activityHash}
               className={s.nightfallCard}
               activityHash={obj.activityHash}
               leaderboardEntries={obj.entries}

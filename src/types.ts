@@ -1,3 +1,11 @@
+declare global {
+  interface Window {
+    __HIDDEN_IFRAME_REFRESH_AUTH: boolean;
+    __recieveNewCodeFromIframe: (v: any) => void;
+    __preloadData: Record<string, any>;
+  }
+}
+
 export enum MembershipType {
   Xbox = 1,
   Playstation = 2,

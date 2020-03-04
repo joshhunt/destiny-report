@@ -2,7 +2,6 @@ import React from "react";
 import { hydrate, render } from "react-dom";
 import "./index.scss";
 import App from "./App";
-// import App from "./views/Triumphs";
 import * as serviceWorker from "./serviceWorker";
 
 const Site = () => {

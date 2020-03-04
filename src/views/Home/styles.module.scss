@@ -6,10 +6,6 @@
   margin: auto;
 }
 
-.title {
-  text-align: center;
-}
-
 .staleData {
   opacity: 0.5;
 }
@@ -23,7 +19,7 @@
 
 .search {
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
   margin: 32px auto;
 }
 
@@ -35,4 +31,8 @@
 .leaderboards {
   composes: container;
   margin-bottom: 48px;
+}
+
+.button {
+  composes: moreButton from "../../components/GlobalLeaderboards/styles.module.scss";
 }
