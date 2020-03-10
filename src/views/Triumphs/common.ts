@@ -180,10 +180,10 @@ export const scoreFromRecord = (record: DestinyRecordDefinition) => {
     return scoreCache[record.hash];
   }
 
-  const intervalScore = record.intervalInfo.intervalObjectives.reduce(
+  const intervalScore = record.intervalInfo?.intervalObjectives.reduce(
     (acc, interval) => acc + interval.intervalScoreValue,
     0
   );
 
-  return intervalScore || record.completionInfo.ScoreValue;
+  return intervalScore || record.completionInfo?.ScoreValue;
 };
