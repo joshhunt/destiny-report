@@ -185,5 +185,5 @@ export const scoreFromRecord = (record: DestinyRecordDefinition) => {
     0
   );
 
-  return intervalScore || record.completionInfo?.ScoreValue;
+  return intervalScore || (record.completionInfo?.ScoreValue ?? 0);
 };
