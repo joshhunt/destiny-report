@@ -128,20 +128,16 @@ const Node: React.FC<{
 
         {!isCollapsed && (
           <div className={s.nodeChildren}>
-            {node.children.presentationNodes.map(child => {
-              return (
-                <Node
-                  key={child.presentationNodeHash}
-                  presentationNodeHash={child.presentationNodeHash}
-                />
-              );
-            })}
+            {node.children.presentationNodes.map(child => (
+              <Node
+                key={child.presentationNodeHash}
+                presentationNodeHash={child.presentationNodeHash}
+              />
+            ))}
 
-            {node.children.records.map(child => {
-              return (
-                <Record key={child.recordHash} recordHash={child.recordHash} />
-              );
-            })}
+            {node.children.records.map(child => (
+              <Record key={child.recordHash} recordHash={child.recordHash} />
+            ))}
           </div>
         )}
       </div>
@@ -167,10 +163,12 @@ const NodePlayerData: React.FC<{
 
   return (
     <div className={s.players}>
-      {playerData.map(player => {
+      {playerData.map((player, index) => {
         if (!player) {
           return undefined;
         }
+
+        const key = player.profile?.data?.userInfo.membershipId || index;
 
         const completedScore = calculateCompletedScoreFromNode(
           node,
@@ -182,7 +180,7 @@ const NodePlayerData: React.FC<{
         const remainingScore = totalChildrenPointScore - completedScore;
 
         return (
-          <div className={s.player}>
+          <div className={s.player} key={key}>
             {isRoot && (
               <>
                 <strong>{player.profile.data?.userInfo.displayName}</strong>

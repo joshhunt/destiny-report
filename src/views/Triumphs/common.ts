@@ -93,7 +93,8 @@ export function calculateCompletedScoreFromNode(
       return;
     }
 
-    const basicScore = isCompleted ? record.completionInfo.ScoreValue : 0;
+    const completedScore = record.completionInfo?.ScoreValue || 0;
+    const basicScore = isCompleted ? completedScore : 0;
     const intervalScore =
       instance.intervalObjectives &&
       instance.intervalObjectives.reduce((acc, interval, index) => {
