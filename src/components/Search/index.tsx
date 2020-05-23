@@ -21,10 +21,9 @@ type SearchResult = {
 
 interface SearchProps {
   className?: string;
-  isAuthenticated: boolean;
 }
 
-const Search: React.FC<SearchProps> = ({ className, isAuthenticated }) => {
+const Search: React.FC<SearchProps> = ({ className }) => {
   const [searchValue, setSearchValue] = useState<string>();
   const [results, setResults] = useState<SearchResult[]>();
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -41,12 +40,12 @@ const Search: React.FC<SearchProps> = ({ className, isAuthenticated }) => {
     const url = `https://elastic.destinytrialsreport.com/players/0/${searchValue}`;
 
     fetch(url)
-      .then(r => r.json())
-      .then(_results => {
+      .then((r) => r.json())
+      .then((_results) => {
         const results: SearchResult[] = _results;
 
         if (searchValue === valueSearchedFor) {
-          const cleanedResults = results.map(result => {
+          const cleanedResults = results.map((result) => {
             const hasCrossSaveOverride =
               result.crossSaveOverride?.membershipId !== "" &&
               result.crossSaveOverride?.membershipType !== 0;
@@ -55,7 +54,7 @@ const Search: React.FC<SearchProps> = ({ className, isAuthenticated }) => {
               ...result,
               crossSaveOverride: hasCrossSaveOverride
                 ? result.crossSaveOverride
-                : undefined
+                : undefined,
             };
           });
 
@@ -69,7 +68,7 @@ const Search: React.FC<SearchProps> = ({ className, isAuthenticated }) => {
       <div className={s.searchBox}>
         <div className={s.inputWrapper}>
           <input
-            onChange={ev => setSearchValue(ev.target.value)}
+            onChange={(ev) => setSearchValue(ev.target.value)}
             value={searchValue || ""}
             className={cx(s.searchField, displayResults && s.hasResults)}
             type="text"
@@ -77,18 +76,12 @@ const Search: React.FC<SearchProps> = ({ className, isAuthenticated }) => {
             onFocus={() => setIsFocused(true)}
             onBlur={() => setTimeout(() => setIsFocused(false), 250)}
           />
-
-          {!isAuthenticated ? (
-            <a className={s.connectBtn} href={getTokenRequestUrl()}>
-              Login with Bungie.net
-            </a>
-          ) : null}
         </div>
 
         {displayResults && (
           <div className={s.results}>
             {results &&
-              results.map(result => {
+              results.map((result) => {
                 const { membershipId, membershipType } =
                   result.crossSaveOverride || result;
                 return (

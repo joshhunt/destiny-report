@@ -2,28 +2,30 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Home from "./views/Home";
+import GhostAuthReturn from "./views/GhostAuthReturn";
 import Triumphs from "./views/Triumphs";
-import { BungieAuthProvider } from "./lib/bungieAuth";
 
 const App: React.FC = () => {
   return (
-    <BungieAuthProvider>
-      <Router>
-        <Switch>
-          <Route path="/triumphs">
-            <Triumphs />
-          </Route>
+    <Router>
+      <Switch>
+        <Route path="/triumphs">
+          <Triumphs />
+        </Route>
 
-          <Route path="/:membershipType(\d+)/:membershipId(\d+)">
-            <Home />
-          </Route>
+        <Route path="/:membershipType(\d+)/:membershipId(\d+)">
+          <Home />
+        </Route>
 
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </Router>
-    </BungieAuthProvider>
+        <Route path="/ghost-auth-return">
+          <GhostAuthReturn />
+        </Route>
+
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
+    </Router>
   );
 };
 
