@@ -130,6 +130,10 @@
   transition: 150ms ease-in-out;
   opacity: 0;
   cursor: pointer;
+
+  @media (hover: none) {
+    opacity: 1 !important;
+  }
 }
 
 td:hover > .removePlayerButton {
