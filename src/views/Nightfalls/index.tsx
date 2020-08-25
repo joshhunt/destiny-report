@@ -108,6 +108,7 @@ function usePlayerData(memberships: Membership[]) {
         }
       );
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberships]);
 
   return profiles;
