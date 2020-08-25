@@ -1,31 +1,10 @@
 import { DestinyManifest } from "bungie-api-ts/destiny2/interfaces";
-import Dexie from "dexie";
 
 import { bungieFetch } from "../destinyApi";
 import { DefintionsDispatchData } from "./types";
+import { db } from "../indexedDb";
 
 const REQUESTS: Record<string, Promise<any>> = {};
-
-interface DefinitionKeep {
-  url: string;
-  definitions: Record<string, any>;
-}
-
-class DestinyReportDatabase extends Dexie {
-  definitions: Dexie.Table<DefinitionKeep, number>;
-
-  constructor() {
-    super("DestinyReportDatabase");
-
-    this.version(1).stores({
-      definitions: "&url,definitions"
-    });
-
-    this.definitions = this.table("definitions");
-  }
-}
-
-const db = new DestinyReportDatabase();
 
 export interface DestinyManifestUpdated extends DestinyManifest {
   readonly jsonWorldComponentContentPaths: {
@@ -49,7 +28,7 @@ async function actualFetchDefinition(url: string) {
 
   await db.definitions.put({
     url: url,
-    definitions: data
+    definitions: data,
   });
 
   return data;
@@ -87,7 +66,7 @@ export async function getDefinitions(
   const manifest = await getManifest();
 
   const promises = tables
-    .map(async tableName => {
+    .map(async (tableName) => {
       const bungiePath =
         manifest.jsonWorldComponentContentPaths[LANGUAGE][tableName];
 
@@ -99,7 +78,7 @@ export async function getDefinitions(
 
       callback({
         tableName,
-        definitions: data
+        definitions: data,
       });
 
       return data;

@@ -1,7 +1,9 @@
 import { ServerResponse } from "bungie-api-ts/common";
-import { DestinyProfileResponse } from "bungie-api-ts/destiny2/interfaces";
+import {
+  DestinyProfileResponse,
+  DestinyActivityHistoryResults,
+} from "bungie-api-ts/destiny2/interfaces";
 import { DestinyComponentType } from "../additionalDestinyTypes";
-import { getEnsuredAccessToken } from "./bungieAuth/auth";
 import { UserMembershipData } from "bungie-api-ts/user/interfaces";
 
 const API_KEY = process.env.REACT_APP_BUNGIE_API_KEY;
@@ -13,8 +15,8 @@ export async function bungieFetch<Data>(
   const options = {
     headers: {
       authorization: authToken ? `Bearer ${authToken}` : "",
-      "x-api-key": API_KEY || ""
-    }
+      "x-api-key": API_KEY || "",
+    },
   };
 
   const response = await fetch(url, options);
@@ -35,8 +37,9 @@ export async function getProfile(
   );
 }
 
+// Don't use this anymore
 export async function getMembershipForCurrentUser() {
-  const authToken = await getEnsuredAccessToken();
+  const authToken = null;
 
   if (!authToken) {
     throw new Error("Do not have an auth token");
@@ -62,6 +65,19 @@ export const getAuthenticatedDestinyMembership = async () => {
     userMemberships.destinyMemberships[0].membershipId;
 
   return userMemberships.destinyMemberships.find(
-    membership => membership.membershipId === primaryMembershipId
+    (membership) => membership.membershipId === primaryMembershipId
   );
 };
+
+export async function getActivityHistoryForCharacter(
+  membershipType: string,
+  membershipId: string,
+  characterId: string,
+  mode: string,
+  page = 0,
+  count = 250
+) {
+  return await bungieFetch<DestinyActivityHistoryResults>(
+    `https://www.bungie.net/Platform/Destiny2/${membershipType}/Account/${membershipId}/Character/${characterId}/Stats/Activities/?mode=${mode}&page=${page}&count=${count}`
+  );
+}

@@ -1,3 +1,5 @@
+import { DestinyHistoricalStatsPeriodGroup } from "bungie-api-ts/destiny2/interfaces";
+
 declare global {
   interface Window {
     __HIDDEN_IFRAME_REFRESH_AUTH: boolean;
@@ -11,7 +13,8 @@ export enum MembershipType {
   Playstation = 2,
   Steam = 3,
   BattleNet = 4,
-  Stadia = 5
+  Stadia = 5,
+  Unknown = 777,
 }
 
 export interface LeaderboardEntry {
@@ -82,4 +85,14 @@ export interface Season {
   seasonHash: number;
   startDate: string;
   endDate: string;
+}
+
+export interface Membership {
+  membershipType: string;
+  membershipId: string;
+}
+
+export interface CharacterActivity {
+  characterId: string;
+  activity: DestinyHistoricalStatsPeriodGroup;
 }

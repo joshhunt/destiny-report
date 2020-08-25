@@ -3,10 +3,8 @@ import cx from "classnames";
 
 import s from "./styles.module.scss";
 import { MembershipTypeIcon } from "../Icon";
-// import Link from "../Link";
 import { Link } from "react-router-dom";
 import { MembershipType } from "../../types";
-import { getTokenRequestUrl } from "../../lib/bungieAuth/auth";
 
 type SearchResult = {
   displayName: string;

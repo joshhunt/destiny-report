@@ -21,7 +21,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
   players,
   extraPlayers,
   isLoading,
-  renderScore
+  renderScore,
 }) => {
   return (
     <div className={className}>
@@ -37,7 +37,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
         {isLoading && <div className={s.loading}>Loading</div>}
 
         {extraPlayers &&
-          extraPlayers.map(player => (
+          extraPlayers.map((player) => (
             <Player
               key={player.membershipId}
               player={player}
@@ -49,7 +49,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
           <div className={s.divider} />
         )}
 
-        {players.map(player => (
+        {players.map((player) => (
           <Player
             key={player.membershipId}
             player={player}
@@ -97,8 +97,8 @@ const Player: React.FC<{
           </span>
 
           {player.applicableMembershipTypes
-            .filter(mType => mType !== player.membershipType)
-            .map(a => (
+            .filter((mType) => mType !== player.membershipType)
+            .map((a) => (
               <span key={a} className={s.secondaryPlatformIcon}>
                 <MembershipTypeIcon type={a} />
               </span>

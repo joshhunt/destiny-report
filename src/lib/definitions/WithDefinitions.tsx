@@ -5,7 +5,7 @@ import { useReducer, useEffect } from "react";
 import {
   DefinitionsState,
   DefintionsDispatchData,
-  DestinyWorldDefinitions
+  DestinyWorldDefinitions,
 } from "./types";
 import { getDefinitions } from "./getDefinitions";
 
@@ -19,18 +19,6 @@ function stableTable(currentArray: string[]) {
 
   for (let index = 0; index < currentArray.length; index++) {
     if (currentArray[index] !== lastArray[index]) {
-      console.log(
-        "Array",
-        currentArray,
-        "is different to previous array",
-        lastArray,
-        "because now in index",
-        index,
-        "there is the value",
-        currentArray[index],
-        "but previously it was",
-        lastArray[index]
-      );
       isDifferent = true;
       continue;
     }
@@ -48,7 +36,7 @@ const definitionsReducer = (
   data: DefintionsDispatchData
 ) => ({
   ...state,
-  [data.tableName]: data.definitions
+  [data.tableName]: data.definitions,
 });
 
 export function withDefinitions<T>(

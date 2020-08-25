@@ -1,15 +1,15 @@
-import { useContext, useMemo, useState, createContext } from "react";
+import { useContext, createContext } from "react";
 import memoize from "lodash/memoize";
 import {
   DestinyRecordDefinition,
   DestinyProfileResponse,
   DestinyRecordComponent,
-  DestinyPresentationNodeDefinition
+  DestinyPresentationNodeDefinition,
 } from "bungie-api-ts/destiny2/interfaces";
 import { DestinyRecordState } from "../../additionalDestinyTypes";
 import {
   DestinyPresentationNodeDefinitionCollection,
-  DestinyRecordDefinitionCollection
+  DestinyRecordDefinitionCollection,
 } from "../../lib/definitions/types";
 
 export interface TriumphsSettings {
@@ -26,7 +26,7 @@ export interface PlayerDataAction {
 }
 
 export const settingsContext = createContext<TriumphsSettings>({
-  setShowCompletedPoints: () => {}
+  setShowCompletedPoints: () => {},
 });
 export const useSettings = () => useContext(settingsContext);
 
@@ -46,7 +46,7 @@ export const enumerateRecordState = (state: number) => ({
   obscured: flagEnum(state, DestinyRecordState.Obscured),
   invisible: flagEnum(state, DestinyRecordState.Invisible),
   entitlementUnowned: flagEnum(state, DestinyRecordState.EntitlementUnowned),
-  canEquipTitle: flagEnum(state, DestinyRecordState.CanEquipTitle)
+  canEquipTitle: flagEnum(state, DestinyRecordState.CanEquipTitle),
 });
 
 export const recordIsCompleted = (state: number) => {
@@ -126,7 +126,7 @@ function _triumphsFromProfile(profile: DestinyProfileResponse) {
   );
 
   Object.values(profile.characterRecords.data || {}).forEach(
-    characterRecords => {
+    (characterRecords) => {
       Object.entries(characterRecords.records).forEach(
         ([recordHash, recordInstance]) => {
           // If the record is already in the object (from profile, or another character), then
@@ -152,27 +152,6 @@ function _triumphsFromProfile(profile: DestinyProfileResponse) {
 
 memoize.Cache = WeakMap;
 export const triumphsFromProfile = memoize(_triumphsFromProfile);
-
-export function useLocalStorage<Value>(
-  key: string,
-  initialValue: Value
-): [Value, (v: Value) => void] {
-  const previousInitialValue = useMemo(() => {
-    const previous = window.localStorage.getItem(key);
-    return previous && JSON.parse(previous);
-  }, [key]);
-
-  const [value, setValue] = useState<Value>(
-    previousInitialValue || initialValue
-  );
-
-  const setter = (newValue: Value) => {
-    setValue(newValue);
-    window.localStorage.setItem(key, JSON.stringify(newValue));
-  };
-
-  return [value, setter];
-}
 
 // Should this be memoized?
 const scoreCache: Record<string, number> = {};

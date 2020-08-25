@@ -16,7 +16,7 @@ const writeFile = promisify(fs.writeFile);
 
 const usesNightfallCard = (activity: DestinyActivityDefinition): boolean => {
   return !!activity.modifiers.find(
-    modifier => modifier.activityModifierHash === 1845517209
+    (modifier) => modifier.activityModifierHash === 1845517209
   );
 };
 
@@ -25,10 +25,7 @@ const API_KEY = process.env.REACT_APP_API_KEY;
 const STRIKE_MODE_TYPE = 2394616003;
 
 const hashString = (string: string) =>
-  crypto
-    .createHash("md5")
-    .update(string)
-    .digest("hex");
+  crypto.createHash("md5").update(string).digest("hex");
 
 function ordealify(activity: DestinyActivityDefinition) {
   const isOrdeal = activity.displayProperties.name.includes("The Ordeal:");
@@ -42,7 +39,7 @@ export async function getDefinitions() {
   const manifestResponse = await axios.get<
     ServerResponse<DestinyManifestUpdated>
   >("https://www.bungie.net/Platform/Destiny2/Manifest/", {
-    headers: { "x-api-key": API_KEY }
+    headers: { "x-api-key": API_KEY },
   });
 
   const definitonsPath =
@@ -70,7 +67,7 @@ export async function getDefinitions() {
   const defsResponse = await axios.get<DestinyWorldDefinitions>(
     definitionsUrl,
     {
-      headers: { "x-api-key": API_KEY }
+      headers: { "x-api-key": API_KEY },
     }
   );
 
@@ -93,13 +90,13 @@ async function main() {
   const strikes = Object.values(DestinyActivityDefinition)
     .filter(isActivity)
     .filter(
-      activity =>
+      (activity) =>
         activity.activityModeHashes &&
         activity.activityModeHashes.includes(STRIKE_MODE_TYPE)
     );
 
-  strikes.forEach(activity => {
-    const foundMatches = strikes.filter(strike => {
+  strikes.forEach((activity) => {
+    const foundMatches = strikes.filter((strike) => {
       const isMatch =
         strike.displayProperties.name !== activity.displayProperties.name &&
         strike.displayProperties.name.includes(activity.displayProperties.name);
@@ -107,7 +104,7 @@ async function main() {
       return isMatch;
     });
 
-    foundMatches.forEach(matchedActivity => {
+    foundMatches.forEach((matchedActivity) => {
       if (!mapping[matchedActivity.hash]) {
         mapping[matchedActivity.hash] = [];
       }
@@ -128,7 +125,7 @@ async function main() {
     }
 
     const toActivities = toHashes
-      .map(hash => DestinyActivityDefinition[hash])
+      .map((hash) => DestinyActivityDefinition[hash])
       .filter(isActivity)
       .reduce((acc: DestinyActivityDefinition[], strike) => {
         if (acc.includes(strike)) {
@@ -142,7 +139,7 @@ async function main() {
           a.displayProperties.name.length - b.displayProperties.name.length
       );
 
-    toActivities.forEach(toActivity => {
+    toActivities.forEach((toActivity) => {
       console.log(
         fromActivity.displayProperties.name,
         "=>",
@@ -154,11 +151,13 @@ async function main() {
   });
 
   strikes
-    .filter(activity => activity.displayProperties.name.includes("The Ordeal:"))
-    .forEach(ordealActivity => {
+    .filter((activity) =>
+      activity.displayProperties.name.includes("The Ordeal:")
+    )
+    .forEach((ordealActivity) => {
       const ordealRealName = ordealActivity.displayProperties.description;
       const mapped = strikes.find(
-        strike => strike.displayProperties.name === ordealRealName
+        (strike) => strike.displayProperties.name === ordealRealName
       );
 
       if (mapped) {

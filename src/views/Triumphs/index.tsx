@@ -4,25 +4,18 @@ import { withDefinitions } from "../../lib/definitions";
 import Node from "./Node";
 import {
   settingsContext,
-  useLocalStorage,
   PlayerDataState,
   PlayerDataAction,
-  playerDataContext
+  playerDataContext,
 } from "./common";
 import s from "./styles.module.scss";
-import { useLocation } from "react-router-dom";
 import { getProfile } from "../../lib/destinyApi";
 import { DestinyComponentType } from "../../additionalDestinyTypes";
+import { usePlayersParam, useLocalStorage } from "../../lib/hooks";
 
 // This can be gotten from the API, settings endpoint
 const ROOT_TRIUMPH_NODE = 1024788583;
 const ROOT_SEALS_NODE = 1652422747;
-
-type ExcludesFalse = <T>(x: T | null) => x is T;
-
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
 
 function playerDataReducer(
   state: PlayerDataState,
@@ -36,20 +29,20 @@ const useSortedPlayers = (
   players: { membershipId: string }[]
 ) => {
   return useMemo(() => {
-    return unsortedPlayerData.sort(function(a, b) {
+    return unsortedPlayerData.sort(function (a, b) {
       return (
         players.findIndex(
-          p => p.membershipId === a.profile.data?.userInfo.membershipId
+          (p) => p.membershipId === a.profile.data?.userInfo.membershipId
         ) -
         players.findIndex(
-          p => p.membershipId === b.profile.data?.userInfo.membershipId
+          (p) => p.membershipId === b.profile.data?.userInfo.membershipId
         )
       );
     });
   }, [players, unsortedPlayerData]);
 };
 
-const Triumphs = function() {
+const Triumphs = function () {
   const [unsortedPlayerData, setPlayerData] = useReducer(playerDataReducer, []);
 
   const [showZeroPointTriumphs, setShowZeroPointTriumphs] = useLocalStorage(
@@ -67,28 +60,15 @@ const Triumphs = function() {
     false
   );
 
-  const queryParams = useQuery();
-  const playersParam = queryParams.get("players") || "";
-  const players = useMemo(
-    () =>
-      playersParam
-        .split(",")
-        .map(str => {
-          const [type, id] = str.split("/");
-          const hasData = type && id;
-          return hasData ? { membershipType: type, membershipId: id } : null;
-        })
-        .filter((Boolean as any) as ExcludesFalse),
-    [playersParam]
-  );
+  const players = usePlayersParam();
 
   useEffect(() => {
     players.forEach(({ membershipId, membershipType }) => {
       getProfile(membershipType, membershipId, [
         DestinyComponentType.Profiles,
         DestinyComponentType.PresentationNodes,
-        DestinyComponentType.Records
-      ]).then(data => {
+        DestinyComponentType.Records,
+      ]).then((data) => {
         setPlayerData({ key: membershipId, data });
       });
     });
@@ -101,13 +81,13 @@ const Triumphs = function() {
       showZeroPointTriumphs,
       showCompletedPoints,
       showCompletedTriumphs,
-      setShowCompletedPoints
+      setShowCompletedPoints,
     };
   }, [
     setShowCompletedPoints,
     showCompletedPoints,
     showCompletedTriumphs,
-    showZeroPointTriumphs
+    showZeroPointTriumphs,
   ]);
 
   return (
@@ -120,7 +100,7 @@ const Triumphs = function() {
             <input
               type="checkbox"
               checked={showZeroPointTriumphs}
-              onChange={ev => setShowZeroPointTriumphs(ev.target.checked)}
+              onChange={(ev) => setShowZeroPointTriumphs(ev.target.checked)}
             />{" "}
             Show zero point triumphs
           </label>
@@ -131,7 +111,7 @@ const Triumphs = function() {
             <input
               type="checkbox"
               checked={showCompletedTriumphs}
-              onChange={ev => setShowCompletedTriumphs(ev.target.checked)}
+              onChange={(ev) => setShowCompletedTriumphs(ev.target.checked)}
             />{" "}
             Show triumphs completed by all
           </label>
@@ -152,5 +132,5 @@ const Triumphs = function() {
 export default withDefinitions(Triumphs, [
   "DestinyRecordDefinition",
   "DestinyObjectiveDefinition",
-  "DestinyPresentationNodeDefinition"
+  "DestinyPresentationNodeDefinition",
 ]);

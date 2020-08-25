@@ -1,7 +1,5 @@
-import { useReducer, useEffect, useState } from "react";
+import { useReducer, useEffect } from "react";
 import { DestinyCrawlProfileResponse } from "../../types";
-import { getAuthenticatedDestinyMembership } from "../../lib/destinyApi";
-import { useBungieAuth } from "../../lib/bungieAuth";
 
 type DestinyRecordStateItem = {
   membershipId: string;
@@ -17,7 +15,7 @@ const profileDataReducer = (
   data: DestinyRecordStateItem
 ) => ({
   ...state,
-  [data.membershipId]: data
+  [data.membershipId]: data,
 });
 
 const getLeaderboardProfile = (
@@ -32,16 +30,16 @@ const getLeaderboardProfile = (
   dispatchResult({ membershipId, loading: true });
 
   fetch(`https://api.clan.report/i/user/${membershipType}/${membershipId}`)
-    .then(resp => resp.json())
-    .then(resp =>
+    .then((resp) => resp.json())
+    .then((resp) =>
       dispatchResult({
         membershipId,
         loading: false,
         error: resp.error || false,
-        response: resp
+        response: resp,
       })
     )
-    .catch(err => {
+    .catch((err) => {
       console.error(
         `Error fetching ${membershipType}/${membershipId} leaderboard`,
         err
@@ -79,19 +77,4 @@ export const useAdditionalProfiles = (
   }, [authedMembership]);
 
   return Object.values(profileData);
-};
-
-export const useAuthenticatedBungieMembership = () => {
-  const { isAuthenticated, authLoaded } = useBungieAuth();
-  const [data, setData] = useState();
-
-  useEffect(() => {
-    if (!isAuthenticated || !authLoaded) {
-      return;
-    }
-
-    getAuthenticatedDestinyMembership().then(r => setData(r));
-  }, [isAuthenticated, authLoaded]);
-
-  return data;
 };

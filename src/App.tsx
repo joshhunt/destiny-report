@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./views/Home";
 import GhostAuthReturn from "./views/GhostAuthReturn";
 import Triumphs from "./views/Triumphs";
+import Nightfalls from "./views/Nightfalls";
 
 const App: React.FC = () => {
   return (
@@ -11,6 +12,10 @@ const App: React.FC = () => {
       <Switch>
         <Route path="/triumphs">
           <Triumphs />
+        </Route>
+
+        <Route path="/nightfalls">
+          <Nightfalls />
         </Route>
 
         <Route path="/:membershipType(\d+)/:membershipId(\d+)">

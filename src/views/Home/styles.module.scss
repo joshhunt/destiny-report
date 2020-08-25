@@ -17,6 +17,12 @@
   margin-bottom: 32px;
 }
 
+.searchContainer {
+  composes: container;
+  margin-top: 32px;
+  max-width: 600px;
+}
+
 .search {
   width: 100%;
   max-width: 500px;
@@ -44,4 +50,9 @@
 .stale {
   composes: notStale;
   opacity: 0.5;
+}
+
+.nightfalls {
+  text-align: middle;
+  color: inherit;
 }

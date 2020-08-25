@@ -3,7 +3,9 @@ import {
   DestinyInventoryItemDefinition,
   DestinyPresentationNodeDefinition,
   DestinyRecordDefinition,
-  DestinyObjectiveDefinition
+  DestinyObjectiveDefinition,
+  DestinySeasonDefinition,
+  DestinyClassDefinition,
 } from "bungie-api-ts/destiny2/interfaces";
 
 type DefinitionsObject<Definition> = {
@@ -25,6 +27,12 @@ export type DestinyPresentationNodeDefinitionCollection = DefinitionsObject<
 export type DestinyObjectiveDefinitionCollection = DefinitionsObject<
   DestinyObjectiveDefinition
 >;
+export type DestinySeasonDefinitionCollection = DefinitionsObject<
+  DestinySeasonDefinition
+>;
+export type DestinyClassDefinitionCollection = DefinitionsObject<
+  DestinyClassDefinition
+>;
 
 export interface DestinyWorldDefinitions {
   DestinyRecordDefinition?: DestinyRecordDefinitionCollection;
@@ -32,6 +40,8 @@ export interface DestinyWorldDefinitions {
   DestinyInventoryItemDefinition?: DestinyInventoryItemDefinitionCollection;
   DestinyPresentationNodeDefinition?: DestinyPresentationNodeDefinitionCollection;
   DestinyObjectiveDefinition?: DestinyObjectiveDefinitionCollection;
+  DestinySeasonDefinition?: DestinySeasonDefinitionCollection;
+  DestinyClassDefinition?: DestinyClassDefinitionCollection;
 }
 
 export type DefinitionsState = Record<string, any>;

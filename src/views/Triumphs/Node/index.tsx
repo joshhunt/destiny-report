@@ -3,19 +3,19 @@ import { useDefinitions } from "../../../lib/definitions";
 
 import Record from "../Record";
 import {
-  useLocalStorage,
   scoreFromRecord,
   useSettings,
   usePlayerData,
-  calculateCompletedScoreFromNode
+  calculateCompletedScoreFromNode,
 } from "../common";
 import s from "./styles.module.scss";
 import cx from "classnames";
 import { DestinyPresentationNodeDefinition } from "bungie-api-ts/destiny2/interfaces";
 import {
   DestinyRecordDefinitionCollection,
-  DestinyPresentationNodeDefinitionCollection
+  DestinyPresentationNodeDefinitionCollection,
 } from "../../../lib/definitions/types";
+import { useLocalStorage } from "../../../lib/hooks";
 
 const scoreCache: Record<string, number> = {};
 function scoreFromPresentationNode(
@@ -55,7 +55,7 @@ const Node: React.FC<{
 
   const {
     DestinyPresentationNodeDefinition: nodeDefs,
-    DestinyRecordDefinition: recordDefs
+    DestinyRecordDefinition: recordDefs,
   } = useDefinitions();
 
   const [isCollapsed, setIsCollapsed] = useLocalStorage(
@@ -76,7 +76,7 @@ const Node: React.FC<{
     return null;
   }
 
-  const allZeroPointsRemaining = playerData.every(player => {
+  const allZeroPointsRemaining = playerData.every((player) => {
     const completedScore = calculateCompletedScoreFromNode(
       node,
       player,
@@ -128,14 +128,14 @@ const Node: React.FC<{
 
         {!isCollapsed && (
           <div className={s.nodeChildren}>
-            {node.children.presentationNodes.map(child => (
+            {node.children.presentationNodes.map((child) => (
               <Node
                 key={child.presentationNodeHash}
                 presentationNodeHash={child.presentationNodeHash}
               />
             ))}
 
-            {node.children.records.map(child => (
+            {node.children.records.map((child) => (
               <Record key={child.recordHash} recordHash={child.recordHash} />
             ))}
           </div>
@@ -154,7 +154,7 @@ const NodePlayerData: React.FC<{
 
   const {
     DestinyPresentationNodeDefinition: nodeDefs,
-    DestinyRecordDefinition: recordDefs
+    DestinyRecordDefinition: recordDefs,
   } = useDefinitions();
 
   if (!nodeDefs || !recordDefs) {
@@ -207,7 +207,7 @@ const PointsToggle: React.FC<{
 
   return (
     <span
-      onClick={ev =>
+      onClick={(ev) =>
         settings.setShowCompletedPoints(!settings.showCompletedPoints)
       }
     >

@@ -8,6 +8,7 @@ interface IconProps extends React.HTMLAttributes<HTMLSpanElement> {
   light?: boolean;
   duotone?: boolean;
   brand?: boolean;
+  spin?: boolean;
 }
 
 const Icon: React.FC<IconProps> = ({
@@ -17,6 +18,8 @@ const Icon: React.FC<IconProps> = ({
   light,
   duotone,
   brand,
+  spin,
+  className,
   ...rest
 }) => {
   const prefix =
@@ -25,27 +28,32 @@ const Icon: React.FC<IconProps> = ({
       [regular ? "true" : "false"]: "far",
       [light ? "true" : "false"]: "fal",
       [duotone ? "true" : "false"]: "fad",
-      [brand ? "true" : "false"]: "fab"
+      [brand ? "true" : "false"]: "fab",
     }["true"] || "far";
 
-  if (solid) {
-  }
-
-  return <span className={`${prefix} fa-${name}`} {...rest}></span>;
+  return (
+    <span>
+      <span
+        className={`${prefix} fa-${name} ${className || ""} ${
+          spin ? "fa-spin" : ""
+        }`}
+        {...rest}
+      ></span>
+    </span>
+  );
 };
 
 export default Icon;
 
-export const MembershipTypeIcon: React.FC<{ type: MembershipType }> = ({
-  type,
-  ...rest
-}) => {
+export const MembershipTypeIcon: React.FC<{
+  type: string | MembershipType;
+}> = ({ type, ...rest }) => {
   const iconMap: Record<string, string> = {
     [MembershipType.Xbox]: "xbox",
     [MembershipType.Playstation]: "playstation",
     [MembershipType.Steam]: "steam",
     [MembershipType.BattleNet]: "battle-net",
-    [MembershipType.Stadia]: "google"
+    [MembershipType.Stadia]: "google",
   };
 
   return <Icon brand name={iconMap[type.toString()]} {...rest} />;
