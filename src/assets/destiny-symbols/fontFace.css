@@ -1,5 +1,5 @@
 @font-face {
   font-family: "Destiny Symbols";
-  src: url("./destinySymbols.otf");
+  src: url("./DestinyKeysBL.woff") format("woff"), url("./destinySymbols.otf");
   unicode-range: U+E000-F8FF;
 }

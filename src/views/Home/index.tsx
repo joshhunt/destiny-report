@@ -32,10 +32,11 @@ const App: React.FC = () => {
       </section>
 
       <section className={s.container}>
-        <p style={{ textAlign: "center", marginTop: 64 }}>RIP</p>
+        <p style={{ textAlign: "center", marginTop: 64 }}></p>
       </section>
 
-      <p className={s.footer}>Made by joshhunt</p>
+      <p className={s.footer}>Made by joshhunt </p>
+      <p className={s.footer}></p>
     </>
   );
 };

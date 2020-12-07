@@ -10,6 +10,7 @@ import {
 } from "../common";
 import { useDefinitions } from "../../../lib/definitions";
 import PrettyNumber from "../../../components/PrettyNumber";
+import bungieIconText from "../../../lib/bungieIconText";
 
 const RecordPlayerData: React.FC<{
   record: DestinyRecordDefinition;
@@ -71,7 +72,6 @@ const RecordPlayerData: React.FC<{
                           }%`,
                         }}
                       />
-
                       {intervals &&
                         intervals
                           .slice(0, intervals.length - 1)
@@ -87,11 +87,10 @@ const RecordPlayerData: React.FC<{
                               />
                             );
                           })}
-
                       <div className={s.objectiveName}>
-                        {objectiveDef.progressDescription || "Completed"}
+                        {bungieIconText(objectiveDef.progressDescription) ||
+                          "Completed"}
                       </div>
-
                       <div className={s.objectiveScore}>
                         <PrettyNumber
                           number={objectiveInstance.progress ?? 0}
