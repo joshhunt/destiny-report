@@ -1,5 +1,6 @@
 import React, { useMemo, useReducer, useEffect, useState } from "react";
 import { withDefinitions } from "../../lib/definitions";
+import Modal from "react-modal";
 
 import Node from "./Node";
 import {
@@ -13,16 +14,29 @@ import { getCachedSettings, getProfile } from "../../lib/destinyApi";
 import { DestinyComponentType } from "../../additionalDestinyTypes";
 import { usePlayersParam, useLocalStorage } from "../../lib/hooks";
 import { CoreSettingsConfiguration } from "bungie-api-ts/core/interfaces";
-
-// This can be gotten from the API, settings endpoint
-// const ROOT_TRIUMPH_NODE = 1024788583;
-// const ROOT_SEALS_NODE = 1652422747;
+import Icon from "../../components/Icon";
+import PlayerSearch, { SearchResult } from "../../components/PlayerSearch";
+import { useHistory, useLocation } from "react-router-dom";
 
 function playerDataReducer(
   state: PlayerDataState,
   action: PlayerDataAction
 ): PlayerDataState {
-  return [...state, action.data];
+  const index = state.findIndex(
+    (p) =>
+      p.profile.data?.userInfo.membershipId ===
+      action.data.profile.data?.userInfo.membershipId
+  );
+
+  const working = [...state];
+
+  if (index > -1) {
+    working[index] = action.data;
+  } else {
+    working.push(action.data);
+  }
+
+  return working;
 }
 
 const useSortedPlayers = (
@@ -44,6 +58,10 @@ const useSortedPlayers = (
 };
 
 const Triumphs = function () {
+  const [modalIsOpen, setModalOpen] = React.useState(false);
+  const history = useHistory();
+  const rlocation = useLocation();
+
   const [bungieSettings, setBungieSettings] = useState<
     CoreSettingsConfiguration
   >();
@@ -81,6 +99,18 @@ const Triumphs = function () {
       });
     });
   }, [players]);
+
+  const setActiveProfiles = (pp: any[]) => {
+    const newPlayersParam = pp
+      .map((player) => `${player.membershipType}/${player.membershipId}`)
+      .join(",");
+
+    history.replace(`${rlocation.pathname}?players=${newPlayersParam}`);
+  };
+
+  const addNewPlayer = (player: SearchResult) => {
+    setActiveProfiles([...players, player]);
+  };
 
   const playerData = useSortedPlayers(unsortedPlayerData, players);
 
@@ -131,15 +161,47 @@ const Triumphs = function () {
           <br />
           <br />
 
+          <button
+            className={s.addPlayerButton}
+            onClick={() => setModalOpen(true)}
+          >
+            Add player
+          </button>
+
+          <br />
+          <br />
+
           <div className={s.triumphs}>
             {rootTriumphsNodeHash && (
               <Node presentationNodeHash={rootTriumphsNodeHash} isRoot />
             )}
-            {/* {rootSealsNodeHash && (
+            {rootSealsNodeHash && (
               <Node presentationNodeHash={rootSealsNodeHash} isRoot />
-            )} */}
+            )}
           </div>
         </div>
+
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={() => setModalOpen(false)}
+          className={s.modal}
+          overlayClassName={s.modalOverlay}
+          contentLabel="Search for a player"
+        >
+          <div className={s.modalHeader}>
+            <h2 className={s.modalTitle}>Search for player</h2>
+            <button
+              className={s.modalClose}
+              onClick={() => setModalOpen(false)}
+            >
+              <div className={s.modalCloseInner}>
+                <Icon className={s.modalCloseIcon} name="times" />
+              </div>
+            </button>
+          </div>
+
+          <PlayerSearch onPlayerSelected={addNewPlayer} />
+        </Modal>
       </playerDataContext.Provider>
     </settingsContext.Provider>
   );

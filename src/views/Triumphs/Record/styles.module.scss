@@ -93,7 +93,7 @@ $objective-height: 24px;
   flex: 0 0 $objective-height;
   width: $objective-height;
   height: $objective-height;
-  border: 1px solid rgba(white, 0.95);
+  border: 1px solid var(--track-bg);
   outline: 2px black;
   margin-right: 2px;
 }
@@ -101,6 +101,7 @@ $objective-height: 24px;
 .objectiveIndicatorComplete {
   composes: objectiveIndicatorIncomplete;
   position: relative;
+  border-color: rgba(white, 0.95);
 
   &:after {
     $inset: 2px;
@@ -127,11 +128,10 @@ $objective-height: 24px;
   font-size: 13px;
   align-items: center;
   border: 1px solid var(--track-bg);
-  border-left: none;
 }
 
 .objectiveScore {
-  padding: 0 3px;
+  padding: 0 6px;
 }
 
 .objectiveName,
@@ -171,9 +171,10 @@ $objective-height: 24px;
 
 .intervalMarker {
   position: absolute;
-  z-index: 1;
+  z-index: 3;
   top: 2px;
   bottom: 2px;
   width: 1px;
   background: rgba(white, 0.5);
+  margin-left: -1px;
 }
