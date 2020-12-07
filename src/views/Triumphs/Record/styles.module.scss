@@ -62,12 +62,14 @@ $incomplete-lighter: lighten($incomplete, 20%);
 .complete {
   background: $complete;
 
+  --bg: #{$complete};
   --track-bg: hsl(123, 33%, 60%);
 }
 
 .incomplete {
   background: $incomplete;
 
+  --bg: #{$incomplete};
   --track-bg: hsl(1, 77%, 70%);
 }
 
@@ -87,6 +89,7 @@ $objective-height: 24px;
   display: flex;
   height: $objective-height;
   overflow: hidden;
+  text-shadow: 0 0 5px var(--bg);
 }
 
 .objectiveIndicatorIncomplete {
