@@ -1,10 +1,12 @@
 import { ServerResponse } from "bungie-api-ts/common";
+import { CoreSettingsConfiguration } from "bungie-api-ts/core/interfaces";
 import {
   DestinyProfileResponse,
   DestinyActivityHistoryResults,
 } from "bungie-api-ts/destiny2/interfaces";
+import { UserMembershipData } from "bungie-api-ts/user";
+
 import { DestinyComponentType } from "../additionalDestinyTypes";
-import { UserMembershipData } from "bungie-api-ts/user/interfaces";
 
 const API_KEY = process.env.REACT_APP_BUNGIE_API_KEY;
 
@@ -37,6 +39,23 @@ export async function getProfile(
   );
 }
 
+export async function getCachedSettings(
+  cb: (value: CoreSettingsConfiguration) => void
+) {
+  const cachedStr = localStorage.getItem("bungie-settings");
+  if (cachedStr) {
+    cb(JSON.parse(cachedStr));
+  }
+
+  const newValue = await bungieFetch<CoreSettingsConfiguration>(
+    "https://www.bungie.net/Platform/Settings/"
+  );
+
+  localStorage.setItem("bungie-settings", JSON.stringify(newValue));
+
+  cb(newValue);
+}
+
 // Don't use this anymore
 export async function getMembershipForCurrentUser() {
   const authToken = null;
@@ -45,9 +64,7 @@ export async function getMembershipForCurrentUser() {
     throw new Error("Do not have an auth token");
   }
 
-  return await bungieFetch<
-    UserMembershipData & { primaryMembershipId: string }
-  >(
+  return await bungieFetch<UserMembershipData>(
     `https://www.bungie.net/Platform/User/GetMembershipsForCurrentUser/`,
     authToken
   );

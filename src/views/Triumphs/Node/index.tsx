@@ -88,7 +88,11 @@ const Node: React.FC<{
     return remaining <= 0;
   });
 
-  if (!showCompletedTriumphs && allZeroPointsRemaining) {
+  if (
+    !showCompletedTriumphs &&
+    playerData.length > 0 &&
+    allZeroPointsRemaining
+  ) {
     return null;
   }
 

@@ -10,8 +10,9 @@ import {
   scoreFromRecord,
   usePlayerData,
   triumphsFromProfile,
-  recordIsCompleted
+  recordIsCompleted,
 } from "../common";
+import Icon from "../../../components/Icon";
 
 const RecordBody: React.FC<{
   record: DestinyRecordDefinition;
@@ -20,7 +21,7 @@ const RecordBody: React.FC<{
   return (
     <div className={s.recordBody}>
       <div className={s.recordTitle}>
-        {record.displayProperties.name}
+        {record.displayProperties.name || <em>No name</em>}
         {" - "}
         <span className={s.recordTotalPointScore}>{totalPointScore} pts</span>
       </div>
@@ -28,6 +29,13 @@ const RecordBody: React.FC<{
       <div className={s.recordDescription}>
         {record.displayProperties.description}
       </div>
+
+      {record.expirationInfo?.hasExpiration && (
+        <div className={s.recordExpiration}>
+          <Icon name="bomb" regular className={s.expiresIcon} />
+          {record.expirationInfo.description}
+        </div>
+      )}
     </div>
   );
 };
@@ -43,13 +51,13 @@ const Record: React.FC<{ recordHash: number }> = ({ recordHash }) => {
     return null;
   }
 
-  const allCompleted = playerData.every(profile => {
+  const allCompleted = playerData.every((profile) => {
     const playerTriumphs = triumphsFromProfile(profile);
     const recordInstance = playerTriumphs[record.hash];
     return recordInstance && recordIsCompleted(recordInstance.state);
   });
 
-  if (!showCompletedTriumphs && allCompleted) {
+  if (!showCompletedTriumphs && playerData.length > 0 && allCompleted) {
     return null;
   }
 

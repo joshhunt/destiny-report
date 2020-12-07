@@ -36,6 +36,16 @@
   color: #c5c5c5;
 }
 
+.recordExpiration {
+  margin-top: 8px;
+}
+
+.expiresIcon {
+  padding-right: 5px;
+  font-size: 1.75em;
+  color: #d7e360;
+}
+
 .players {
   display: flex;
   margin: -10px 0;
@@ -45,12 +55,20 @@
   flex: 1 1 0px;
 }
 
+$complete: hsl(123, 41%, 45%);
+$incomplete: hsl(1, 77%, 55%);
+$incomplete-lighter: lighten($incomplete, 20%);
+
 .complete {
-  background: #43a047;
+  background: $complete;
+
+  --track-bg: hsl(123, 33%, 60%);
 }
 
 .incomplete {
-  background: #e53935;
+  background: $incomplete;
+
+  --track-bg: hsl(1, 77%, 70%);
 }
 
 .player {
@@ -63,7 +81,7 @@
 }
 
 // Objective
-$objective-height: 16px;
+$objective-height: 24px;
 .objective {
   margin-bottom: 4px;
   display: flex;
@@ -75,12 +93,27 @@ $objective-height: 16px;
   flex: 0 0 $objective-height;
   width: $objective-height;
   height: $objective-height;
-  border: 1px solid white;
+  border: 1px solid rgba(white, 0.95);
+  outline: 2px black;
+  margin-right: 2px;
 }
 
 .objectiveIndicatorComplete {
   composes: objectiveIndicatorIncomplete;
-  background: white;
+  position: relative;
+
+  &:after {
+    $inset: 2px;
+
+    content: "";
+    top: $inset;
+    left: $inset;
+    bottom: $inset;
+    right: $inset;
+    display: block;
+    position: absolute;
+    background: rgba(white, 0.95);
+  }
 }
 
 .objectiveBar {
@@ -91,9 +124,9 @@ $objective-height: 16px;
   white-space: nowrap;
   line-height: 1;
   overflow: hidden;
-  font-size: 12px;
+  font-size: 13px;
   align-items: center;
-  border: 1px solid rgba(white, 0.2);
+  border: 1px solid var(--track-bg);
   border-left: none;
 }
 
@@ -111,16 +144,36 @@ $objective-height: 16px;
   text-overflow: ellipsis;
   overflow: hidden;
   flex: 1 1 100%;
-  padding-left: 3px;
+  padding-left: 6px;
+  line-height: initial;
+
+  // .complete & {
+  //   text-shadow: 1px 1px 0 $complete, -1px -1px 0 $complete, 1px -1px $complete,
+  //     -1px 1px $complete;
+  // }
+
+  // .incomplete & {
+  //   text-shadow: 1px 1px 0 $incomplete, -1px -1px 0 $incomplete,
+  //     1px -1px $incomplete, -1px 1px $incomplete;
+  // }
 }
 
 .objectiveTrack {
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   height: 100%;
   left: 0;
   top: 0;
   bottom: 0;
-  background: rgba(white, 0.2);
+  background: var(--track-bg);
   width: 55%;
+}
+
+.intervalMarker {
+  position: absolute;
+  z-index: 1;
+  top: 2px;
+  bottom: 2px;
+  width: 1px;
+  background: rgba(white, 0.5);
 }

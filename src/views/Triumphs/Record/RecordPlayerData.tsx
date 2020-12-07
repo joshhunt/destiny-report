@@ -6,9 +6,10 @@ import s from "./styles.module.scss";
 import {
   triumphsFromProfile,
   recordIsCompleted,
-  PlayerDataState
+  PlayerDataState,
 } from "../common";
 import { useDefinitions } from "../../../lib/definitions";
+import PrettyNumber from "../../../components/PrettyNumber";
 
 const RecordPlayerData: React.FC<{
   record: DestinyRecordDefinition;
@@ -18,7 +19,7 @@ const RecordPlayerData: React.FC<{
 
   return (
     <div className={s.players}>
-      {playerData.map(player => {
+      {playerData.map((player) => {
         if (!player || !DestinyObjectiveDefinition) {
           return null;
         }
@@ -32,12 +33,18 @@ const RecordPlayerData: React.FC<{
           return null;
         }
 
-        const objectiveInstances =
-          recordInstance.objectives || recordInstance.intervalObjectives;
+        const intervals = recordInstance.intervalObjectives;
+
+        const objectiveInstances = intervals
+          ? intervals.slice(intervals.length - 1)
+          : recordInstance.objectives;
+
+        const lastInvervalCompletionValue =
+          intervals && objectiveInstances[0]?.completionValue;
 
         return (
           <div className={cx(s.player, isComplete ? s.complete : s.incomplete)}>
-            {objectiveInstances.map(objectiveInstance => {
+            {(objectiveInstances ?? []).map((objectiveInstance) => {
               const objectiveDef =
                 DestinyObjectiveDefinition[objectiveInstance.objectiveHash];
 
@@ -56,20 +63,43 @@ const RecordPlayerData: React.FC<{
                       <div
                         className={s.objectiveTrack}
                         style={{
-                          width: `${Math.min(
-                            (objectiveInstance.progress || 0) /
-                              objectiveInstance.completionValue
-                          ) * 100}%`
+                          width: `${
+                            Math.min(
+                              (objectiveInstance.progress || 0) /
+                                objectiveInstance.completionValue
+                            ) * 100
+                          }%`,
                         }}
                       />
+
+                      {intervals &&
+                        intervals
+                          .slice(0, intervals.length - 1)
+                          .map((interval) => {
+                            const left =
+                              (interval.completionValue /
+                                lastInvervalCompletionValue) *
+                              100;
+                            return (
+                              <div
+                                className={s.intervalMarker}
+                                style={{ left: `${left}%` }}
+                              />
+                            );
+                          })}
 
                       <div className={s.objectiveName}>
                         {objectiveDef.progressDescription || "Completed"}
                       </div>
 
                       <div className={s.objectiveScore}>
-                        {objectiveInstance.progress} /{" "}
-                        {objectiveInstance.completionValue}
+                        <PrettyNumber
+                          number={objectiveInstance.progress ?? 0}
+                        />
+                        {" / "}
+                        <PrettyNumber
+                          number={objectiveInstance.completionValue}
+                        />
                       </div>
                     </div>
                   </div>

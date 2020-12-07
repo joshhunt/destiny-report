@@ -1,4 +1,4 @@
-import React, { useMemo, useReducer, useEffect } from "react";
+import React, { useMemo, useReducer, useEffect, useState } from "react";
 import { withDefinitions } from "../../lib/definitions";
 
 import Node from "./Node";
@@ -9,13 +9,14 @@ import {
   playerDataContext,
 } from "./common";
 import s from "./styles.module.scss";
-import { getProfile } from "../../lib/destinyApi";
+import { getCachedSettings, getProfile } from "../../lib/destinyApi";
 import { DestinyComponentType } from "../../additionalDestinyTypes";
 import { usePlayersParam, useLocalStorage } from "../../lib/hooks";
+import { CoreSettingsConfiguration } from "bungie-api-ts/core/interfaces";
 
 // This can be gotten from the API, settings endpoint
-const ROOT_TRIUMPH_NODE = 1024788583;
-const ROOT_SEALS_NODE = 1652422747;
+// const ROOT_TRIUMPH_NODE = 1024788583;
+// const ROOT_SEALS_NODE = 1652422747;
 
 function playerDataReducer(
   state: PlayerDataState,
@@ -43,6 +44,9 @@ const useSortedPlayers = (
 };
 
 const Triumphs = function () {
+  const [bungieSettings, setBungieSettings] = useState<
+    CoreSettingsConfiguration
+  >();
   const [unsortedPlayerData, setPlayerData] = useReducer(playerDataReducer, []);
 
   const [showZeroPointTriumphs, setShowZeroPointTriumphs] = useLocalStorage(
@@ -61,6 +65,10 @@ const Triumphs = function () {
   );
 
   const players = usePlayersParam();
+
+  useEffect(() => {
+    getCachedSettings((settings) => setBungieSettings(settings));
+  }, []);
 
   useEffect(() => {
     players.forEach(({ membershipId, membershipType }) => {
@@ -89,6 +97,10 @@ const Triumphs = function () {
     showCompletedTriumphs,
     showZeroPointTriumphs,
   ]);
+
+  const rootTriumphsNodeHash =
+    bungieSettings?.destiny2CoreSettings.activeTriumphsRootNodeHash;
+  const rootSealsNodeHash = bungieSettings?.destiny2CoreSettings.medalsRootNode;
 
   return (
     <settingsContext.Provider value={settings}>
@@ -120,8 +132,12 @@ const Triumphs = function () {
           <br />
 
           <div className={s.triumphs}>
-            <Node presentationNodeHash={ROOT_TRIUMPH_NODE} isRoot />
-            <Node presentationNodeHash={ROOT_SEALS_NODE} isRoot />
+            {rootTriumphsNodeHash && (
+              <Node presentationNodeHash={rootTriumphsNodeHash} isRoot />
+            )}
+            {/* {rootSealsNodeHash && (
+              <Node presentationNodeHash={rootSealsNodeHash} isRoot />
+            )} */}
           </div>
         </div>
       </playerDataContext.Provider>
