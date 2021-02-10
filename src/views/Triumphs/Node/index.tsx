@@ -29,7 +29,7 @@ function scoreFromPresentationNode(
   }
 
   let score = 0;
-  node.children.presentationNodes.forEach(({ presentationNodeHash }) => {
+  node.children?.presentationNodes.forEach(({ presentationNodeHash }) => {
     const childNode = nodeDefs[presentationNodeHash];
     score += childNode
       ? scoreFromPresentationNode(childNode, nodeDefs, recordDefs)
@@ -132,14 +132,14 @@ const Node: React.FC<{
 
         {!isCollapsed && (
           <div className={s.nodeChildren}>
-            {node.children.presentationNodes.map((child) => (
+            {node.children?.presentationNodes.map((child) => (
               <Node
                 key={child.presentationNodeHash}
                 presentationNodeHash={child.presentationNodeHash}
               />
             ))}
 
-            {node.children.records.map((child) => (
+            {node.children?.records.map((child) => (
               <Record key={child.recordHash} recordHash={child.recordHash} />
             ))}
           </div>
