@@ -42,7 +42,7 @@ export function getTokenRequestUrl() {
 }
 
 const getJSON = (url: RequestInfo, options: RequestInit) => {
-  return fetch(url, options).then(r => r.json());
+  return fetch(url, options).then((r) => r.json());
 };
 
 export function requestNewAccessToken(authCode: string) {
@@ -50,9 +50,9 @@ export function requestNewAccessToken(authCode: string) {
     method: "POST",
     headers: {
       "content-type": "application/x-www-form-urlencoded",
-      "x-api-key": API_KEY || ""
+      "x-api-key": API_KEY || "",
     },
-    body: `client_id=${CLIENT_ID}&grant_type=authorization_code&code=${authCode}`
+    body: `client_id=${CLIENT_ID}&grant_type=authorization_code&code=${authCode}`,
   });
 }
 
@@ -101,7 +101,7 @@ export function _getEnsuredAccessToken(): Promise<string> {
     iframe.style.left = "-100px";
     document.body.appendChild(iframe);
 
-    window.__recieveNewCodeFromIframe = newCode => {
+    window.__recieveNewCodeFromIframe = (newCode) => {
       document.body.removeChild(iframe);
       log("Got new code from iFrame", newCode);
       log("Requesting new access token using above new code");
@@ -109,7 +109,7 @@ export function _getEnsuredAccessToken(): Promise<string> {
       // TODO: error handling
       requestNewAccessToken(newCode)
         .then(handleNewAuthData)
-        .then(authData => {
+        .then((authData) => {
           resolve(authData.access_token);
         });
     };
@@ -134,7 +134,7 @@ function handleNewAuthData(authData: AuthData) {
   expiry.setSeconds(expiry.getSeconds() + authData.expires_in);
   const betterAuthData = {
     ...authData,
-    expiresDate: expiry
+    expiresDate: expiry,
   };
 
   log("Expires on", expiry);
@@ -163,11 +163,11 @@ const destinyAuth = (cb: (err: Error | null, result: AuthResult) => void) => {
 
     requestNewAccessToken(code)
       .then(handleNewAuthData)
-      .then(authData => {
+      .then((authData) => {
         log("Successfully requested new access code, calling cb");
         cb(null, { isAuthenticated: true, isFinal: true });
       })
-      .catch(err => {
+      .catch((err) => {
         log("Error requesting new access code, calling cb");
         cb(err, { isAuthenticated: false, isFinal: true });
       });
@@ -195,7 +195,7 @@ const destinyAuth = (cb: (err: Error | null, result: AuthResult) => void) => {
     }, REAUTH_TIMEOUT);
 
     log("Ensuring we have a valid acccess token");
-    getEnsuredAccessToken().then(token => {
+    getEnsuredAccessToken().then((token) => {
       clearTimeout(timeoutID);
       hasReturned = true;
       log("Recieved valid acccess token, calling cb");
