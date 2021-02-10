@@ -84,7 +84,7 @@ export function calculateCompletedScoreFromNode(
       : 0;
   });
 
-  node.children.records.forEach(({ recordHash }) => {
+  node.children?.records.forEach(({ recordHash }) => {
     const record = recordDefs[recordHash];
     const instance = triumphs[recordHash];
     const isCompleted = instance && recordIsCompleted(instance.state);

@@ -36,7 +36,7 @@ function scoreFromPresentationNode(
       : 0;
   });
 
-  node.children.records.forEach(({ recordHash }) => {
+  node.children?.records.forEach(({ recordHash }) => {
     const childRecord = recordDefs[recordHash];
     score += childRecord ? scoreFromRecord(childRecord) : 0;
   });
