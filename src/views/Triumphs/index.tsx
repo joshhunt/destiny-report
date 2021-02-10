@@ -131,7 +131,7 @@ const Triumphs = function () {
   const rootTriumphsNodeHash =
     bungieSettings?.destiny2CoreSettings.activeTriumphsRootNodeHash;
   const rootSealsNodeHash = bungieSettings?.destiny2CoreSettings.medalsRootNode;
-  const rootSeasonalChallengesHash = (bungieSettings?.destiny2CoreSettings as any) // TODO
+  const rootSeasonalChallengesHash = (bungieSettings?.destiny2CoreSettings as any)
     .seasonalChallengesPresentationNodeHash;
 
   return (
