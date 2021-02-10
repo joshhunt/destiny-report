@@ -131,8 +131,9 @@ const Triumphs = function () {
   const rootTriumphsNodeHash =
     bungieSettings?.destiny2CoreSettings.activeTriumphsRootNodeHash;
   const rootSealsNodeHash = bungieSettings?.destiny2CoreSettings.medalsRootNode;
-  const rootSeasonalChallengesHash = (bungieSettings?.destiny2CoreSettings as any)
-    .seasonalChallengesPresentationNodeHash;
+  const rootSeasonalChallengesHash =
+    bungieSettings?.destiny2CoreSettings
+      ?.seasonalChallengesPresentationNodeHash;
 
   return (
     <settingsContext.Provider value={settings}>
