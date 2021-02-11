@@ -10,7 +10,10 @@ import {
 } from "../common";
 import s from "./styles.module.scss";
 import cx from "classnames";
-import { DestinyPresentationNodeDefinition } from "bungie-api-ts/destiny2/interfaces";
+import {
+  DestinyPresentationNodeDefinition,
+  DestinyRecordToastStyle,
+} from "bungie-api-ts/destiny2/interfaces";
 import {
   DestinyRecordDefinitionCollection,
   DestinyPresentationNodeDefinitionCollection,
@@ -38,6 +41,9 @@ function scoreFromPresentationNode(
 
   node.children?.records.forEach(({ recordHash }) => {
     const childRecord = recordDefs[recordHash];
+    if (childRecord?.completionInfo?.toastStyle === 6) {
+      score += 1;
+    }
     score += childRecord ? scoreFromRecord(childRecord) : 0;
   });
 

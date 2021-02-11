@@ -72,7 +72,7 @@ export function calculateCompletedScoreFromNode(
 
   let score = 0;
 
-  node.children.presentationNodes.forEach(({ presentationNodeHash }) => {
+  node.children?.presentationNodes.forEach(({ presentationNodeHash }) => {
     const childNode = nodeDefs[presentationNodeHash];
     score += childNode
       ? calculateCompletedScoreFromNode(
