@@ -25,7 +25,7 @@ const Emoji: React.FC<EmojiProps> = ({ type }) => {
 
   return (
     <span className={s.emoji}>
-      <img src={EMOJIS[type]} />
+      <img alt="" src={EMOJIS[type]} />
     </span>
   );
 };

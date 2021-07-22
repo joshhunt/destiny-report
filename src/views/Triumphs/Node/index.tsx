@@ -12,7 +12,6 @@ import s from "./styles.module.scss";
 import cx from "classnames";
 import {
   DestinyPresentationNodeDefinition,
-  DestinyRecordToastStyle,
 } from "bungie-api-ts/destiny2/interfaces";
 import {
   DestinyRecordDefinitionCollection,
