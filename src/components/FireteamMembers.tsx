@@ -11,7 +11,7 @@ const FireteamMembers: React.FC<{ pgcrId: number }> = ({ pgcrId }) => {
 
   return pgcr ? (
     <>
-      {pgcr.Response.entries.map(entry => (
+      {pgcr.Response.entries.map((entry) => (
         <div key={entry.player.destinyUserInfo.membershipId}>
           {entry.player.destinyUserInfo.displayName}
         </div>

@@ -9,7 +9,7 @@ const LEADERBOARD_SIZES = [20, 100, 999];
 const VIEW_MORE_LABELS: Record<string, string> = {
   20: "View more",
   100: "View a lot more",
-  999: "Less!!!"
+  999: "Less!!!",
 };
 
 type RankField = "triumphRank" | "collectionRank";
@@ -27,7 +27,7 @@ const sortLeaderboard = (
       const rank = a[primaryRank] - b[primaryRank];
       return rank === 0 ? a[secondaryRank] - b[secondaryRank] : rank;
     })
-    .map(player => ({ ...player, rank: player[primaryRank] }))
+    .map((player) => ({ ...player, rank: player[primaryRank] }))
     .slice(0, size);
 };
 
@@ -36,14 +36,14 @@ function leaderboardFromProfiles(
   rankField: RankField
 ) {
   return responses
-    .map(player => {
+    .map((player) => {
       const { triumphRank, collectionRank, profile } = player;
 
       const payload = {
         ...profile,
         triumphRank,
         collectionRank,
-        rank: player[rankField]
+        rank: player[rankField],
       };
 
       return payload;
@@ -60,7 +60,7 @@ interface GlobalLeaderboardProps {
 const GlobalLeaderboards: React.FC<GlobalLeaderboardProps> = ({
   leaderboards,
   isLoading,
-  extraProfiles
+  extraProfiles,
 }) => {
   const [maxLeaderboardSize, setMaxLeaderboardSize] = useState(
     LEADERBOARD_SIZES[0]
@@ -103,7 +103,7 @@ const GlobalLeaderboards: React.FC<GlobalLeaderboardProps> = ({
               ? leaderboardFromProfiles(extraProfiles, "collectionRank")
               : undefined
           }
-          renderScore={player =>
+          renderScore={(player) =>
             `${player.collectionScore.toLocaleString()} items`
           }
         />
@@ -116,7 +116,7 @@ const GlobalLeaderboards: React.FC<GlobalLeaderboardProps> = ({
               ? leaderboardFromProfiles(extraProfiles, "triumphRank")
               : undefined
           }
-          renderScore={player =>
+          renderScore={(player) =>
             `${player.triumphScore.toLocaleString()} points`
           }
         />

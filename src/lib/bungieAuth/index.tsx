@@ -5,7 +5,7 @@ const log = (...args: any[]) => console.log("[AUTH PROVIDER]", ...args);
 
 const bungieAuthContext = React.createContext({
   authLoaded: false,
-  isAuthenticated: false
+  isAuthenticated: false,
 });
 
 export const BungieAuthProvider: React.FC = ({ children }) => {

@@ -4,7 +4,7 @@ import { LeaderboardEntry, DestinyCrawlApiStatus } from "./types";
 
 export enum CacheStrategy {
   Refresh,
-  UseStale
+  UseStale,
 }
 
 const API_KEY = process.env.REACT_APP_BUNGIE_API_KEY;
@@ -58,8 +58,8 @@ export function useCachedApi<Data>(
     }
 
     fetch(url, options)
-      .then(r => r.json())
-      .then(data => {
+      .then((r) => r.json())
+      .then((data) => {
         setData(data);
         setIsStale(false);
         const serialized = JSON.stringify(data);

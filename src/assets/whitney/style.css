@@ -1,0 +1,71 @@
+html,
+body {
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
+@font-face {
+  font-family: "Whitney";
+  font-style: normal;
+  font-weight: 500;
+  src: local("Whitney"), url("./whitneymedium.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Whitney";
+  font-style: italic;
+  font-weight: 500;
+  src: local("Whitney"), url("./whitneymediumitalic.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Whitney";
+  font-style: normal;
+  font-weight: 700;
+  src: local("Whitney"), url("./whitneybold.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Whitney";
+  font-style: normal;
+  font-weight: 600;
+  src: local("Whitney"), url("./whitneysemibold.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Whitney";
+  font-style: normal;
+  font-weight: 400;
+  src: local("Whitney"), url("./whitneybook.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Whitney";
+  font-style: normal;
+  font-weight: 300;
+  src: local("Whitney"), url("./whitneylight.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Whitney";
+  font-style: italic;
+  font-weight: 600;
+  src: local("Whitney"), url("./WhitneySemiboldItalic.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Whitney";
+  font-style: italic;
+  font-weight: 400;
+  src: local("Whitney"), url("./whitneybookitalic.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Whitney";
+  font-style: italic;
+  font-weight: 300;
+  src: local("Whitney"), url("./whitneylightitalic.woff") format("woff");
+}

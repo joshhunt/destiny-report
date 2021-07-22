@@ -20,7 +20,7 @@ export function usePlayersParam(): Membership[] {
           const hasData = type && id;
           return hasData ? { membershipType: type, membershipId: id } : null;
         })
-        .filter((Boolean as any) as ExcludesFalse),
+        .filter(Boolean as any as ExcludesFalse),
     [playersParam]
   );
 

@@ -62,9 +62,8 @@ const Triumphs = function () {
   const history = useHistory();
   const rlocation = useLocation();
 
-  const [bungieSettings, setBungieSettings] = useState<
-    CoreSettingsConfiguration
-  >();
+  const [bungieSettings, setBungieSettings] =
+    useState<CoreSettingsConfiguration>();
   const [unsortedPlayerData, setPlayerData] = useReducer(playerDataReducer, []);
 
   const [showZeroPointTriumphs, setShowZeroPointTriumphs] = useLocalStorage(

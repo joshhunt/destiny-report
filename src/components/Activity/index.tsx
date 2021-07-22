@@ -13,7 +13,7 @@ import FireteamMembers from "../FireteamMembers";
 
 const usesNightfallCard = (activity: DestinyActivityDefinition): boolean => {
   return !!activity.modifiers.find(
-    modifier => modifier.activityModifierHash === 1845517209
+    (modifier) => modifier.activityModifierHash === 1845517209
   );
 };
 
@@ -33,7 +33,7 @@ function getSupplimentaryData(
 ) {
   if (!activityDefs || !activity) {
     return {
-      displayActivity: activity
+      displayActivity: activity,
     };
   }
 
@@ -42,13 +42,13 @@ function getSupplimentaryData(
 
   const displayActivity = isOrdeal
     ? activities.find(
-        candidate =>
+        (candidate) =>
           candidate.displayProperties.name ===
           activity.displayProperties.description
       )
     : activities
         .filter(
-          candidate =>
+          (candidate) =>
             activity.displayProperties.name &&
             candidate.displayProperties.name &&
             candidate.displayProperties.name.length > 3 &&
@@ -64,7 +64,7 @@ function getSupplimentaryData(
         )[0];
 
   return {
-    displayActivity: displayActivity || activity
+    displayActivity: displayActivity || activity,
   };
 }
 
@@ -74,7 +74,7 @@ function formatSeconds(seconds: number) {
 
   return [
     minutes > 0 && `${minutes}m`,
-    secondsRemaining > 0 && `${secondsRemaining}s`
+    secondsRemaining > 0 && `${secondsRemaining}s`,
   ]
     .filter(Boolean)
     .join(" ");
@@ -83,7 +83,7 @@ function formatSeconds(seconds: number) {
 const Activity: React.FC<ActivityProps> = ({
   activityHash,
   className,
-  leaderboardEntries
+  leaderboardEntries,
 }) => {
   const { DestinyActivityDefinition } = useDefinitions();
 

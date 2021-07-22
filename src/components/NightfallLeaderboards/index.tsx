@@ -5,7 +5,7 @@ import { useDefinitions, withDefinitions } from "../../lib/definitions";
 import { useCachedApi } from "../../appHooks";
 import {
   NightfallLeaderboardResponse,
-  NightfallLeaderboardEntry
+  NightfallLeaderboardEntry,
 } from "../../types";
 import Activity from "../../components/Activity";
 
@@ -48,10 +48,10 @@ const NightfallLeaderboards: React.FC = () => {
         return {
           activityHash,
           entries: sortedEntries,
-          lightLevel: activity && activity.activityLightLevel
+          lightLevel: activity && activity.activityLightLevel,
         };
       })
-      .filter(obj => {
+      .filter((obj) => {
         return (
           obj.lightLevel &&
           NIGHFALL_LIGHT_LEVEL_WHITELIST.includes(obj.lightLevel)
@@ -66,7 +66,7 @@ const NightfallLeaderboards: React.FC = () => {
     <>
       <div className={s.nightfalls}>
         {activityLeaderboards &&
-          activityLeaderboards.map(obj => (
+          activityLeaderboards.map((obj) => (
             <Activity
               key={obj.activityHash}
               className={s.nightfallCard}
@@ -90,5 +90,5 @@ const NightfallLeaderboards: React.FC = () => {
 };
 
 export default withDefinitions(NightfallLeaderboards, [
-  "DestinyActivityDefinition"
+  "DestinyActivityDefinition",
 ]);

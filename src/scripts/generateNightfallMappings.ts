@@ -58,7 +58,7 @@ export async function getDefinitions() {
   } catch (e) {}
 
   if (tempDefs) {
-    const typedDefs = (tempDefs as unknown) as DestinyWorldDefinitions;
+    const typedDefs = tempDefs as unknown as DestinyWorldDefinitions;
     return typedDefs;
   }
 

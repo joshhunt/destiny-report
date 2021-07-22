@@ -206,7 +206,7 @@ export enum DestinyComponentType {
    * limited use cases. We can provide no guarantee of timeliness nor consistency for
    * this data: buyer beware with the Transitory component.
    */
-  Transitory = 1000
+  Transitory = 1000,
 }
 
 /**
@@ -250,5 +250,5 @@ export enum DestinyRecordState {
    * If this is set, the record has a title (check DestinyRecordDefinition for title
    * info) and you can equip it.
    */
-  CanEquipTitle = 64
+  CanEquipTitle = 64,
 }

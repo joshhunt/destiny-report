@@ -12,27 +12,20 @@ type DefinitionsObject<Definition> = {
   [key: string]: Definition | undefined;
 };
 
-export type DestinyRecordDefinitionCollection = DefinitionsObject<
-  DestinyRecordDefinition
->;
-export type DestinyActivityDefinitionCollection = DefinitionsObject<
-  DestinyActivityDefinition
->;
-export type DestinyInventoryItemDefinitionCollection = DefinitionsObject<
-  DestinyInventoryItemDefinition
->;
-export type DestinyPresentationNodeDefinitionCollection = DefinitionsObject<
-  DestinyPresentationNodeDefinition
->;
-export type DestinyObjectiveDefinitionCollection = DefinitionsObject<
-  DestinyObjectiveDefinition
->;
-export type DestinySeasonDefinitionCollection = DefinitionsObject<
-  DestinySeasonDefinition
->;
-export type DestinyClassDefinitionCollection = DefinitionsObject<
-  DestinyClassDefinition
->;
+export type DestinyRecordDefinitionCollection =
+  DefinitionsObject<DestinyRecordDefinition>;
+export type DestinyActivityDefinitionCollection =
+  DefinitionsObject<DestinyActivityDefinition>;
+export type DestinyInventoryItemDefinitionCollection =
+  DefinitionsObject<DestinyInventoryItemDefinition>;
+export type DestinyPresentationNodeDefinitionCollection =
+  DefinitionsObject<DestinyPresentationNodeDefinition>;
+export type DestinyObjectiveDefinitionCollection =
+  DefinitionsObject<DestinyObjectiveDefinition>;
+export type DestinySeasonDefinitionCollection =
+  DefinitionsObject<DestinySeasonDefinition>;
+export type DestinyClassDefinitionCollection =
+  DefinitionsObject<DestinyClassDefinition>;
 
 export interface DestinyWorldDefinitions {
   DestinyRecordDefinition?: DestinyRecordDefinitionCollection;

@@ -14,8 +14,8 @@ const leaderboard = [
     crossSaveOverride: 1,
     applicableMembershipTypes: [3, 1],
     triumphRank: 1,
-    collectionRank: 1284
-  }
+    collectionRank: 1284,
+  },
 ];
 
 const extraProfiles = [
@@ -28,11 +28,11 @@ const extraProfiles = [
       triumphScore: 120585,
       collectionScore: 3457,
       crossSaveOverride: 2,
-      applicableMembershipTypes: [1, 3, 2]
+      applicableMembershipTypes: [1, 3, 2],
     },
     collectionRank: 7612,
-    triumphRank: 745
-  }
+    triumphRank: 745,
+  },
 ];
 
 test("renders users from the leaderboard", () => {

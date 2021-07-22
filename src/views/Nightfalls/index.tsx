@@ -147,7 +147,8 @@ function calculatePlayerTimes(
       }
 
       activities.forEach((activity) => {
-        const activityHash = activity.activity.activityDetails.referenceId.toString();
+        const activityHash =
+          activity.activity.activityDetails.referenceId.toString();
 
         const period = new Date(activity.activity.period);
 
