@@ -12,6 +12,7 @@ const rootElement = document.getElementById("root");
 
 if (rootElement && window.location.pathname !== "/") {
   rootElement.innerHTML = "";
+  document.body.classList.remove("hide-body");
 }
 
 if (

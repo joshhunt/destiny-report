@@ -17,3 +17,7 @@ body {
 * {
   box-sizing: border-box;
 }
+
+:global(.hide-body) {
+  display: none;
+}
