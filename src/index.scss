@@ -18,6 +18,6 @@ body {
   box-sizing: border-box;
 }
 
-:global(.hide-body) {
+:global .hide-body {
   display: none;
 }
