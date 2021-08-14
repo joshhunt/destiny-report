@@ -9,6 +9,11 @@ const Site = () => {
 };
 
 const rootElement = document.getElementById("root");
+
+if (rootElement && window.location.pathname !== "/") {
+  rootElement.innerHTML = "";
+}
+
 if (
   rootElement &&
   rootElement.hasChildNodes() &&
