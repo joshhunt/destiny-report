@@ -43,7 +43,7 @@ export async function getCachedSettings(
   cb: (value: CoreSettingsConfiguration) => void
 ) {
   const cachedStr = localStorage.getItem("bungie-settings");
-  if (cachedStr) {
+  if (cachedStr && cachedStr !== "undefined") {
     cb(JSON.parse(cachedStr));
   }
 

@@ -137,7 +137,7 @@ const Triumphs = function () {
   return (
     <settingsContext.Provider value={settings}>
       <playerDataContext.Provider value={playerData}>
-        <div className={s.root}>
+        <div className={s.triumphsRoot}>
           <h2>Triumphs</h2>
 
           <label>

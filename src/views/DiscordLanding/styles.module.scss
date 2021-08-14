@@ -1,5 +1,5 @@
 .root {
-  height: 100%;
+  min-height: 75vh;
   margin: auto;
   max-width: 1440px;
   display: flex;
@@ -27,14 +27,39 @@
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: 32px;
   align-items: center;
   padding: 32px;
+  grid-template-columns: 1fr;
 
-  @media screen and (max-width: 960px) {
-    grid-template-columns: 1fr;
+  @media screen and (min-width: 960px) {
+    grid-template-columns: 3fr 2fr;
   }
+
+  @media screen and (min-width: 1400px) {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.archiveGrid {
+  composes: grid;
+  margin-top: 96px;
+  margin-bottom: 192px;
+
+  grid-template-columns: 1fr;
+
+  @media screen and (min-width: 960px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media screen and (min-width: 1400px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.floatRight {
+  // display: flex;
+  // justify-content: flex-end;
 }
 
 .discordButton {
@@ -57,8 +82,24 @@
   }
 }
 
+.archiveButton {
+  composes: discordButton;
+
+  > * {
+    vertical-align: initial;
+  }
+}
+
 .discordSvg {
   height: 1.3em;
+  color: white;
+  fill: white;
+  display: inline-block;
+  margin-right: 0.5ch;
+}
+
+.archiveIcon {
+  font-size: 1.1em;
   color: white;
   fill: white;
   display: inline-block;
