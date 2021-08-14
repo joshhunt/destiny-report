@@ -135,80 +135,85 @@ const Triumphs = function () {
       ?.seasonalChallengesPresentationNodeHash;
 
   return (
-    <settingsContext.Provider value={settings}>
-      <playerDataContext.Provider value={playerData}>
-        <div className={s.triumphsRoot}>
-          <h2>Triumphs</h2>
+    <div data-triumphs-root>
+      <settingsContext.Provider value={settings}>
+        <playerDataContext.Provider value={playerData}>
+          <div className={s.triumphsRoot}>
+            <h2>Triumphs</h2>
 
-          <label>
-            <input
-              type="checkbox"
-              checked={showZeroPointTriumphs}
-              onChange={(ev) => setShowZeroPointTriumphs(ev.target.checked)}
-            />{" "}
-            Show zero point triumphs
-          </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={showZeroPointTriumphs}
+                onChange={(ev) => setShowZeroPointTriumphs(ev.target.checked)}
+              />{" "}
+              Show zero point triumphs
+            </label>
 
-          <br />
+            <br />
 
-          <label>
-            <input
-              type="checkbox"
-              checked={showCompletedTriumphs}
-              onChange={(ev) => setShowCompletedTriumphs(ev.target.checked)}
-            />{" "}
-            Show triumphs completed by all
-          </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={showCompletedTriumphs}
+                onChange={(ev) => setShowCompletedTriumphs(ev.target.checked)}
+              />{" "}
+              Show triumphs completed by all
+            </label>
 
-          <br />
-          <br />
+            <br />
+            <br />
 
-          <button
-            className={s.addPlayerButton}
-            onClick={() => setModalOpen(true)}
-          >
-            Add player
-          </button>
-
-          <br />
-          <br />
-
-          <div className={s.triumphs}>
-            {rootTriumphsNodeHash && (
-              <Node presentationNodeHash={rootTriumphsNodeHash} isRoot />
-            )}
-            {rootSealsNodeHash && (
-              <Node presentationNodeHash={rootSealsNodeHash} isRoot />
-            )}
-            {rootSeasonalChallengesHash && (
-              <Node presentationNodeHash={rootSeasonalChallengesHash} isRoot />
-            )}
-          </div>
-        </div>
-
-        <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={() => setModalOpen(false)}
-          className={s.modal}
-          overlayClassName={s.modalOverlay}
-          contentLabel="Search for a player"
-        >
-          <div className={s.modalHeader}>
-            <h2 className={s.modalTitle}>Search for player</h2>
             <button
-              className={s.modalClose}
-              onClick={() => setModalOpen(false)}
+              className={s.addPlayerButton}
+              onClick={() => setModalOpen(true)}
             >
-              <div className={s.modalCloseInner}>
-                <Icon className={s.modalCloseIcon} name="times" />
-              </div>
+              Add player
             </button>
+
+            <br />
+            <br />
+
+            <div className={s.triumphs}>
+              {rootTriumphsNodeHash && (
+                <Node presentationNodeHash={rootTriumphsNodeHash} isRoot />
+              )}
+              {rootSealsNodeHash && (
+                <Node presentationNodeHash={rootSealsNodeHash} isRoot />
+              )}
+              {rootSeasonalChallengesHash && (
+                <Node
+                  presentationNodeHash={rootSeasonalChallengesHash}
+                  isRoot
+                />
+              )}
+            </div>
           </div>
 
-          <PlayerSearch onPlayerSelected={addNewPlayer} />
-        </Modal>
-      </playerDataContext.Provider>
-    </settingsContext.Provider>
+          <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={() => setModalOpen(false)}
+            className={s.modal}
+            overlayClassName={s.modalOverlay}
+            contentLabel="Search for a player"
+          >
+            <div className={s.modalHeader}>
+              <h2 className={s.modalTitle}>Search for player</h2>
+              <button
+                className={s.modalClose}
+                onClick={() => setModalOpen(false)}
+              >
+                <div className={s.modalCloseInner}>
+                  <Icon className={s.modalCloseIcon} name="times" />
+                </div>
+              </button>
+            </div>
+
+            <PlayerSearch onPlayerSelected={addNewPlayer} />
+          </Modal>
+        </playerDataContext.Provider>
+      </settingsContext.Provider>
+    </div>
   );
 };
 

@@ -50,7 +50,10 @@ const DiscordLanding: React.FC<DiscordLandingProps> = () => {
               what's added and changed.
             </p>
 
-            <a className={s.archiveButton} href={DISCORD_INVITE_LINK}>
+            <a
+              className={s.archiveButton}
+              href="https://archive.destiny.report"
+            >
               <Icon name="sign-out" className={s.archiveIcon} />{" "}
               <span>Go to Archive</span>
             </a>
