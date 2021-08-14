@@ -9,7 +9,11 @@ const Site = () => {
 };
 
 const rootElement = document.getElementById("root");
-if (rootElement && rootElement.hasChildNodes()) {
+if (
+  rootElement &&
+  rootElement.hasChildNodes() &&
+  window.location.pathname === "/"
+) {
   hydrate(<Site />, rootElement);
 } else {
   render(<Site />, rootElement);
