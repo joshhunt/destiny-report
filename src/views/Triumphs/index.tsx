@@ -135,7 +135,7 @@ const Triumphs = function () {
       ?.seasonalChallengesPresentationNodeHash;
 
   return (
-    <div data-triumphs-root>
+    <div key="triumphs">
       <settingsContext.Provider value={settings}>
         <playerDataContext.Provider value={playerData}>
           <div className={s.triumphsRoot}>
