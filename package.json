@@ -23,7 +23,7 @@
     "date-fns": "^2.8.1",
     "dexie": "^2.0.4",
     "lodash": "^4.17.15",
-    "node-sass": "^4.13.0",
+    "node-sass": "^7.0.0",
     "react": "^16.12.0",
     "react-autosuggest": "^10.0.2",
     "react-dom": "^16.12.0",
