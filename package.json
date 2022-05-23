@@ -21,7 +21,7 @@
     "bungie-api-ts": "4.8.0",
     "classnames": "^2.2.6",
     "date-fns": "^2.8.1",
-    "dexie": "^2.0.4",
+    "dexie": "^3.2.2",
     "lodash": "^4.17.15",
     "node-sass": "^4.13.0",
     "react": "^16.12.0",
