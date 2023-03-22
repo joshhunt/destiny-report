@@ -8,7 +8,9 @@ const bungieAuthContext = React.createContext({
   isAuthenticated: false,
 });
 
-export const BungieAuthProvider: React.FC = ({ children }) => {
+export const BungieAuthProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [authLoaded, setAuthLoaded] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 

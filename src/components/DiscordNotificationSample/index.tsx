@@ -65,35 +65,36 @@ const f = (title: React.ReactNode, ...content: string[]) => ({
   }, <></>),
 });
 
-const DiscordNotificationSample: React.FC<DiscordNotificationSampleProps> =
-  () => {
-    const fields = [
-      f("Items", "43 added", "97 unclassified", "3 removed", "255 modified"),
-      f("PresentationNodes", "9 added", "7 modified"),
-      f("Triumphs", "29 modified"),
-      f("Collectibles", "47 added", "26 unclassified", "5 modified"),
-      f("Activities", "1 added", "1 removed", "8 modified"),
-      f("Lore", "17 unclassified", "3 modified"),
-    ];
+const DiscordNotificationSample: React.FC<
+  DiscordNotificationSampleProps
+> = () => {
+  const fields = [
+    f("Items", "43 added", "97 unclassified", "3 removed", "255 modified"),
+    f("PresentationNodes", "9 added", "7 modified"),
+    f("Triumphs", "29 modified"),
+    f("Collectibles", "47 added", "26 unclassified", "5 modified"),
+    f("Activities", "1 added", "1 removed", "8 modified"),
+    f("Lore", "17 unclassified", "3 modified"),
+  ];
 
-    return (
-      <DiscordEmbed
-        title="Definitions have updated!"
-        link="https://archive.destiny.report/version/1a7d8d39-ca62-40af-becd-98bca27ed617"
-        fields={fields}
-      >
-        <>
-          <strong>ID:</strong> 1a7d8d39-ca62-40af-becd-98bca27ed617
-          <br />
-          <strong>Version:</strong> 94996.21.06.22.1900-3-bnet.38484
-        </>
-      </DiscordEmbed>
-    );
-  };
+  return (
+    <DiscordEmbed
+      title="Definitions have updated!"
+      link="https://archive.destiny.report/version/1a7d8d39-ca62-40af-becd-98bca27ed617"
+      fields={fields}
+    >
+      <>
+        <strong>ID:</strong> 1a7d8d39-ca62-40af-becd-98bca27ed617
+        <br />
+        <strong>Version:</strong> 94996.21.06.22.1900-3-bnet.38484
+      </>
+    </DiscordEmbed>
+  );
+};
 
 export default DiscordNotificationSample;
 
-interface DiscordField {
+interface DiscordFieldType {
   title: React.ReactNode;
   content: React.ReactNode;
 }
@@ -101,7 +102,8 @@ interface DiscordField {
 interface DiscordEmbedProps {
   title?: React.ReactNode;
   link?: string;
-  fields?: DiscordField[];
+  fields?: DiscordFieldType[];
+  children: React.ReactNode;
 }
 
 const DiscordEmbed: React.FC<DiscordEmbedProps> = ({

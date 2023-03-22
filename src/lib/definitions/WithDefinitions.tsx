@@ -39,7 +39,7 @@ const definitionsReducer = (
   [data.tableName]: data.definitions,
 });
 
-export function withDefinitions<T>(
+export function withDefinitions<T extends object>(
   Component: React.ComponentType<T>,
   tables: (keyof DestinyWorldDefinitions)[]
 ) {
@@ -52,6 +52,7 @@ export function withDefinitions<T>(
 
 export const DefinitionsProvider: React.FC<{
   tables: (keyof DestinyWorldDefinitions)[];
+  children: React.ReactNode;
 }> = ({ tables, children }) => {
   const [store, dispatchDefinition] = useReducer(definitionsReducer, {});
   const memoizedTables = stableTable(tables);
