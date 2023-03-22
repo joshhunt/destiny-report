@@ -4,7 +4,7 @@ import { bungieFetch } from "../destinyApi";
 import { DefintionsDispatchData } from "./types";
 import { db } from "../indexedDb";
 
-const REQUESTS: Record<string, Promise<any>> = {};
+const REQUESTS: Record<string, Promise<any> | undefined> = {};
 
 export interface DestinyManifestUpdated extends DestinyManifest {
   readonly jsonWorldComponentContentPaths: {

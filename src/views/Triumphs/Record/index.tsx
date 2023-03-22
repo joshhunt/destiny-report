@@ -13,11 +13,24 @@ import {
   recordIsCompleted,
 } from "../common";
 import Icon from "../../../components/Icon";
+import BungieImage from "../../../components/BungieImage";
 
 const RecordBody: React.FC<{
   record: DestinyRecordDefinition;
   totalPointScore: number;
 }> = ({ record, totalPointScore }) => {
+  const { DestinyInventoryItemDefinition: itemDefs } = useDefinitions();
+  const normalRewards = record?.rewardItems ?? [];
+  const intervalRewards =
+    record?.intervalInfo?.intervalRewards?.flatMap(
+      (v) => v.intervalRewardItems
+    ) ?? [];
+
+  const rewards = normalRewards
+    .concat(intervalRewards)
+    .map((v) => itemDefs?.[v.itemHash])
+    .filter(Boolean);
+
   return (
     <div className={s.recordBody}>
       <div className={s.recordTitle}>
@@ -28,6 +41,21 @@ const RecordBody: React.FC<{
 
       <div className={s.recordDescription}>
         {record.displayProperties.description}
+      </div>
+
+      <div>
+        {rewards.map((item) => {
+          if (!item) return <div />;
+          return (
+            <div className={s.reward}>
+              <BungieImage
+                src={item.displayProperties.icon}
+                className={s.rewardIcon}
+              />{" "}
+              {item.displayProperties.name}
+            </div>
+          );
+        })}
       </div>
 
       {record.expirationInfo?.hasExpiration && (

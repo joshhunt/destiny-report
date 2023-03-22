@@ -219,6 +219,7 @@ const Triumphs = function () {
 
 export default withDefinitions(Triumphs, [
   "DestinyRecordDefinition",
+  "DestinyInventoryItemDefinition",
   "DestinyObjectiveDefinition",
   "DestinyPresentationNodeDefinition",
 ]);
