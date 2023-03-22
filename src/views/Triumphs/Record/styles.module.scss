@@ -185,7 +185,13 @@ $objective-height: 24px;
   margin-left: -1px;
 }
 
+.reward {
+  margin-top: 4px;
+}
+
 .rewardIcon {
-  height: 1.5em;
+  height: 1.2em;
   vertical-align: middle;
+  display: inline-block;
+  margin-right: 0.25ch;
 }
