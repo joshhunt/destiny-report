@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>👋 destiny.report</title>
+    <style>
+      :root {
+        --font-size: 16px;
+        --line-height: 1.6;
+        --spacingv: 0.75rem;
+        --yellow: #ecca48;
+        --dark-gray: #121212;
+        --light-gray: #fafafa;
+
+        font-family: "InterVariable", system-ui, -apple-system,
+          BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+          "Open Sans", "Helvetica Neue", sans-serif;
+        font-optical-sizing: auto;
+        font-size: var(--font-size);
+      }
+
+      @media only screen and (min-width: 1392px) {
+        :root {
+          font-size: calc(100vw / 87);
+        }
+      }
+
+      body {
+        margin: 4rem;
+        padding: 0;
+        background-color: var(--dark-gray);
+        color: var(--light-gray);
+        line-height: var(--line-height);
+      }
+
+      .content {
+        width: 100%;
+        max-width: 60ch;
+        text-transform: lowercase;
+      }
+
+      code,
+      pre {
+        text-transform: initial;
+      }
+
+      /* @media only screen and (min-width: 1392px) {
+        .content {
+          width: ;
+          max-width: unset;
+        }
+      } */
+
+      .yellow {
+        color: var(--yellow);
+      }
+
+      div,
+      p,
+      pre,
+      ol,
+      ul,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        margin: 0;
+        padding: 0;
+      }
+
+      p,
+      pre,
+      ol,
+      h1,
+      h2,
+      ul {
+        margin-bottom: calc(var(--spacingv) * 1.5);
+      }
+
+      h1 {
+        font-size: 3rem;
+        font-weight: 600;
+      }
+
+      h2 {
+        font-size: 2rem;
+        font-weight: 600;
+      }
+
+      h4,
+      h5,
+      h6 {
+        font-weight: 640;
+        margin-bottom: calc(var(--spacingv) * 1);
+      }
+
+      * + h1 {
+        margin-top: calc(var(--spacingv) * 6);
+      }
+      * + h2 {
+        margin-top: calc(var(--spacingv) * 4);
+      }
+      * + h3 {
+        margin-top: calc(var(--spacingv) * 3);
+      }
+      * + h4 {
+        margin-top: calc(var(--spacingv) * 2);
+      }
+
+      hr + p {
+        margin-top: calc(var(--spacingv) * 2);
+      }
+
+      a {
+        color: var(--yellow);
+      }
+
+      .tldr {
+        padding-left: 1em;
+        border-left: 0.25em solid var(--yellow);
+      }
+
+      table {
+        border-collapse: collapse;
+      }
+
+      table thead,
+      table th {
+        text-align: left;
+      }
+
+      table th,
+      table td {
+        padding: 0.25em 0.5em;
+        border: 1px solid grey;
+        vertical-align: top;
+      }
+
+      pre,
+      code {
+        color: white;
+      }
+
+      table code {
+        white-space: nowrap;
+      }
+
+      @font-face {
+        font-family: InterVariable;
+        font-style: normal;
+        font-weight: 100 900;
+        font-display: swap;
+        src: url("InterVariable.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: InterVariable;
+        font-style: italic;
+        font-weight: 100 900;
+        font-display: swap;
+        src: url("InterVariable-Italic.woff2") format("woff2");
+      }
+    </style>
+  </head>
+  <body>
+    <div class="content">
+      <h1 class="yellow">archived definitions</h1>
+      <p>
+        The archived definitions from archive.destiny.report are available to
+        download from S3 using
+        <a
+          href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/RequesterPaysBuckets.html"
+          >Requester Pays</a
+        >. You will use your AWS credentials to download the files and pay AWS
+        bandwidth costs yourself.
+      </p>
+
+      <div class="tldr">
+        <p>
+          <span class="yellow">tl;dr:</span> Download all the files using the
+          AWS CLI using the command:
+        </p>
+
+        <pre>aws s3 sync s3://destiny-definitions ./ --request-payer</pre>
+      </div>
+
+      <p>
+        Definitions have been archived for the versions from Tuesday, 7 July
+        2020 to Tuesday, 10 December 2024, as listed on
+        <a href="https://archive.destiny.report">archive.destiny.report</a>. The
+        total bucket takes up approximately 34GB.
+      </p>
+
+      <p>
+        Archived definitions are available in the AWS bucket
+        <code>destiny-definitions</code> in the <code>eu-west-1</code> region.
+        See
+        <a
+          href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/ObjectsinRequesterPaysBuckets.html"
+          >Downloading objects from Requester Pays buckets</a
+        >
+        for more details.
+      </p>
+
+      <p>The bucket structure is roughly:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Path</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <code>/index.json</code>
+            </td>
+            <td>
+              lists metadata (id, version, date, etc) for each archived version
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <code>/database.sqlite</code>
+            </td>
+            <td>
+              detailed metadata for each archived version and definition table
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <code>/versions/{id}/manifest.json</code>
+            </td>
+            <td>
+              <code>Destiny2.GetDestinyManifest</code> response for this version
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <code>/versions/{id}/world_sql_content_{hash}.content</code>
+            </td>
+            <td>
+              The zipped definitions SQLite database. See the manifest for the
+              exact file name.
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <code>/versions/{id}/diff.json</code>
+            </td>
+            <td>
+              List of new, removed, modified hashes for each definition table
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <code>/versions/{id}/tables/{definitionTableName}.json</code>
+            </td>
+            <td>
+              JSON definition files from
+              <code>jsonWorldComponentContentPaths</code>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+
+      <p>
+        Note that the <code>id</code> is an opaque version ID specific to this
+        bucket, and not the game content <code>version</code> from the manifest
+        response. You can list all IDs from the <code>index.json</code> file.
+      </p>
+
+      <p>
+        New definitions will continue to be archived for now, but no promises
+        are made for how long with will continue. No promises are made for how
+        long the bucket will be available for others to download from.
+      </p>
+
+      <p>
+        With a configured AWS CLI, you can list all objects in the bucket with
+        the command:
+      </p>
+      <pre>aws s3 ls --recursive s3://destiny-definitions --request-payer</pre>
+
+      <p>You can download all objects in the bucket with the command:</p>
+      <pre>aws s3 sync s3://destiny-definitions ./ --request-payer</pre>
+
+      <p>
+        &mdash; <a href="https://bsky.app/profile/joshhunt.dev">Josh Hunt</a>
+      </p>
+    </div>
+  </body>
+</html>
