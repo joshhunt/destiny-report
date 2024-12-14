@@ -1,66 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="%PUBLIC_URL%/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="96x96"
-      href="%PUBLIC_URL%/favicon-96x96.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="%PUBLIC_URL%/favicon-16x16.png"
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>👋 destiny.report</title>
+    <style>
+      :root {
+        --font-size: 16px;
+        --line-height: 1.6;
+        --spacingv: 0.75rem;
+        --yellow: #ecca48;
+        --dark-gray: #121212;
+        --light-gray: #fafafa;
 
-    <meta name="theme-color" content="#121212" >
-    
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="destiny.report" />
-    <meta name="twitter:description" content="Destiny API update notifications" />
-    <meta
-      name="twitter:image"
-      content="https://destiny.report/banner.png"
-    />
-
-    <meta property="og:title" content="destiny.report" />
-    <meta property="og:description" content="Destiny API update notifications" />
-    <meta property="og:url" content="https://destiny.report/" />
-    <meta property="og:type" content="website" />
-
-    <meta
-      property="og:image"
-      content="https://destiny.report/banner.png"
-    />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="600" />
-
-    <!-- <link rel="manifest" href="%PUBLIC_URL%/manifest.json" /> -->
-    <title>destiny.report</title>
-  </head>
-
-  <body>
-    <script type="text/javascript">
-      if (window.location.href !== "/") {
-        document.body.classList.add("hide-body")
+        font-family: "InterVariable", system-ui, -apple-system,
+          BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+          "Open Sans", "Helvetica Neue", sans-serif;
+        font-optical-sizing: auto;
+        font-size: var(--font-size);
       }
-    </script>
 
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <script
-      src="https://kit.fontawesome.com/eb61b9b8d1.js"
-      crossorigin="anonymous"
-    ></script>
+      @media only screen and (min-width: 1392px) {
+        :root {
+          font-size: calc(100vw / 87);
+        }
+      }
+
+      body {
+        margin: 4rem;
+        padding: 0;
+        background-color: var(--dark-gray);
+        color: var(--light-gray);
+        line-height: var(--line-height);
+      }
+
+      .content {
+        width: 100%;
+        max-width: 60ch;
+        text-transform: lowercase;
+      }
+
+      /* @media only screen and (min-width: 1392px) {
+        .content {
+          width: ;
+          max-width: unset;
+        }
+      } */
+
+      .yellow {
+        color: var(--yellow);
+      }
+
+      div,
+      p,
+      pre,
+      ol,
+      ul,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        margin: 0;
+        padding: 0;
+      }
+
+      p,
+      pre,
+      ol,
+      h1,
+      h2,
+      ul {
+        margin-bottom: calc(var(--spacingv) * 1.5);
+      }
+
+      h1 {
+        font-size: 3rem;
+        font-weight: 600;
+      }
+
+      h2 {
+        font-size: 2rem;
+        font-weight: 600;
+      }
+
+      h4,
+      h5,
+      h6 {
+        font-weight: 640;
+        margin-bottom: calc(var(--spacingv) * 1);
+      }
+
+      * + h1 {
+        margin-top: calc(var(--spacingv) * 6);
+      }
+      * + h2 {
+        margin-top: calc(var(--spacingv) * 4);
+      }
+      * + h3 {
+        margin-top: calc(var(--spacingv) * 3);
+      }
+      * + h4 {
+        margin-top: calc(var(--spacingv) * 2);
+      }
+
+      hr + p {
+        margin-top: calc(var(--spacingv) * 2);
+      }
+
+      a {
+        color: var(--yellow);
+      }
+
+      @font-face {
+        font-family: InterVariable;
+        font-style: normal;
+        font-weight: 100 900;
+        font-display: swap;
+        src: url("InterVariable.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: InterVariable;
+        font-style: italic;
+        font-weight: 100 900;
+        font-display: swap;
+        src: url("InterVariable-Italic.woff2") format("woff2");
+      }
+    </style>
+  </head>
+  <body>
+    <div class="content">
+      <h1 class="yellow">Shutting down</h1>
+      <p>
+        After years of running the destiny.report websites, I've decided to shut
+        them down. As time has passed, I've found myself playing the game less
+        and my interest and motivation in developing the websites has naturally
+        faded. Without an interest in the game or using the websites anymore, it
+        became difficult to justify the non-trivial storage and hosting costs
+        and leaving the sites languish.
+      </p>
+
+      <h2>So what now?</h2>
+
+      <p>
+        archive.destiny.report has been archived. It will remain up for now but
+        will no longer receive updates or list new versions on the site. A few
+        versions have been skipped due to file size limitations, and all the
+        modified JSON diffs have not been archived and so will 404.
+      </p>
+
+      <p>
+        The destiny.report discord and notifications will stay around for now,
+        but some things may not work if they relied on the webiste continuing to
+        update.
+      </p>
+
+      <p>
+        dialogue.destiny.report will be taken down. Because of the size and
+        intellectual property concerns, I won't be offering archive.
+      </p>
+
+      <h2>What about Data Explorer?</h2>
+
+      <p>
+        Undoubtably, my most used Destiny website is the Destiny Data Explorer
+        developer tool. As it doesn't actually cost me anything, I'm not
+        shutting it down, but it has been living on borrowed time for a while
+        now, getting slower and slower with each major Destiny content update.
+        I've
+        <a href="https://destiny-data-explorer-ng.netlify.app"
+          >had a few attempts</a
+        >
+        at rewriting it to make it faster, but I never found the motivation to
+        make much progress.
+      </p>
+
+      <p>
+        The site will stay as is (slow, buggy, unmaintained) for now, but is
+        ripe for someone to build something better.
+      </p>
+
+      <hr />
+
+      <p>
+        I'm really proud of all these projects that I've made and whatever
+        impact they've had. Building them was not only a fun challenge but also
+        a deeply rewarding experience. I credit these with changing my life in
+        pretty significant ways - It helped me get a visa to stay in the UK, and
+        talking about the architecture of archive.destiny.report played a big
+        part of me landing my job at Grafana.
+      </p>
+
+      <p>
+        Perhaps one day I'll find the juice to revisit these projects. We'll
+        see.
+      </p>
+
+      <p>
+        &mdash; <a href="https://bsky.app/profile/joshhunt.dev">Josh Hunt</a>
+      </p>
+    </div>
   </body>
 </html>
